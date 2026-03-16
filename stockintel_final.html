@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Stock Intel Pro — Nifty 750</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0f172a;font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100%}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:#1e293b}::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
+@keyframes slidein{0%{transform:translateX(-200%)}100%{transform:translateX(400%)}}
+button{cursor:pointer}button:hover{opacity:.8}input{outline:none}
+</style>
+</head>
+<body>JS ERROR: '+event.message+'<br>Line: '+event.lineno+'</div>'">
+<div id="app">
+  <div id="topbar" style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0f172a;border-bottom:1px solid #1e293b;flex-shrink:0;gap:8px;flex-wrap:wrap;min-height:54px;color:#e2e8f0"></div>
+  <div style="display:flex;background:#0f172a;border-bottom:1px solid #1e293b;flex-shrink:0">
+    <button id="tab-s" onclick="showTab('s')" style="padding:7px 18px;font-size:10px;font-family:monospace;background:rgba(96,165,250,0.1);border:none;border-bottom:2px solid #60a5fa;color:#60a5fa;cursor:pointer">📡 STOCKS</button>
+    <button id="tab-f" onclick="showTab('f')" style="padding:7px 18px;font-size:10px;font-family:monospace;background:transparent;border:none;border-bottom:2px solid transparent;color:#64748b;cursor:pointer">🌍 FII / MF TRACKER</button>
+  </div>
+  <div style="display:flex;flex:1;overflow:hidden;color:#e2e8f0">
+    <div id="sv" style="display:flex;flex:1;overflow:hidden">
+      <div id="lp" style="width:250px;flex-shrink:0;border-right:1px solid #1e293b;display:flex;flex-direction:column;background:#0a1628;overflow:hidden"></div>
+      <div id="rp" style="flex:1;display:flex;flex-direction:column;background:#f8fafc;overflow:hidden"></div>
+    </div>
+    <div id="fv" style="display:none;flex:1;overflow-y:auto;background:#0f172a;padding:16px"><div id="fp"></div></div>
+  </div>
+</div>
+<div id="toast" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:6px;font-size:12px;font-family:monospace;z-index:9999;pointer-events:none;white-space:nowrap"></div>
+<script>
+var COMPANIES = [{"name": "HDFC Bank Limited", "symbol": "HDFCBANK", "id": "HDFCBANK"}, {"name": "Adani Total Gas Limited", "symbol": "ATGL", "id": "ATGL"}, {"name": "Reliance Industries Limited", "symbol": "RELIANCE", "id": "RELIANCE"}, {"name": "ICICI Bank Limited", "symbol": "ICICIBANK", "id": "ICICIBANK"}, {"name": "Bharti Airtel Limited", "symbol": "BHARTIARTL", "id": "BHARTIARTL"}, {"name": "Mahindra & Mahindra Limited", "symbol": "M\x26M", "id": "M\x26M"}, {"name": "Jindal Saw Limited", "symbol": "JINDALSAW", "id": "JINDALSAW"}, {"name": "NTPC Green Energy Limited", "symbol": "NTPCGREEN", "id": "NTPCGREEN"}, {"name": "Larsen & Toubro Limited", "symbol": "LT", "id": "LT"}, {"name": "State Bank of India", "symbol": "SBIN", "id": "SBIN"}, {"name": "DOMS Industries Limited", "symbol": "DOMS", "id": "DOMS"}, {"name": "ETERNAL LIMITED", "symbol": "ETERNAL", "id": "ETERNAL"}, {"name": "Bajaj Finance Limited", "symbol": "BAJFINANCE", "id": "BAJFINANCE"}, {"name": "Coal India Limited", "symbol": "COALINDIA", "id": "COALINDIA"}, {"name": "Axis Bank Limited", "symbol": "AXISBANK", "id": "AXISBANK"}, {"name": "Adani Power Limited", "symbol": "ADANIPOWER", "id": "ADANIPOWER"}, {"name": "Dixon Technologies (India) Limited", "symbol": "DIXON", "id": "DIXON"}, {"name": "JSW Energy Limited", "symbol": "JSWENERGY", "id": "JSWENERGY"}, {"name": "Tata Power Company Limited", "symbol": "TATAPOWER", "id": "TATAPOWER"}, {"name": "Infosys Limited", "symbol": "INFY", "id": "INFY"}, {"name": "Kotak Mahindra Bank Limited", "symbol": "KOTAKBANK", "id": "KOTAKBANK"}, {"name": "NTPC Limited", "symbol": "NTPC", "id": "NTPC"}, {"name": "TVS Motor Company Limited", "symbol": "TVSMOTOR", "id": "TVSMOTOR"}, {"name": "Eicher Motors Limited", "symbol": "EICHERMOT", "id": "EICHERMOT"}, {"name": "BSE Limited", "symbol": "BSE", "id": "BSE"}, {"name": "Gujarat Gas Limited", "symbol": "GUJGASLTD", "id": "GUJGASLTD"}, {"name": "National Aluminium Company Limited", "symbol": "NATIONALUM", "id": "NATIONALUM"}, {"name": "Ashok Leyland Limited", "symbol": "ASHOKLEY", "id": "ASHOKLEY"}, {"name": "Vedanta Limited", "symbol": "VEDL", "id": "VEDL"}, {"name": "Happiest Minds Technologies Limited", "symbol": "HAPPSTMNDS", "id": "HAPPSTMNDS"}, {"name": "Shriram Finance Limited", "symbol": "SHRIRAMFIN", "id": "SHRIRAMFIN"}, {"name": "Maruti Suzuki India Limited", "symbol": "MARUTI", "id": "MARUTI"}, {"name": "ITC Limited", "symbol": "ITC", "id": "ITC"}, {"name": "InterGlobe Aviation Limited", "symbol": "INDIGO", "id": "INDIGO"}, {"name": "Tata Consultancy Services Limited", "symbol": "TCS", "id": "TCS"}, {"name": "Godrej Consumer Products Limited", "symbol": "GODREJCP", "id": "GODREJCP"}, {"name": "Bharat Electronics Limited", "symbol": "BEL", "id": "BEL"}, {"name": "KPI Green Energy Limited", "symbol": "KPIGREEN", "id": "KPIGREEN"}, {"name": "IndusInd Bank Limited", "symbol": "INDUSINDBK", "id": "INDUSINDBK"}, {"name": "Multi Commodity Exchange of India Limited", "symbol": "MCX", "id": "MCX"}, {"name": "UltraTech Cement Limited", "symbol": "ULTRACEMCO", "id": "ULTRACEMCO"}, {"name": "Max Healthcare Institute Limited", "symbol": "MAXHEALTH", "id": "MAXHEALTH"}, {"name": "Britannia Industries Limited", "symbol": "BRITANNIA", "id": "BRITANNIA"}, {"name": "Muthoot Finance Limited", "symbol": "MUTHOOTFIN", "id": "MUTHOOTFIN"}, {"name": "Adani Green Energy Limited", "symbol": "ADANIGREEN", "id": "ADANIGREEN"}, {"name": "Amber Enterprises India Limited", "symbol": "AMBER", "id": "AMBER"}, {"name": "Oil & Natural Gas Corporation Limited", "symbol": "ONGC", "id": "ONGC"}, {"name": "Kaynes Technology India Limited", "symbol": "KAYNES", "id": "KAYNES"}, {"name": "Mazagon Dock Shipbuilders Limited", "symbol": "MAZDOCK", "id": "MAZDOCK"}, {"name": "Varun Beverages Limited", "symbol": "VBL", "id": "VBL"}, {"name": "Sun Pharmaceutical Industries Limited", "symbol": "SUNPHARMA", "id": "SUNPHARMA"}, {"name": "Tata Steel Limited", "symbol": "TATASTEEL", "id": "TATASTEEL"}, {"name": "Power Grid Corporation of India Limited", "symbol": "POWERGRID", "id": "POWERGRID"}, {"name": "Coforge Limited", "symbol": "COFORGE", "id": "COFORGE"}, {"name": "Suzlon Energy Limited", "symbol": "SUZLON", "id": "SUZLON"}, {"name": "Jio Financial Services Limited", "symbol": "JIOFIN", "id": "JIOFIN"}, {"name": "Cummins India Limited", "symbol": "CUMMINSIND", "id": "CUMMINSIND"}, {"name": "HFCL Limited", "symbol": "HFCL", "id": "HFCL"}, {"name": "Netweb Technologies India Limited", "symbol": "NETWEB", "id": "NETWEB"}, {"name": "Hindalco Industries Limited", "symbol": "HINDALCO", "id": "HINDALCO"}, {"name": "Titan Company Limited", "symbol": "TITAN", "id": "TITAN"}, {"name": "Bharat Heavy Electricals Limited", "symbol": "BHEL", "id": "BHEL"}, {"name": "Vodafone Idea Limited", "symbol": "IDEA", "id": "IDEA"}, {"name": "Hindustan Copper Limited", "symbol": "HINDCOPPER", "id": "HINDCOPPER"}, {"name": "Apollo Hospitals Enterprise Limited", "symbol": "APOLLOHOSP", "id": "APOLLOHOSP"}, {"name": "K.P.R. Mill Limited", "symbol": "KPRMILL", "id": "KPRMILL"}, {"name": "Tech Mahindra Limited", "symbol": "TECHM", "id": "TECHM"}, {"name": "Enviro Infra Engineers Limited", "symbol": "EIEL", "id": "EIEL"}, {"name": "Swiggy Limited", "symbol": "SWIGGY", "id": "SWIGGY"}, {"name": "Wipro Limited", "symbol": "WIPRO", "id": "WIPRO"}, {"name": "Hindustan Aeronautics Limited", "symbol": "HAL", "id": "HAL"}, {"name": "Hindustan Unilever Limited", "symbol": "HINDUNILVR", "id": "HINDUNILVR"}, {"name": "ABB India Limited", "symbol": "ABB", "id": "ABB"}, {"name": "Adani Ports and Special Economic Zone Limited", "symbol": "ADANIPORTS", "id": "ADANIPORTS"}, {"name": "Polycab India Limited", "symbol": "POLYCAB", "id": "POLYCAB"}, {"name": "Bharat Petroleum Corporation Limited", "symbol": "BPCL", "id": "BPCL"}, {"name": "REC Limited", "symbol": "RECLTD", "id": "RECLTD"}, {"name": "Cholamandalam Investment and Finance Company Limited", "symbol": "CHOLAFIN", "id": "CHOLAFIN"}, {"name": "Waaree Energies Limited", "symbol": "WAAREEENER", "id": "WAAREEENER"}, {"name": "Bajaj Auto Limited", "symbol": "BAJAJ-AUTO", "id": "BAJAJ-AUTO"}, {"name": "Power Finance Corporation Limited", "symbol": "PFC", "id": "PFC"}, {"name": "HCL Technologies Limited", "symbol": "HCLTECH", "id": "HCLTECH"}, {"name": "Hitachi Energy India Limited", "symbol": "POWERINDIA", "id": "POWERINDIA"}, {"name": "Tejas Networks Limited", "symbol": "TEJASNET", "id": "TEJASNET"}, {"name": "Trent Limited", "symbol": "TRENT", "id": "TRENT"}, {"name": "Sterlite Technologies Limited", "symbol": "STLTECH", "id": "STLTECH"}, {"name": "Indian Oil Corporation Limited", "symbol": "IOC", "id": "IOC"}, {"name": "NLC India Limited", "symbol": "NLCINDIA", "id": "NLCINDIA"}, {"name": "Chennai Petroleum Corporation Limited", "symbol": "CHENNPETRO", "id": "CHENNPETRO"}, {"name": "SRF Limited", "symbol": "SRF", "id": "SRF"}, {"name": "Hindustan Petroleum Corporation Limited", "symbol": "HINDPETRO", "id": "HINDPETRO"}, {"name": "Marico Limited", "symbol": "MARICO", "id": "MARICO"}, {"name": "Tata Motors Passenger Vehicles Limited", "symbol": "TMPV", "id": "TMPV"}, {"name": "Asian Paints Limited", "symbol": "ASIANPAINT", "id": "ASIANPAINT"}, {"name": "Canara Bank", "symbol": "CANBK", "id": "CANBK"}, {"name": "Fertilizers and Chemicals Travancore Limited", "symbol": "FACT", "id": "FACT"}, {"name": "Adani Enterprises Limited", "symbol": "ADANIENT", "id": "ADANIENT"}, {"name": "The Indian Hotels Company Limited", "symbol": "INDHOTEL", "id": "INDHOTEL"}, {"name": "Samvardhana Motherson International Limited", "symbol": "MOTHERSON", "id": "MOTHERSON"}, {"name": "Oil India Limited", "symbol": "OIL", "id": "OIL"}, {"name": "Info Edge (India) Limited", "symbol": "NAUKRI", "id": "NAUKRI"}, {"name": "Aurobindo Pharma Limited", "symbol": "AUROPHARMA", "id": "AUROPHARMA"}, {"name": "Persistent Systems Limited", "symbol": "PERSISTENT", "id": "PERSISTENT"}, {"name": "APL Apollo Tubes Limited", "symbol": "APLAPOLLO", "id": "APLAPOLLO"}, {"name": "CESC Limited", "symbol": "CESC", "id": "CESC"}, {"name": "Petronet LNG Limited", "symbol": "PETRONET", "id": "PETRONET"}, {"name": "Astral Limited", "symbol": "ASTRAL", "id": "ASTRAL"}, {"name": "Dr. Reddy's Laboratories Limited", "symbol": "DRREDDY", "id": "DRREDDY"}, {"name": "Hero MotoCorp Limited", "symbol": "HEROMOTOCO", "id": "HEROMOTOCO"}, {"name": "KEC International Limited", "symbol": "KEC", "id": "KEC"}, {"name": "CG Power and Industrial Solutions Limited", "symbol": "CGPOWER", "id": "CGPOWER"}, {"name": "Grasim Industries Limited", "symbol": "GRASIM", "id": "GRASIM"}, {"name": "Union Bank of India", "symbol": "UNIONBANK", "id": "UNIONBANK"}, {"name": "Hindustan Zinc Limited", "symbol": "HINDZINC", "id": "HINDZINC"}, {"name": "Ambuja Cements Limited", "symbol": "AMBUJACEM", "id": "AMBUJACEM"}, {"name": "Mangalore Refinery and Petrochemicals Limited", "symbol": "MRPL", "id": "MRPL"}, {"name": "GAIL (India) Limited", "symbol": "GAIL", "id": "GAIL"}, {"name": "Indus Towers Limited", "symbol": "INDUSTOWER", "id": "INDUSTOWER"}, {"name": "JINDAL STEEL LIMITED", "symbol": "JINDALSTEL", "id": "JINDALSTEL"}, {"name": "Bank of Baroda", "symbol": "BANKBARODA", "id": "BANKBARODA"}, {"name": "Data Patterns (India) Limited", "symbol": "DATAPATTNS", "id": "DATAPATTNS"}, {"name": "Angel One Limited", "symbol": "ANGELONE", "id": "ANGELONE"}, {"name": "KEI Industries Limited", "symbol": "KEI", "id": "KEI"}, {"name": "Glenmark Pharmaceuticals Limited", "symbol": "GLENMARK", "id": "GLENMARK"}, {"name": "IDFC First Bank Limited", "symbol": "IDFCFIRSTB", "id": "IDFCFIRSTB"}, {"name": "Bharat Forge Limited", "symbol": "BHARATFORG", "id": "BHARATFORG"}, {"name": "GE Vernova T&D India Limited", "symbol": "GVT\x26D", "id": "GVT\x26D"}, {"name": "The Federal Bank  Limited", "symbol": "FEDERALBNK", "id": "FEDERALBNK"}, {"name": "HDFC Life Insurance Company Limited", "symbol": "HDFCLIFE", "id": "HDFCLIFE"}, {"name": "Solar Industries India Limited", "symbol": "SOLARINDS", "id": "SOLARINDS"}, {"name": "HDFC Asset Management Company Limited", "symbol": "HDFCAMC", "id": "HDFCAMC"}, {"name": "One 97 Communications Limited", "symbol": "PAYTM", "id": "PAYTM"}, {"name": "Lupin Limited", "symbol": "LUPIN", "id": "LUPIN"}, {"name": "Fortis Healthcare Limited", "symbol": "FORTIS", "id": "FORTIS"}, {"name": "Mahanagar Gas Limited", "symbol": "MGL", "id": "MGL"}, {"name": "Shaily Engineering Plastics Limited", "symbol": "SHAILY", "id": "SHAILY"}, {"name": "CEAT Limited", "symbol": "CEATLTD", "id": "CEATLTD"}, {"name": "Central Depository Services (India) Limited", "symbol": "CDSL", "id": "CDSL"}, {"name": "Bajaj Finserv Limited", "symbol": "BAJAJFINSV", "id": "BAJAJFINSV"}, {"name": "Rail Vikas Nigam Limited", "symbol": "RVNL", "id": "RVNL"}, {"name": "FORCE MOTORS LTD", "symbol": "FORCEMOT", "id": "FORCEMOT"}, {"name": "Jubilant Foodworks Limited", "symbol": "JUBLFOOD", "id": "JUBLFOOD"}, {"name": "Cipla Limited", "symbol": "CIPLA", "id": "CIPLA"}, {"name": "Shipping Corporation Of India Limited", "symbol": "SCI", "id": "SCI"}, {"name": "Container Corporation of India Limited", "symbol": "CONCOR", "id": "CONCOR"}, {"name": "Reliance Power Limited", "symbol": "RPOWER", "id": "RPOWER"}, {"name": "PB Fintech Limited", "symbol": "POLICYBZR", "id": "POLICYBZR"}, {"name": "PG Electroplast Limited", "symbol": "PGEL", "id": "PGEL"}, {"name": "DLF Limited", "symbol": "DLF", "id": "DLF"}, {"name": "Gujarat State Petronet Limited", "symbol": "GSPL", "id": "GSPL"}, {"name": "Bharat Dynamics Limited", "symbol": "BDL", "id": "BDL"}, {"name": "Inox Wind Limited", "symbol": "INOXWIND", "id": "INOXWIND"}, {"name": "Indian Railway Catering And Tourism Corporation Limited", "symbol": "IRCTC", "id": "IRCTC"}, {"name": "SBI Life Insurance Company Limited", "symbol": "SBILIFE", "id": "SBILIFE"}, {"name": "Yes Bank Limited", "symbol": "YESBANK", "id": "YESBANK"}, {"name": "NMDC Limited", "symbol": "NMDC", "id": "NMDC"}, {"name": "Colgate Palmolive (India) Limited", "symbol": "COLPAL", "id": "COLPAL"}, {"name": "Nestle India Limited", "symbol": "NESTLEIND", "id": "NESTLEIND"}, {"name": "AU Small Finance Bank Limited", "symbol": "AUBANK", "id": "AUBANK"}, {"name": "GMR AIRPORTS LIMITED", "symbol": "GMRAIRPORT", "id": "GMRAIRPORT"}, {"name": "Electrosteel Castings Limited", "symbol": "ELECTCAST", "id": "ELECTCAST"}, {"name": "Supreme Industries Limited", "symbol": "SUPREMEIND", "id": "SUPREMEIND"}, {"name": "The Great Eastern Shipping Company Limited", "symbol": "GESHIP", "id": "GESHIP"}, {"name": "Punjab National Bank", "symbol": "PNB", "id": "PNB"}, {"name": "Radico Khaitan Limited", "symbol": "RADICO", "id": "RADICO"}, {"name": "Redington Limited", "symbol": "REDINGTON", "id": "REDINGTON"}, {"name": "The Jammu & Kashmir Bank Limited", "symbol": "J\x26KBANK", "id": "J\x26KBANK"}, {"name": "Vishal Mega Mart Limited", "symbol": "VMM", "id": "VMM"}, {"name": "Shakti Pumps (India) Limited", "symbol": "SHAKTIPUMP", "id": "SHAKTIPUMP"}, {"name": "Steel Authority of India Limited", "symbol": "SAIL", "id": "SAIL"}, {"name": "JSW Steel Limited", "symbol": "JSWSTEEL", "id": "JSWSTEEL"}, {"name": "Torrent Pharmaceuticals Limited", "symbol": "TORNTPHARM", "id": "TORNTPHARM"}, {"name": "Garden Reach Shipbuilders & Engineers Limited", "symbol": "GRSE", "id": "GRSE"}, {"name": "Indian Railway Finance Corporation Limited", "symbol": "IRFC", "id": "IRFC"}, {"name": "Apar Industries Limited", "symbol": "APARINDS", "id": "APARINDS"}, {"name": "Aarti Industries Limited", "symbol": "AARTIIND", "id": "AARTIIND"}, {"name": "Max Financial Services Limited", "symbol": "MFSL", "id": "MFSL"}, {"name": "Avenue Supermarts Limited", "symbol": "DMART", "id": "DMART"}, {"name": "Torrent Power Limited", "symbol": "TORNTPOWER", "id": "TORNTPOWER"}, {"name": "Laurus Labs Limited", "symbol": "LAURUSLABS", "id": "LAURUSLABS"}, {"name": "Premier Energies Limited", "symbol": "PREMIERENE", "id": "PREMIERENE"}, {"name": "Piramal Pharma Limited", "symbol": "PPLPHARMA", "id": "PPLPHARMA"}, {"name": "LIC Housing Finance Limited", "symbol": "LICHSGFIN", "id": "LICHSGFIN"}, {"name": "Manappuram Finance Limited", "symbol": "MANAPPURAM", "id": "MANAPPURAM"}, {"name": "NHPC Limited", "symbol": "NHPC", "id": "NHPC"}, {"name": "Kalyan Jewellers India Limited", "symbol": "KALYANKJIL", "id": "KALYANKJIL"}, {"name": "Blue Star Limited", "symbol": "BLUESTARCO", "id": "BLUESTARCO"}, {"name": "Godrej Properties Limited", "symbol": "GODREJPROP", "id": "GODREJPROP"}, {"name": "Jaiprakash Power Ventures Limited", "symbol": "JPPOWER", "id": "JPPOWER"}, {"name": "Siemens Limited", "symbol": "SIEMENS", "id": "SIEMENS"}, {"name": "IDBI Bank Limited", "symbol": "IDBI", "id": "IDBI"}, {"name": "Gujarat Mineral Development Corporation Limited", "symbol": "GMDCLTD", "id": "GMDCLTD"}, {"name": "UNO Minda Limited", "symbol": "UNOMINDA", "id": "UNOMINDA"}, {"name": "Linde India Limited", "symbol": "LINDEINDIA", "id": "LINDEINDIA"}, {"name": "Voltas Limited", "symbol": "VOLTAS", "id": "VOLTAS"}, {"name": "Havells India Limited", "symbol": "HAVELLS", "id": "HAVELLS"}, {"name": "United Spirits Limited", "symbol": "UNITDSPR", "id": "UNITDSPR"}, {"name": "Belrise Industries Limited", "symbol": "BELRISE", "id": "BELRISE"}, {"name": "Adani Energy Solutions Limited", "symbol": "ADANIENSOL", "id": "ADANIENSOL"}, {"name": "ICICI Lombard General Insurance Company Limited", "symbol": "ICICIGI", "id": "ICICIGI"}, {"name": "Devyani International Limited", "symbol": "DEVYANI", "id": "DEVYANI"}, {"name": "VA Tech Wabag Limited", "symbol": "WABAG", "id": "WABAG"}, {"name": "Hyundai Motor India Limited", "symbol": "HYUNDAI", "id": "HYUNDAI"}, {"name": "Indian Renewable Energy Development Agency Limited", "symbol": "IREDA", "id": "IREDA"}, {"name": "Mtar Technologies Limited", "symbol": "MTARTECH", "id": "MTARTECH"}, {"name": "Computer Age Management Services Limited", "symbol": "CAMS", "id": "CAMS"}, {"name": "Ola Electric Mobility Limited", "symbol": "OLAELEC", "id": "OLAELEC"}, {"name": "Indraprastha Gas Limited", "symbol": "IGL", "id": "IGL"}, {"name": "TATA CONSUMER PRODUCTS LIMITED", "symbol": "TATACONSUM", "id": "TATACONSUM"}, {"name": "Zee Entertainment Enterprises Limited", "symbol": "ZEEL", "id": "ZEEL"}, {"name": "L&T Finance Limited", "symbol": "LTF", "id": "LTF"}, {"name": "Pidilite Industries Limited", "symbol": "PIDILITIND", "id": "PIDILITIND"}, {"name": "Acutaas Chemicals Limited", "symbol": "ACUTAAS", "id": "ACUTAAS"}, {"name": "LTIMindtree Limited", "symbol": "LTM", "id": "LTM"}, {"name": "The Karnataka Bank Limited", "symbol": "KTKBANK", "id": "KTKBANK"}, {"name": "Tata Elxsi Limited", "symbol": "TATAELXSI", "id": "TATAELXSI"}, {"name": "Bank of India", "symbol": "BANKINDIA", "id": "BANKINDIA"}, {"name": "Aditya Birla Capital Limited", "symbol": "ABCAPITAL", "id": "ABCAPITAL"}, {"name": "Capri Global Capital Limited", "symbol": "CGCL", "id": "CGCL"}, {"name": "360 ONE WAM LIMITED", "symbol": "360ONE", "id": "360ONE"}, {"name": "Bandhan Bank Limited", "symbol": "BANDHANBNK", "id": "BANDHANBNK"}, {"name": "Divi's Laboratories Limited", "symbol": "DIVISLAB", "id": "DIVISLAB"}, {"name": "Bajaj Electricals Limited", "symbol": "BAJAJELEC", "id": "BAJAJELEC"}, {"name": "SHREE CEMENT LIMITED", "symbol": "SHREECEM", "id": "SHREECEM"}, {"name": "RBL Bank Limited", "symbol": "RBLBANK", "id": "RBLBANK"}, {"name": "Anant Raj Limited", "symbol": "ANANTRAJ", "id": "ANANTRAJ"}, {"name": "Apollo Tyres Limited", "symbol": "APOLLOTYRE", "id": "APOLLOTYRE"}, {"name": "AWL Agri Business Limited", "symbol": "AWL", "id": "AWL"}, {"name": "Indian Bank", "symbol": "INDIANB", "id": "INDIANB"}, {"name": "Ajanta Pharma Limited", "symbol": "AJANTPHARM", "id": "AJANTPHARM"}, {"name": "MphasiS Limited", "symbol": "MPHASIS", "id": "MPHASIS"}, {"name": "Patanjali Foods Limited", "symbol": "PATANJALI", "id": "PATANJALI"}, {"name": "Transformers And Rectifiers (India) Limited", "symbol": "TARIL", "id": "TARIL"}, {"name": "KPIT Technologies Limited", "symbol": "KPITTECH", "id": "KPITTECH"}, {"name": "FSN E-Commerce Ventures Limited", "symbol": "NYKAA", "id": "NYKAA"}, {"name": "Hexaware Technologies Limited", "symbol": "HEXT", "id": "HEXT"}, {"name": "Navin Fluorine International Limited", "symbol": "NAVINFLUOR", "id": "NAVINFLUOR"}, {"name": "Bank of Maharashtra", "symbol": "MAHABANK", "id": "MAHABANK"}, {"name": "ITC Hotels Limited", "symbol": "ITCHOTELS", "id": "ITCHOTELS"}, {"name": "Bosch Limited", "symbol": "BOSCHLTD", "id": "BOSCHLTD"}, {"name": "JB Chemicals & Pharmaceuticals Limited", "symbol": "JBCHEPHARM", "id": "JBCHEPHARM"}, {"name": "Cochin Shipyard Limited", "symbol": "COCHINSHIP", "id": "COCHINSHIP"}, {"name": "Bajaj Holdings & Investment Limited", "symbol": "BAJAJHLDNG", "id": "BAJAJHLDNG"}, {"name": "Skipper Limited", "symbol": "SKIPPER", "id": "SKIPPER"}, {"name": "Motilal Oswal Financial Services Limited", "symbol": "MOTILALOFS", "id": "MOTILALOFS"}, {"name": "UPL Limited", "symbol": "UPL", "id": "UPL"}, {"name": "Dabur India Limited", "symbol": "DABUR", "id": "DABUR"}, {"name": "NBCC (India) Limited", "symbol": "NBCC", "id": "NBCC"}, {"name": "Godawari Power And Ispat limited", "symbol": "GPIL", "id": "GPIL"}, {"name": "Paras Defence and Space Technologies Limited", "symbol": "PARAS", "id": "PARAS"}, {"name": "HBL Engineering Limited", "symbol": "HBLENGINE", "id": "HBLENGINE"}, {"name": "PNB Housing Finance Limited", "symbol": "PNBHOUSING", "id": "PNBHOUSING"}, {"name": "Ujjivan Small Finance Bank Limited", "symbol": "UJJIVANSFB", "id": "UJJIVANSFB"}, {"name": "MRF Limited", "symbol": "MRF", "id": "MRF"}, {"name": "Biocon Limited", "symbol": "BIOCON", "id": "BIOCON"}, {"name": "The Phoenix Mills Limited", "symbol": "PHOENIXLTD", "id": "PHOENIXLTD"}, {"name": "Welspun Corp Limited", "symbol": "WELCORP", "id": "WELCORP"}, {"name": "Aditya Birla Sun Life AMC Limited", "symbol": "ABSLAMC", "id": "ABSLAMC"}, {"name": "Avanti Feeds Limited", "symbol": "AVANTIFEED", "id": "AVANTIFEED"}, {"name": "Jindal Stainless Limited", "symbol": "JSL", "id": "JSL"}, {"name": "City Union Bank Limited", "symbol": "CUB", "id": "CUB"}, {"name": "Oberoi Realty Limited", "symbol": "OBEROIRLTY", "id": "OBEROIRLTY"}, {"name": "Indian Energy Exchange Limited", "symbol": "IEX", "id": "IEX"}, {"name": "Ather Energy Limited", "symbol": "ATHERENERG", "id": "ATHERENERG"}, {"name": "Praj Industries Limited", "symbol": "PRAJIND", "id": "PRAJIND"}, {"name": "Paradeep Phosphates Limited", "symbol": "PARADEEP", "id": "PARADEEP"}, {"name": "Himadri Speciality Chemical Limited", "symbol": "HSCL", "id": "HSCL"}, {"name": "Sammaan Capital Limited", "symbol": "SAMMAANCAP", "id": "SAMMAANCAP"}, {"name": "IFCI Limited", "symbol": "IFCI", "id": "IFCI"}, {"name": "Mankind Pharma Limited", "symbol": "MANKIND", "id": "MANKIND"}, {"name": "Engineers India Limited", "symbol": "ENGINERSIN", "id": "ENGINERSIN"}, {"name": "Delhivery Limited", "symbol": "DELHIVERY", "id": "DELHIVERY"}, {"name": "TD Power Systems Limited", "symbol": "TDPOWERSYS", "id": "TDPOWERSYS"}, {"name": "Anand Rathi Wealth Limited", "symbol": "ANANDRATHI", "id": "ANANDRATHI"}, {"name": "Dalmia Bharat Limited", "symbol": "DALBHARAT", "id": "DALBHARAT"}, {"name": "Sai Life Sciences Limited", "symbol": "SAILIFE", "id": "SAILIFE"}, {"name": "Alkem Laboratories Limited", "symbol": "ALKEM", "id": "ALKEM"}, {"name": "Graphite India Limited", "symbol": "GRAPHITE", "id": "GRAPHITE"}, {"name": "Lemon Tree Hotels Limited", "symbol": "LEMONTREE", "id": "LEMONTREE"}, {"name": "KRN Heat Exchanger and Refrigeration Limited", "symbol": "KRN", "id": "KRN"}, {"name": "Jupiter Wagons Limited", "symbol": "JWL", "id": "JWL"}, {"name": "JK Tyre & Industries Limited", "symbol": "JKTYRE", "id": "JKTYRE"}, {"name": "Five-Star Business Finance Limited", "symbol": "FIVESTAR", "id": "FIVESTAR"}, {"name": "Lodha Developers Limited", "symbol": "LODHA", "id": "LODHA"}, {"name": "SJVN Limited", "symbol": "SJVN", "id": "SJVN"}, {"name": "Godfrey Phillips India Limited", "symbol": "GODFRYPHLP", "id": "GODFRYPHLP"}, {"name": "Prestige Estates Projects Limited", "symbol": "PRESTIGE", "id": "PRESTIGE"}, {"name": "Aster DM Healthcare Limited", "symbol": "ASTERDM", "id": "ASTERDM"}, {"name": "Crompton Greaves Consumer Electricals Limited", "symbol": "CROMPTON", "id": "CROMPTON"}, {"name": "SAGILITY LIMITED", "symbol": "SAGILITY", "id": "SAGILITY"}, {"name": "Cartrade Tech Limited", "symbol": "CARTRADE", "id": "CARTRADE"}, {"name": "Life Insurance Corporation Of India", "symbol": "LICI", "id": "LICI"}, {"name": "Natco Pharma Limited", "symbol": "NATCOPHARM", "id": "NATCOPHARM"}, {"name": "Rashtriya Chemicals and Fertilizers Limited", "symbol": "RCF", "id": "RCF"}, {"name": "Page Industries Limited", "symbol": "PAGEIND", "id": "PAGEIND"}, {"name": "Aegis Logistics Limited", "symbol": "AEGISLOG", "id": "AEGISLOG"}, {"name": "SBI Cards and Payment Services Limited", "symbol": "SBICARD", "id": "SBICARD"}, {"name": "Aether Industries Limited", "symbol": "AETHER", "id": "AETHER"}, {"name": "PI Industries Limited", "symbol": "PIIND", "id": "PIIND"}, {"name": "Narayana Hrudayalaya Ltd.", "symbol": "NH", "id": "NH"}, {"name": "ICICI Prudential Life Insurance Company Limited", "symbol": "ICICIPRULI", "id": "ICICIPRULI"}, {"name": "Indiamart Intermesh Limited", "symbol": "INDIAMART", "id": "INDIAMART"}, {"name": "Oracle Financial Services Software Limited", "symbol": "OFSS", "id": "OFSS"}, {"name": "Coromandel International Limited", "symbol": "COROMANDEL", "id": "COROMANDEL"}, {"name": "Kirloskar Oil Engines Limited", "symbol": "KIRLOSENG", "id": "KIRLOSENG"}, {"name": "LT Foods Limited", "symbol": "LTFOODS", "id": "LTFOODS"}, {"name": "Thangamayil Jewellery Limited", "symbol": "THANGAMAYL", "id": "THANGAMAYL"}, {"name": "Tube Investments of India Limited", "symbol": "TIINDIA", "id": "TIINDIA"}, {"name": "Oswal Pumps Limited", "symbol": "OSWALPUMPS", "id": "OSWALPUMPS"}, {"name": "Kajaria Ceramics Limited", "symbol": "KAJARIACER", "id": "KAJARIACER"}, {"name": "Escorts Kubota Limited", "symbol": "ESCORTS", "id": "ESCORTS"}, {"name": "Zen Technologies Limited", "symbol": "ZENTEC", "id": "ZENTEC"}, {"name": "HEG Limited", "symbol": "HEG", "id": "HEG"}, {"name": "Action Construction Equipment Limited", "symbol": "ACE", "id": "ACE"}, {"name": "JM Financial Limited", "symbol": "JMFINANCIL", "id": "JMFINANCIL"}, {"name": "Home First Finance Company India Limited", "symbol": "HOMEFIRST", "id": "HOMEFIRST"}, {"name": "Syrma SGS Technology Limited", "symbol": "SYRMA", "id": "SYRMA"}, {"name": "Inventurus Knowledge Solutions Limited", "symbol": "IKS", "id": "IKS"}, {"name": "Newgen Software Technologies Limited", "symbol": "NEWGEN", "id": "NEWGEN"}, {"name": "IIFL Finance Limited", "symbol": "IIFL", "id": "IIFL"}, {"name": "Bajaj Housing Finance Limited", "symbol": "BAJAJHFL", "id": "BAJAJHFL"}, {"name": "Housing & Urban Development Corporation Limited", "symbol": "HUDCO", "id": "HUDCO"}, {"name": "Balkrishna Industries Limited", "symbol": "BALKRISIND", "id": "BALKRISIND"}, {"name": "Tata Technologies Limited", "symbol": "TATATECH", "id": "TATATECH"}, {"name": "Exide Industries Limited", "symbol": "EXIDEIND", "id": "EXIDEIND"}, {"name": "Kfin Technologies Limited", "symbol": "KFINTECH", "id": "KFINTECH"}, {"name": "Craftsman Automation Limited", "symbol": "CRAFTSMAN", "id": "CRAFTSMAN"}, {"name": "Ircon International Limited", "symbol": "IRCON", "id": "IRCON"}, {"name": "The South Indian Bank Limited", "symbol": "SOUTHBANK", "id": "SOUTHBANK"}, {"name": "IPCA Laboratories Limited", "symbol": "IPCALAB", "id": "IPCALAB"}, {"name": "Arvind Limited", "symbol": "ARVIND", "id": "ARVIND"}, {"name": "Zydus Lifesciences Limited", "symbol": "ZYDUSLIFE", "id": "ZYDUSLIFE"}, {"name": "Neuland Laboratories Limited", "symbol": "NEULANDLAB", "id": "NEULANDLAB"}, {"name": "Balrampur Chini Mills Limited", "symbol": "BALRAMCHIN", "id": "BALRAMCHIN"}, {"name": "IRB Infrastructure Developers Limited", "symbol": "IRB", "id": "IRB"}, {"name": "Aavas Financiers Limited", "symbol": "AAVAS", "id": "AAVAS"}, {"name": "Olectra Greentech Limited", "symbol": "OLECTRA", "id": "OLECTRA"}, {"name": "Rain Industries Limited", "symbol": "RAIN", "id": "RAIN"}, {"name": "PVR INOX Limited", "symbol": "PVRINOX", "id": "PVRINOX"}, {"name": "Finolex Cables Limited", "symbol": "FINCABLES", "id": "FINCABLES"}, {"name": "Affle 3i Limited", "symbol": "AFFLE", "id": "AFFLE"}, {"name": "Nuvama Wealth Management Limited", "symbol": "NUVAMA", "id": "NUVAMA"}, {"name": "Karur Vysya Bank Limited", "symbol": "KARURVYSYA", "id": "KARURVYSYA"}, {"name": "Sona BLW Precision Forgings Limited", "symbol": "SONACOMS", "id": "SONACOMS"}, {"name": "Edelweiss Financial Services Limited", "symbol": "EDELWEISS", "id": "EDELWEISS"}, {"name": "Jyoti CNC Automation Limited", "symbol": "JYOTICNC", "id": "JYOTICNC"}, {"name": "TITAGARH RAIL SYSTEMS LIMITED", "symbol": "TITAGARH", "id": "TITAGARH"}, {"name": "ACC Limited", "symbol": "ACC", "id": "ACC"}, {"name": "SWAN CORP LIMITED", "symbol": "SWANCORP", "id": "SWANCORP"}, {"name": "Firstsource Solutions Limited", "symbol": "FSL", "id": "FSL"}, {"name": "Gokaldas Exports Limited", "symbol": "GOKEX", "id": "GOKEX"}, {"name": "Voltamp Transformers Limited", "symbol": "VOLTAMP", "id": "VOLTAMP"}, {"name": "Sansera Engineering Limited", "symbol": "SANSERA", "id": "SANSERA"}, {"name": "MOIL Limited", "symbol": "MOIL", "id": "MOIL"}, {"name": "Aptus Value Housing Finance India Limited", "symbol": "APTUS", "id": "APTUS"}, {"name": "NCC Limited", "symbol": "NCC", "id": "NCC"}, {"name": "Dr. Lal Path Labs Ltd.", "symbol": "LALPATHLAB", "id": "LALPATHLAB"}, {"name": "Vedant Fashions Limited", "symbol": "MANYAVAR", "id": "MANYAVAR"}, {"name": "Star Health and Allied Insurance Company Limited", "symbol": "STARHEALTH", "id": "STARHEALTH"}, {"name": "BIRLASOFT LIMITED", "symbol": "BSOFT", "id": "BSOFT"}, {"name": "BEML Limited", "symbol": "BEML", "id": "BEML"}, {"name": "Sterling and Wilson Renewable Energy Limited", "symbol": "SWSOLAR", "id": "SWSOLAR"}, {"name": "Go Digit General Insurance Limited", "symbol": "GODIGIT", "id": "GODIGIT"}, {"name": "Gallantt Ispat Limited", "symbol": "GALLANTT", "id": "GALLANTT"}, {"name": "Tata Investment Corporation Limited", "symbol": "TATAINVEST", "id": "TATAINVEST"}, {"name": "Siemens Energy India Limited", "symbol": "ENRIN", "id": "ENRIN"}, {"name": "Lloyds Metals And Energy Limited", "symbol": "LLOYDSME", "id": "LLOYDSME"}, {"name": "Granules India Limited", "symbol": "GRANULES", "id": "GRANULES"}, {"name": "Poonawalla Fincorp Limited", "symbol": "POONAWALLA", "id": "POONAWALLA"}, {"name": "Amara Raja Energy & Mobility Limited", "symbol": "ARE\x26M", "id": "ARE\x26M"}, {"name": "Nazara Technologies Limited", "symbol": "NAZARA", "id": "NAZARA"}, {"name": "Time Technoplast Limited", "symbol": "TIMETECHNO", "id": "TIMETECHNO"}, {"name": "Lumax Auto Technologies Limited", "symbol": "LUMAXTECH", "id": "LUMAXTECH"}, {"name": "Mahindra & Mahindra Financial Services Limited", "symbol": "M\x26MFIN", "id": "M\x26MFIN"}, {"name": "Restaurant Brands Asia Limited", "symbol": "RBA", "id": "RBA"}, {"name": "JSW Infrastructure Limited", "symbol": "JSWINFRA", "id": "JSWINFRA"}, {"name": "Wockhardt Limited", "symbol": "WOCKPHARMA", "id": "WOCKPHARMA"}, {"name": "The Ramco Cements Limited", "symbol": "RAMCOCEM", "id": "RAMCOCEM"}, {"name": "Gravita India Limited", "symbol": "GRAVITA", "id": "GRAVITA"}, {"name": "Jai Balaji Industries Limited", "symbol": "JAIBALAJI", "id": "JAIBALAJI"}, {"name": "3M India Limited", "symbol": "3MINDIA", "id": "3MINDIA"}, {"name": "Chambal Fertilizers & Chemicals Limited", "symbol": "CHAMBLFERT", "id": "CHAMBLFERT"}, {"name": "Religare Enterprises Limited", "symbol": "RELIGARE", "id": "RELIGARE"}, {"name": "Signatureglobal (India) Limited", "symbol": "SIGNATURE", "id": "SIGNATURE"}, {"name": "PC Jeweller Limited", "symbol": "PCJEWELLER", "id": "PCJEWELLER"}, {"name": "Sundaram Finance Limited", "symbol": "SUNDARMFIN", "id": "SUNDARMFIN"}, {"name": "Sudarshan Chemical Industries Limited", "symbol": "SUDARSCHEM", "id": "SUDARSCHEM"}, {"name": "Samhi Hotels Limited", "symbol": "SAMHI", "id": "SAMHI"}, {"name": "Dynamatic Technologies Limited", "symbol": "DYNAMATECH", "id": "DYNAMATECH"}, {"name": "DCB Bank Limited", "symbol": "DCBBANK", "id": "DCBBANK"}, {"name": "Hindustan Construction Company Limited", "symbol": "HCC", "id": "HCC"}, {"name": "Acme Solar Holdings Limited", "symbol": "ACMESOLAR", "id": "ACMESOLAR"}, {"name": "Gland Pharma Limited", "symbol": "GLAND", "id": "GLAND"}, {"name": "Ramkrishna Forgings Limited", "symbol": "RKFORGE", "id": "RKFORGE"}, {"name": "Heritage Foods Limited", "symbol": "HERITGFOOD", "id": "HERITGFOOD"}, {"name": "Zaggle Prepaid Ocean Services Limited", "symbol": "ZAGGLE", "id": "ZAGGLE"}, {"name": "National Fertilizers Limited", "symbol": "NFL", "id": "NFL"}, {"name": "Techno Electric & Engineering Company Limited", "symbol": "TECHNOE", "id": "TECHNOE"}, {"name": "Authum Investment & Infrastructure Limited", "symbol": "AIIL", "id": "AIIL"}, {"name": "Valor Estate Limited", "symbol": "DBREALTY", "id": "DBREALTY"}, {"name": "Railtel Corporation Of India Limited", "symbol": "RAILTEL", "id": "RAILTEL"}, {"name": "Nippon Life India Asset Management Limited", "symbol": "NAM-INDIA", "id": "NAM-INDIA"}, {"name": "Choice International Limited", "symbol": "CHOICEIN", "id": "CHOICEIN"}, {"name": "Castrol India Limited", "symbol": "CASTROLIND", "id": "CASTROLIND"}, {"name": "Sapphire Foods India Limited", "symbol": "SAPPHIRE", "id": "SAPPHIRE"}, {"name": "PCBL Chemical Limited", "symbol": "PCBL", "id": "PCBL"}, {"name": "Krishna Institute of Medical Sciences Limited", "symbol": "KIMS", "id": "KIMS"}, {"name": "Gujarat State Fertilizers & Chemicals Limited", "symbol": "GSFC", "id": "GSFC"}, {"name": "eClerx Services Limited", "symbol": "ECLERX", "id": "ECLERX"}, {"name": "Sandur Manganese & Iron Ores Limited", "symbol": "SANDUMA", "id": "SANDUMA"}, {"name": "Waaree Renewable Technologies Limited", "symbol": "WAAREERTL", "id": "WAAREERTL"}, {"name": "RattanIndia Power Limited", "symbol": "RTNPOWER", "id": "RTNPOWER"}, {"name": "Jubilant Ingrevia Limited", "symbol": "JUBLINGREA", "id": "JUBLINGREA"}, {"name": "Websol Energy System Limited", "symbol": "WEBELSOLAR", "id": "WEBELSOLAR"}, {"name": "Syngene International Limited", "symbol": "SYNGENE", "id": "SYNGENE"}, {"name": "Central Bank of India", "symbol": "CENTRALBK", "id": "CENTRALBK"}, {"name": "CREDITACCESS GRAMEEN LIMITED", "symbol": "CREDITACC", "id": "CREDITACC"}, {"name": "Le Travenues Technology Limited", "symbol": "IXIGO", "id": "IXIGO"}, {"name": "JK Cement Limited", "symbol": "JKCEMENT", "id": "JKCEMENT"}, {"name": "H.G. Infra Engineering Limited", "symbol": "HGINFRA", "id": "HGINFRA"}, {"name": "Tilaknagar Industries Limited", "symbol": "TI", "id": "TI"}, {"name": "Whirlpool of India Limited", "symbol": "WHIRLPOOL", "id": "WHIRLPOOL"}, {"name": "Azad Engineering Limited", "symbol": "AZAD", "id": "AZAD"}, {"name": "Onesource Specialty Pharma Limited", "symbol": "ONESOURCE", "id": "ONESOURCE"}, {"name": "Elgi Equipments Limited", "symbol": "ELGIEQUIP", "id": "ELGIEQUIP"}, {"name": "Emcure Pharmaceuticals Limited", "symbol": "EMCURE", "id": "EMCURE"}, {"name": "Yatharth Hospital & Trauma Care Services Limited", "symbol": "YATHARTH", "id": "YATHARTH"}, {"name": "Astra Microwave Products Limited", "symbol": "ASTRAMICRO", "id": "ASTRAMICRO"}, {"name": "Transrail Lighting Limited", "symbol": "TRANSRAILL", "id": "TRANSRAILL"}, {"name": "EIH Limited", "symbol": "EIHOTEL", "id": "EIHOTEL"}, {"name": "CCL Products (India) Limited", "symbol": "CCL", "id": "CCL"}, {"name": "Greaves Cotton Limited", "symbol": "GREAVESCOT", "id": "GREAVESCOT"}, {"name": "Awfis Space Solutions Limited", "symbol": "AWFIS", "id": "AWFIS"}, {"name": "RHI MAGNESITA INDIA LIMITED", "symbol": "RHIM", "id": "RHIM"}, {"name": "Medplus Health Services Limited", "symbol": "MEDPLUS", "id": "MEDPLUS"}, {"name": "Balu Forge Industries Limited", "symbol": "BALUFORGE", "id": "BALUFORGE"}, {"name": "Tata Chemicals Limited", "symbol": "TATACHEM", "id": "TATACHEM"}, {"name": "Minda Corporation Limited", "symbol": "MINDACORP", "id": "MINDACORP"}, {"name": "Sharda Cropchem Limited", "symbol": "SHARDACROP", "id": "SHARDACROP"}, {"name": "PTC India Limited", "symbol": "PTC", "id": "PTC"}, {"name": "BLS International Services Limited", "symbol": "BLS", "id": "BLS"}, {"name": "Sarda Energy & Minerals Limited", "symbol": "SARDAEN", "id": "SARDAEN"}, {"name": "Datamatics Global Services Limited", "symbol": "DATAMATICS", "id": "DATAMATICS"}, {"name": "C.E. Info Systems Limited", "symbol": "MAPMYINDIA", "id": "MAPMYINDIA"}, {"name": "Indian Overseas Bank", "symbol": "IOB", "id": "IOB"}, {"name": "Texmaco Rail & Engineering Limited", "symbol": "TEXRAIL", "id": "TEXRAIL"}, {"name": "Deepak Fertilizers and Petrochemicals Corporation Limited", "symbol": "DEEPAKFERT", "id": "DEEPAKFERT"}, {"name": "Aurionpro Solutions Limited", "symbol": "AURIONPRO", "id": "AURIONPRO"}, {"name": "Tata Communications Limited", "symbol": "TATACOMM", "id": "TATACOMM"}, {"name": "Intellect Design Arena Limited", "symbol": "INTELLECT", "id": "INTELLECT"}, {"name": "Tega Industries Limited", "symbol": "TEGA", "id": "TEGA"}, {"name": "Cholamandalam Financial Holdings Limited", "symbol": "CHOLAHLDNG", "id": "CHOLAHLDNG"}, {"name": "Lloyds Enterprises Limited", "symbol": "LLOYDSENT", "id": "LLOYDSENT"}, {"name": "BOROSIL RENEWABLES LIMITED", "symbol": "BORORENEW", "id": "BORORENEW"}, {"name": "Sun Pharma Advanced Research Company Limited", "symbol": "SPARC", "id": "SPARC"}, {"name": "Thermax Limited", "symbol": "THERMAX", "id": "THERMAX"}, {"name": "Optiemus Infracom Limited", "symbol": "OPTIEMUS", "id": "OPTIEMUS"}, {"name": "Timken India Limited", "symbol": "TIMKEN", "id": "TIMKEN"}, {"name": "Aditya Birla Fashion and Retail Limited", "symbol": "ABFRL", "id": "ABFRL"}, {"name": "Pricol Limited", "symbol": "PRICOLLTD", "id": "PRICOLLTD"}, {"name": "Brainbees Solutions Limited", "symbol": "FIRSTCRY", "id": "FIRSTCRY"}, {"name": "Jubilant Pharmova Limited", "symbol": "JUBLPHARMA", "id": "JUBLPHARMA"}, {"name": "Niva Bupa Health Insurance Company Limited", "symbol": "NIVABUPA", "id": "NIVABUPA"}, {"name": "Ceigall India Limited", "symbol": "CEIGALL", "id": "CEIGALL"}, {"name": "Jana Small Finance Bank Limited", "symbol": "JSFB", "id": "JSFB"}, {"name": "JBM Auto Limited", "symbol": "JBMA", "id": "JBMA"}, {"name": "Procter & Gamble Hygiene and Health Care Limited", "symbol": "PGHH", "id": "PGHH"}, {"name": "Finolex Industries Limited", "symbol": "FINPIPE", "id": "FINPIPE"}, {"name": "KNR Constructions Limited", "symbol": "KNRCON", "id": "KNRCON"}, {"name": "Aditya Birla Real Estate Limited", "symbol": "ABREL", "id": "ABREL"}, {"name": "Rainbow Childrens Medicare Limited", "symbol": "RAINBOW", "id": "RAINBOW"}, {"name": "Elecon Engineering Company Limited", "symbol": "ELECON", "id": "ELECON"}, {"name": "Sonata Software Limited", "symbol": "SONATSOFTW", "id": "SONATSOFTW"}, {"name": "Refex Industries Limited", "symbol": "REFEX", "id": "REFEX"}, {"name": "Saregama India Limited", "symbol": "SAREGAMA", "id": "SAREGAMA"}, {"name": "R R Kabel Limited", "symbol": "RRKABEL", "id": "RRKABEL"}, {"name": "Inox Green Energy Services Limited", "symbol": "INOXGREEN", "id": "INOXGREEN"}, {"name": "Bayer Cropscience Limited", "symbol": "BAYERCROP", "id": "BAYERCROP"}, {"name": "CSB Bank Limited", "symbol": "CSBBANK", "id": "CSBBANK"}, {"name": "Cyient Limited", "symbol": "CYIENT", "id": "CYIENT"}, {"name": "ZF Commercial Vehicle Control Systems India Limited", "symbol": "ZFCVINDIA", "id": "ZFCVINDIA"}, {"name": "Strides Pharma Science Limited", "symbol": "STAR", "id": "STAR"}, {"name": "Cemindia Projects Limited", "symbol": "CEMPRO", "id": "CEMPRO"}, {"name": "Welspun Living Limited", "symbol": "WELSPUNLIV", "id": "WELSPUNLIV"}, {"name": "Concord Biotech Limited", "symbol": "CONCORDBIO", "id": "CONCORDBIO"}, {"name": "Equitas Small Finance Bank Limited", "symbol": "EQUITASBNK", "id": "EQUITASBNK"}, {"name": "Abbott India Limited", "symbol": "ABBOTINDIA", "id": "ABBOTINDIA"}, {"name": "AIA Engineering Limited", "symbol": "AIAENG", "id": "AIAENG"}, {"name": "Latent View Analytics Limited", "symbol": "LATENTVIEW", "id": "LATENTVIEW"}, {"name": "Poly Medicure Limited", "symbol": "POLYMED", "id": "POLYMED"}, {"name": "Symphony Limited", "symbol": "SYMPHONY", "id": "SYMPHONY"}, {"name": "Patel Engineering Limited", "symbol": "PATELENG", "id": "PATELENG"}, {"name": "NAVA LIMITED", "symbol": "NAVA", "id": "NAVA"}, {"name": "Garware Hi-Tech Films Limited", "symbol": "GRWRHITECH", "id": "GRWRHITECH"}, {"name": "Mrs. Bectors Food Specialities Limited", "symbol": "BECTORFOOD", "id": "BECTORFOOD"}, {"name": "L&T Technology Services Limited", "symbol": "LTTS", "id": "LTTS"}, {"name": "Reliance Infrastructure Limited", "symbol": "RELINFRA", "id": "RELINFRA"}, {"name": "Ashoka Buildcon Limited", "symbol": "ASHOKA", "id": "ASHOKA"}, {"name": "Schaeffler India Limited", "symbol": "SCHAEFFLER", "id": "SCHAEFFLER"}, {"name": "Diamond Power Infrastructure Limited", "symbol": "DIACABS", "id": "DIACABS"}, {"name": "Cohance Lifesciences Limited", "symbol": "COHANCE", "id": "COHANCE"}, {"name": "Pfizer Limited", "symbol": "PFIZER", "id": "PFIZER"}, {"name": "EID Parry India Limited", "symbol": "EIDPARRY", "id": "EIDPARRY"}, {"name": "Shilpa Medicare Limited", "symbol": "SHILPAMED", "id": "SHILPAMED"}, {"name": "Gujarat Pipavav Port Limited", "symbol": "GPPL", "id": "GPPL"}, {"name": "Jamna Auto Industries Limited", "symbol": "JAMNAAUTO", "id": "JAMNAAUTO"}, {"name": "Brigade Enterprises Limited", "symbol": "BRIGADE", "id": "BRIGADE"}, {"name": "Gabriel India Limited", "symbol": "GABRIEL", "id": "GABRIEL"}, {"name": "Eureka Forbes Limited", "symbol": "EUREKAFORB", "id": "EUREKAFORB"}, {"name": "CRISIL Limited", "symbol": "CRISIL", "id": "CRISIL"}, {"name": "LLOYDS ENGINEERING WORKS LIMITED", "symbol": "LLOYDSENGG", "id": "LLOYDSENGG"}, {"name": "BLACKBUCK LIMITED", "symbol": "BLACKBUCK", "id": "BLACKBUCK"}, {"name": "JSW Cement Limited", "symbol": "JSWCEMENT", "id": "JSWCEMENT"}, {"name": "Gujarat Fluorochemicals Limited", "symbol": "FLUOROCHEM", "id": "FLUOROCHEM"}, {"name": "Kaveri Seed Company Limited", "symbol": "KSCL", "id": "KSCL"}, {"name": "Power Mech Projects Limited", "symbol": "POWERMECH", "id": "POWERMECH"}, {"name": "Indian Metals & Ferro Alloys Limited", "symbol": "IMFA", "id": "IMFA"}, {"name": "Gujarat Narmada Valley Fertilizers and Chemicals Limited", "symbol": "GNFC", "id": "GNFC"}, {"name": "Mishra Dhatu Nigam Limited", "symbol": "MIDHANI", "id": "MIDHANI"}, {"name": "Atul Limited", "symbol": "ATUL", "id": "ATUL"}, {"name": "Berger Paints (I) Limited", "symbol": "BERGEPAINT", "id": "BERGEPAINT"}, {"name": "PTC Industries Limited", "symbol": "PTCIL", "id": "PTCIL"}, {"name": "Tanla Platforms Limited", "symbol": "TANLA", "id": "TANLA"}, {"name": "UCO Bank", "symbol": "UCOBANK", "id": "UCOBANK"}, {"name": "Jain Irrigation Systems Limited", "symbol": "JISLJALEQS", "id": "JISLJALEQS"}, {"name": "Rategain Travel Technologies Limited", "symbol": "RATEGAIN", "id": "RATEGAIN"}, {"name": "KRBL Limited", "symbol": "KRBL", "id": "KRBL"}, {"name": "GMR Power and Urban Infra Limited", "symbol": "GMRP\x26UI", "id": "GMRP\x26UI"}, {"name": "Hemisphere Properties India Limited", "symbol": "HEMIPROP", "id": "HEMIPROP"}, {"name": "EPL Limited", "symbol": "EPL", "id": "EPL"}, {"name": "Kitex Garments Limited", "symbol": "KITEX", "id": "KITEX"}, {"name": "Network18 Media & Investments Limited", "symbol": "NETWORK18", "id": "NETWORK18"}, {"name": "AvenuesAI Limited", "symbol": "CCAVENUE", "id": "CCAVENUE"}, {"name": "Surya Roshni Limited", "symbol": "SURYAROSNI", "id": "SURYAROSNI"}, {"name": "Trident Limited", "symbol": "TRIDENT", "id": "TRIDENT"}, {"name": "Archean Chemical Industries Limited", "symbol": "ACI", "id": "ACI"}, {"name": "Avalon Technologies Limited", "symbol": "AVALON", "id": "AVALON"}, {"name": "Viyash Scientific Limited", "symbol": "VIYASH", "id": "VIYASH"}, {"name": "Dilip Buildcon Limited", "symbol": "DBL", "id": "DBL"}, {"name": "Supriya Lifescience Limited", "symbol": "SUPRIYA", "id": "SUPRIYA"}, {"name": "NMDC Steel Limited", "symbol": "NSLNISP", "id": "NSLNISP"}, {"name": "Zensar Technologies Limited", "symbol": "ZENSARTECH", "id": "ZENSARTECH"}, {"name": "GMM Pfaudler Limited", "symbol": "GMMPFAUDLR", "id": "GMMPFAUDLR"}, {"name": "CMS Info Systems Limited", "symbol": "CMSINFO", "id": "CMSINFO"}, {"name": "Bata India Limited", "symbol": "BATAINDIA", "id": "BATAINDIA"}, {"name": "AGI Greenpac Limited", "symbol": "AGI", "id": "AGI"}, {"name": "Honasa Consumer Limited", "symbol": "HONASA", "id": "HONASA"}, {"name": "Sun TV Network Limited", "symbol": "SUNTV", "id": "SUNTV"}, {"name": "Just Dial Limited", "symbol": "JUSTDIAL", "id": "JUSTDIAL"}, {"name": "Shriram Pistons & Rings Limited", "symbol": "SHRIPISTON", "id": "SHRIPISTON"}, {"name": "Afcons Infrastructure Limited", "symbol": "AFCONS", "id": "AFCONS"}, {"name": "P N Gadgil Jewellers Limited", "symbol": "PNGJL", "id": "PNGJL"}, {"name": "SKY GOLD AND DIAMONDS LIMITED", "symbol": "SKYGOLD", "id": "SKYGOLD"}, {"name": "Can Fin Homes Limited", "symbol": "CANFINHOME", "id": "CANFINHOME"}, {"name": "Shree Renuka Sugars Limited", "symbol": "RENUKA", "id": "RENUKA"}, {"name": "Senco Gold Limited", "symbol": "SENCO", "id": "SENCO"}, {"name": "Tata Teleservices (Maharashtra) Limited", "symbol": "TTML", "id": "TTML"}, {"name": "Indegene Limited", "symbol": "INDGN", "id": "INDGN"}, {"name": "Deepak Nitrite Limited", "symbol": "DEEPAKNTR", "id": "DEEPAKNTR"}, {"name": "Sobha Limited", "symbol": "SOBHA", "id": "SOBHA"}, {"name": "Emami Limited", "symbol": "EMAMILTD", "id": "EMAMILTD"}, {"name": "Banco Products (I) Limited", "symbol": "BANCOINDIA", "id": "BANCOINDIA"}, {"name": "PNC Infratech Limited", "symbol": "PNCINFRA", "id": "PNCINFRA"}, {"name": "Isgec Heavy Engineering Limited", "symbol": "ISGEC", "id": "ISGEC"}, {"name": "Aadhar Housing Finance Limited", "symbol": "AADHARHFC", "id": "AADHARHFC"}, {"name": "Blue Jet Healthcare Limited", "symbol": "BLUEJET", "id": "BLUEJET"}, {"name": "GlaxoSmithKline Pharmaceuticals Limited", "symbol": "GLAXO", "id": "GLAXO"}, {"name": "Thomas Cook  (India)  Limited", "symbol": "THOMASCOOK", "id": "THOMASCOOK"}, {"name": "IIFL Capital Services Limited", "symbol": "IIFLCAPS", "id": "IIFLCAPS"}, {"name": "Neogen Chemicals Limited", "symbol": "NEOGEN", "id": "NEOGEN"}, {"name": "United Breweries Limited", "symbol": "UBL", "id": "UBL"}, {"name": "Motherson Sumi Wiring India Limited", "symbol": "MSUMI", "id": "MSUMI"}, {"name": "India Shelter Finance Corporation Limited", "symbol": "INDIASHLTR", "id": "INDIASHLTR"}, {"name": "V2 Retail Limited", "symbol": "V2RETAIL", "id": "V2RETAIL"}, {"name": "Gillette India Limited", "symbol": "GILLETTE", "id": "GILLETTE"}, {"name": "Triveni Turbine Limited", "symbol": "TRITURBINE", "id": "TRITURBINE"}, {"name": "Maharashtra Seamless Limited", "symbol": "MAHSEAMLES", "id": "MAHSEAMLES"}, {"name": "Styrenix Performance Materials Limited", "symbol": "STYRENIX", "id": "STYRENIX"}, {"name": "ITI Limited", "symbol": "ITI", "id": "ITI"}, {"name": "Kalpataru Projects International Limited", "symbol": "KPIL", "id": "KPIL"}, {"name": "Embassy Developments Limited", "symbol": "EMBDL", "id": "EMBDL"}, {"name": "TBO Tek Limited", "symbol": "TBOTEK", "id": "TBOTEK"}, {"name": "Honeywell Automation India Limited", "symbol": "HONAUT", "id": "HONAUT"}, {"name": "Kirloskar Brothers Limited", "symbol": "KIRLOSBROS", "id": "KIRLOSBROS"}, {"name": "ION Exchange (India) Limited", "symbol": "IONEXCHANG", "id": "IONEXCHANG"}, {"name": "Global Health Limited", "symbol": "MEDANTA", "id": "MEDANTA"}, {"name": "Ksb Limited", "symbol": "KSB", "id": "KSB"}, {"name": "Cigniti Technologies Limited", "symbol": "CIGNITITEC", "id": "CIGNITITEC"}, {"name": "RattanIndia Enterprises Limited", "symbol": "RTNINDIA", "id": "RTNINDIA"}, {"name": "RITES Limited", "symbol": "RITES", "id": "RITES"}, {"name": "Aegis Vopak Terminals Limited", "symbol": "AEGISVOPAK", "id": "AEGISVOPAK"}, {"name": "International Gemmological Institute (India) Limited", "symbol": "IGIL", "id": "IGIL"}, {"name": "Indigo Paints Limited", "symbol": "INDIGOPNTS", "id": "INDIGOPNTS"}, {"name": "Usha Martin Limited", "symbol": "USHAMART", "id": "USHAMART"}, {"name": "Jyothy Labs Limited", "symbol": "JYOTHYLAB", "id": "JYOTHYLAB"}, {"name": "Cello World Limited", "symbol": "CELLO", "id": "CELLO"}, {"name": "Leela Palaces Hotels & Resorts Limited", "symbol": "THELEELA", "id": "THELEELA"}, {"name": "Easy Trip Planners Limited", "symbol": "EASEMYTRIP", "id": "EASEMYTRIP"}, {"name": "Balaji Amines Limited", "symbol": "BALAMINES", "id": "BALAMINES"}, {"name": "Sheela Foam Limited", "symbol": "SFL", "id": "SFL"}, {"name": "JK Lakshmi Cement Limited", "symbol": "JKLAKSHMI", "id": "JKLAKSHMI"}, {"name": "Fiem Industries Limited", "symbol": "FIEMIND", "id": "FIEMIND"}, {"name": "Akums Drugs and Pharmaceuticals Limited", "symbol": "AKUMS", "id": "AKUMS"}, {"name": "Anupam Rasayan India Limited", "symbol": "ANURAS", "id": "ANURAS"}, {"name": "Aditya Birla Lifestyle Brands Limited", "symbol": "ABLBL", "id": "ABLBL"}, {"name": "Privi Speciality Chemicals Limited", "symbol": "PRIVISCL", "id": "PRIVISCL"}, {"name": "Marksans Pharma Limited", "symbol": "MARKSANS", "id": "MARKSANS"}, {"name": "Shyam Metalics and Energy Limited", "symbol": "SHYAMMETL", "id": "SHYAMMETL"}, {"name": "Clean Science and Technology Limited", "symbol": "CLEAN", "id": "CLEAN"}, {"name": "Caplin Point Laboratories Limited", "symbol": "CAPLIPOINT", "id": "CAPLIPOINT"}, {"name": "Laxmi Organic Industries Limited", "symbol": "LXCHEM", "id": "LXCHEM"}, {"name": "Thyrocare Technologies Limited", "symbol": "THYROCARE", "id": "THYROCARE"}, {"name": "Chalet Hotels Limited", "symbol": "CHALET", "id": "CHALET"}, {"name": "Dodla Dairy Limited", "symbol": "DODLA", "id": "DODLA"}, {"name": "VIP Industries Limited", "symbol": "VIPIND", "id": "VIPIND"}, {"name": "Ajax Engineering Limited", "symbol": "AJAXENGG", "id": "AJAXENGG"}, {"name": "Birla Corporation Limited", "symbol": "BIRLACORPN", "id": "BIRLACORPN"}, {"name": "Kansai Nerolac Paints Limited", "symbol": "KANSAINER", "id": "KANSAINER"}, {"name": "Alok Industries Limited", "symbol": "ALOKINDS", "id": "ALOKINDS"}, {"name": "Arvind Fashions Limited", "symbol": "ARVINDFASN", "id": "ARVINDFASN"}, {"name": "MMTC Limited", "symbol": "MMTC", "id": "MMTC"}, {"name": "Raymond Lifestyle Limited", "symbol": "RAYMONDLSL", "id": "RAYMONDLSL"}, {"name": "SBFC Finance Limited", "symbol": "SBFC", "id": "SBFC"}, {"name": "Entero Healthcare Solutions Limited", "symbol": "ENTERO", "id": "ENTERO"}, {"name": "Aarti Pharmalabs Limited", "symbol": "AARTIPHARM", "id": "AARTIPHARM"}, {"name": "ASK Automotive Limited", "symbol": "ASKAUTOLTD", "id": "ASKAUTOLTD"}, {"name": "Vardhman Textiles Limited", "symbol": "VTL", "id": "VTL"}, {"name": "Gulf Oil Lubricants India Limited", "symbol": "GULFOILLUB", "id": "GULFOILLUB"}, {"name": "Alkyl Amines Chemicals Limited", "symbol": "ALKYLAMINE", "id": "ALKYLAMINE"}, {"name": "Bharti Hexacom Limited", "symbol": "BHARTIHEXA", "id": "BHARTIHEXA"}, {"name": "Ganesha Ecosphere Limited", "symbol": "GANECOS", "id": "GANECOS"}, {"name": "Gujarat Ambuja Exports Limited", "symbol": "GAEL", "id": "GAEL"}, {"name": "Sanofi India Limited", "symbol": "SANOFI", "id": "SANOFI"}, {"name": "Allied Blenders and Distillers Limited", "symbol": "ABDL", "id": "ABDL"}, {"name": "Prudent Corporate Advisory Services Limited", "symbol": "PRUDENT", "id": "PRUDENT"}, {"name": "Bharat Bijlee Limited", "symbol": "BBL", "id": "BBL"}, {"name": "TARC Limited", "symbol": "TARC", "id": "TARC"}, {"name": "The Bombay Burmah Trading Corporation Limited", "symbol": "BBTC", "id": "BBTC"}, {"name": "V-Mart Retail Limited", "symbol": "VMART", "id": "VMART"}, {"name": "VST Industries Limited", "symbol": "VSTIND", "id": "VSTIND"}, {"name": "CIE Automotive India Limited", "symbol": "CIEINDIA", "id": "CIEINDIA"}, {"name": "Nuvoco Vistas Corporation Limited", "symbol": "NUVOCO", "id": "NUVOCO"}, {"name": "Manorama Industries Limited", "symbol": "MANORAMA", "id": "MANORAMA"}, {"name": "ROUTE MOBILE LIMITED", "symbol": "ROUTE", "id": "ROUTE"}, {"name": "Godrej Industries Limited", "symbol": "GODREJIND", "id": "GODREJIND"}, {"name": "Prince Pipes And Fittings Limited", "symbol": "PRINCEPIPE", "id": "PRINCEPIPE"}, {"name": "Vaibhav Global Limited", "symbol": "VAIBHAVGBL", "id": "VAIBHAVGBL"}, {"name": "Orient Cement Limited", "symbol": "ORIENTCEM", "id": "ORIENTCEM"}, {"name": "Pearl Global Industries Limited", "symbol": "PGIL", "id": "PGIL"}, {"name": "The New India Assurance Company Limited", "symbol": "NIACL", "id": "NIACL"}, {"name": "Cera Sanitaryware Limited", "symbol": "CERA", "id": "CERA"}, {"name": "Star Cement Limited", "symbol": "STARCEMENT", "id": "STARCEMENT"}, {"name": "The Anup Engineering Limited", "symbol": "ANUP", "id": "ANUP"}, {"name": "Share India Securities Limited", "symbol": "SHAREINDIA", "id": "SHAREINDIA"}, {"name": "Triveni Engineering & Industries Limited", "symbol": "TRIVENI", "id": "TRIVENI"}, {"name": "Endurance Technologies Limited", "symbol": "ENDURANCE", "id": "ENDURANCE"}, {"name": "General Insurance Corporation of India", "symbol": "GICRE", "id": "GICRE"}, {"name": "Mstc Limited", "symbol": "MSTCLTD", "id": "MSTCLTD"}, {"name": "JK Paper Limited", "symbol": "JKPAPER", "id": "JKPAPER"}, {"name": "Healthcare Global Enterprises Limited", "symbol": "HCG", "id": "HCG"}, {"name": "Sunflag Iron And Steel Company Limited", "symbol": "SUNFLAG", "id": "SUNFLAG"}, {"name": "Orchid Pharma Limited", "symbol": "ORCHPHARMA", "id": "ORCHPHARMA"}, {"name": "Tips Music Limited", "symbol": "TIPSMUSIC", "id": "TIPSMUSIC"}, {"name": "Greenpanel Industries Limited", "symbol": "GREENPANEL", "id": "GREENPANEL"}, {"name": "BASF India Limited", "symbol": "BASF", "id": "BASF"}, {"name": "INOX India Limited", "symbol": "INOXINDIA", "id": "INOXINDIA"}, {"name": "IFB Industries Limited", "symbol": "IFBIND", "id": "IFBIND"}, {"name": "eMudhra Limited", "symbol": "EMUDHRA", "id": "EMUDHRA"}, {"name": "Apeejay Surrendra Park Hotels Limited", "symbol": "PARKHOTELS", "id": "PARKHOTELS"}, {"name": "Metropolis Healthcare Limited", "symbol": "METROPOLIS", "id": "METROPOLIS"}, {"name": "V-Guard Industries Limited", "symbol": "VGUARD", "id": "VGUARD"}, {"name": "Sundram Fasteners Limited", "symbol": "SUNDRMFAST", "id": "SUNDRMFAST"}, {"name": "Indo Count Industries Limited", "symbol": "ICIL", "id": "ICIL"}, {"name": "TVS Supply Chain Solutions Limited", "symbol": "TVSSCS", "id": "TVSSCS"}, {"name": "Eris Lifesciences Limited", "symbol": "ERIS", "id": "ERIS"}, {"name": "Vijaya Diagnostic Centre Limited", "symbol": "VIJAYA", "id": "VIJAYA"}, {"name": "India Glycols Limited", "symbol": "INDIAGLYCO", "id": "INDIAGLYCO"}, {"name": "LMW Limited", "symbol": "LMW", "id": "LMW"}, {"name": "Gateway Distriparks Limited", "symbol": "GATEWAY", "id": "GATEWAY"}, {"name": "Sunteck Realty Limited", "symbol": "SUNTECK", "id": "SUNTECK"}, {"name": "Godrej Agrovet Limited", "symbol": "GODREJAGRO", "id": "GODREJAGRO"}, {"name": "Akzo Nobel India Limited", "symbol": "AKZOINDIA", "id": "AKZOINDIA"}, {"name": "Sumitomo Chemical India Limited", "symbol": "SUMICHEM", "id": "SUMICHEM"}, {"name": "Mastek Limited", "symbol": "MASTEK", "id": "MASTEK"}, {"name": "Subros Limited", "symbol": "SUBROS", "id": "SUBROS"}, {"name": "Man Infraconstruction Limited", "symbol": "MANINFRA", "id": "MANINFRA"}, {"name": "Schneider Electric Infrastructure Limited", "symbol": "SCHNEIDER", "id": "SCHNEIDER"}, {"name": "Ethos Limited", "symbol": "ETHOSLTD", "id": "ETHOSLTD"}, {"name": "Campus Activewear Limited", "symbol": "CAMPUS", "id": "CAMPUS"}, {"name": "Electronics Mart India Limited", "symbol": "EMIL", "id": "EMIL"}, {"name": "Carborundum Universal Limited", "symbol": "CARBORUNIV", "id": "CARBORUNIV"}, {"name": "GHCL Limited", "symbol": "GHCL", "id": "GHCL"}, {"name": "Ratnamani Metals & Tubes Limited", "symbol": "RATNAMANI", "id": "RATNAMANI"}, {"name": "Epigral Limited", "symbol": "EPIGRAL", "id": "EPIGRAL"}, {"name": "Welspun Enterprises Limited", "symbol": "WELENT", "id": "WELENT"}, {"name": "The India Cements Limited", "symbol": "INDIACEM", "id": "INDIACEM"}, {"name": "Cyient DLM Limited", "symbol": "CYIENTDLM", "id": "CYIENTDLM"}, {"name": "Hikal Limited", "symbol": "HIKAL", "id": "HIKAL"}, {"name": "WESTLIFE FOODWORLD LIMITED", "symbol": "WESTLIFE", "id": "WESTLIFE"}, {"name": "Relaxo Footwears Limited", "symbol": "RELAXO", "id": "RELAXO"}, {"name": "Fine Organic Industries Limited", "symbol": "FINEORG", "id": "FINEORG"}, {"name": "Bikaji Foods International Limited", "symbol": "BIKAJI", "id": "BIKAJI"}, {"name": "Maharashtra Scooters Limited", "symbol": "MAHSCOOTER", "id": "MAHSCOOTER"}, {"name": "Varroc Engineering Limited", "symbol": "VARROC", "id": "VARROC"}, {"name": "J.Kumar Infraprojects Limited", "symbol": "JKIL", "id": "JKIL"}, {"name": "Imagicaaworld Entertainment Limited", "symbol": "IMAGICAA", "id": "IMAGICAA"}, {"name": "Dhanuka Agritech Limited", "symbol": "DHANUKA", "id": "DHANUKA"}, {"name": "Ahluwalia Contracts (India) Limited", "symbol": "AHLUCONT", "id": "AHLUCONT"}, {"name": "GANESH HOUSING LIMITED", "symbol": "GANESHHOU", "id": "GANESHHOU"}, {"name": "UTI Asset Management Company Limited", "symbol": "UTIAMC", "id": "UTIAMC"}, {"name": "Polyplex Corporation Limited", "symbol": "POLYPLEX", "id": "POLYPLEX"}, {"name": "Allcargo Logistics Limited", "symbol": "ALLCARGO", "id": "ALLCARGO"}, {"name": "Quess Corp Limited", "symbol": "QUESS", "id": "QUESS"}, {"name": "Dr. Agarwal's Health Care Limited", "symbol": "AGARWALEYE", "id": "AGARWALEYE"}, {"name": "Lux Industries Limited", "symbol": "LUXIND", "id": "LUXIND"}, {"name": "Dishman Carbogen Amcis Limited", "symbol": "DCAL", "id": "DCAL"}, {"name": "Garware Technical Fibres Limited", "symbol": "GARFIBRES", "id": "GARFIBRES"}, {"name": "Rallis India Limited", "symbol": "RALLIS", "id": "RALLIS"}, {"name": "Kirloskar Pneumatic Company Limited", "symbol": "KIRLPNU", "id": "KIRLPNU"}, {"name": "DCM Shriram Limited", "symbol": "DCMSHRIRAM", "id": "DCMSHRIRAM"}, {"name": "Kalyani Steels Limited", "symbol": "KSL", "id": "KSL"}, {"name": "Sharda Motor Industries Limited", "symbol": "SHARDAMOTR", "id": "SHARDAMOTR"}, {"name": "Ingersoll Rand (India) Limited", "symbol": "INGERRAND", "id": "INGERRAND"}, {"name": "Advanced Enzyme Technologies Limited", "symbol": "ADVENZYMES", "id": "ADVENZYMES"}, {"name": "Vesuvius India Limited", "symbol": "VESUVIUS", "id": "VESUVIUS"}, {"name": "Unimech Aerospace and Manufacturing Limited", "symbol": "UNIMECH", "id": "UNIMECH"}, {"name": "Blue Dart Express Limited", "symbol": "BLUEDART", "id": "BLUEDART"}, {"name": "Ventive Hospitality Limited", "symbol": "VENTIVE", "id": "VENTIVE"}, {"name": "Aarti Drugs Limited", "symbol": "AARTIDRUGS", "id": "AARTIDRUGS"}, {"name": "BOSCH HOME COMFORT INDIA LIMITED", "symbol": "BOSCH-HCIL", "id": "BOSCH-HCIL"}, {"name": "TSF INVESTMENTS LIMITED", "symbol": "TSFINV", "id": "TSFINV"}, {"name": "Asahi India Glass Limited", "symbol": "ASAHIINDIA", "id": "ASAHIINDIA"}, {"name": "Puravankara Limited", "symbol": "PURVA", "id": "PURVA"}, {"name": "Sanofi Consumer Healthcare India Limited", "symbol": "SANOFICONR", "id": "SANOFICONR"}, {"name": "Nesco Limited", "symbol": "NESCO", "id": "NESCO"}, {"name": "Zydus Wellness Limited", "symbol": "ZYDUSWELL", "id": "ZYDUSWELL"}, {"name": "Alivus Life Sciences Limited", "symbol": "ALIVUS", "id": "ALIVUS"}, {"name": "Mahindra Lifespace Developers Limited", "symbol": "MAHLIFE", "id": "MAHLIFE"}, {"name": "Vinati Organics Limited", "symbol": "VINATIORGA", "id": "VINATIORGA"}, {"name": "Safari Industries (India) Limited", "symbol": "SAFARI", "id": "SAFARI"}, {"name": "AstraZeneca Pharma India Limited", "symbol": "ASTRAZEN", "id": "ASTRAZEN"}, {"name": "Prism Johnson Limited", "symbol": "PRSMJOHNSN", "id": "PRSMJOHNSN"}, {"name": "Max Estates Limited", "symbol": "MAXESTATES", "id": "MAXESTATES"}, {"name": "Alembic Pharmaceuticals Limited", "symbol": "APLLTD", "id": "APLLTD"}, {"name": "Innova Captab Limited", "symbol": "INNOVACAP", "id": "INNOVACAP"}, {"name": "Teamlease Services Limited", "symbol": "TEAMLEASE", "id": "TEAMLEASE"}, {"name": "FDC Limited", "symbol": "FDC", "id": "FDC"}, {"name": "Jindal Worldwide Limited", "symbol": "JINDWORLD", "id": "JINDWORLD"}, {"name": "G R Infraprojects Limited", "symbol": "GRINFRA", "id": "GRINFRA"}, {"name": "Century Plyboards (India) Limited", "symbol": "CENTURYPLY", "id": "CENTURYPLY"}];
+
+// ── HELPERS ──────────────────────────────────────────────────
+function getIST(){return new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));}
+function getNowLabel(){
+  var d=getIST();
+  return String(d.getDate()).padStart(2,'0')+'-'+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]+'-'+d.getFullYear()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+function toast(msg,color){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=color||'#334155';t.style.color='#fff';t.style.display='block';t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.style.display='none';},400);},5000);
+}
+function div(css){var d=document.createElement('div');if(css)d.style.cssText=css;return d;}
+function btn(txt,css,fn){var b=document.createElement('button');b.textContent=txt;b.style.cssText=css;b.onclick=fn;return b;}
+function chip(txt,c,bg){return '<span style="background:'+bg+';color:'+c+';border-radius:3px;padding:2px 8px;font-size:10px;font-family:monospace;border:1px solid '+c+'30;margin-right:3px">'+txt+'</span>';}
+function fmtINR(n){return '₹'+n.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function withTimeout(p,ms){return new Promise(function(res,rej){var t=setTimeout(function(){rej(new Error('timeout'));},ms);p.then(function(v){clearTimeout(t);res(v);},function(e){clearTimeout(t);rej(e);});});}
+
+// ── STATE ────────────────────────────────────────────────────
+var ST={groqKey:'',results:{},prices:{},scanning:{},running:false,paused:false,
+        selectedId:null,filterText:'',filterTab:'all',detailTab:'top3',
+        scannedCount:0,label:getNowLabel(),mainTab:'s',scansFired:[]};
+try{ST.groqKey=localStorage.getItem('sip_groq')||'';}catch(e){}
+try{var _sr=localStorage.getItem('sip_r');if(_sr){ST.results=JSON.parse(_sr);ST.scannedCount=Object.keys(ST.results).length;}}catch(e){}
+try{ST.scansFired=JSON.parse(sessionStorage.getItem('sip_sf')||'[]');}catch(e){}
+
+var SENT={POSITIVE:{c:'#34d399',bg:'rgba(52,211,153,0.12)',icon:'▲'},NEGATIVE:{c:'#f87171',bg:'rgba(248,113,113,0.12)',icon:'▼'},NEUTRAL:{c:'#94a3b8',bg:'rgba(148,163,184,0.08)',icon:'◆'}};
+var ALC={CRITICAL:'#ef4444',HIGH:'#f97316',MEDIUM:'#facc15',LOW:'#94a3b8',NONE:'#475569'};
+
+// ── TAB ───────────────────────────────────────────────────────
+function showTab(t){
+  ST.mainTab=t;
+  document.getElementById('sv').style.display=t==='s'?'flex':'none';
+  document.getElementById('fv').style.display=t==='f'?'flex':'none';
+  ['s','f'].forEach(function(k){
+    var el=document.getElementById('tab-'+k);
+    var active=k===t;
+    el.style.background=active?(k==='s'?'rgba(96,165,250,0.1)':'rgba(167,139,250,0.1)'):'transparent';
+    el.style.borderBottom=active?'2px solid '+(k==='s'?'#60a5fa':'#a78bfa'):'2px solid transparent';
+    el.style.color=active?(k==='s'?'#60a5fa':'#a78bfa'):'#64748b';
+  });
+  if(t==='f') renderFII();
+}
+
+// ── YAHOO FINANCE CMP (confirmed working) ────────────────────
+function fetchCMP(sym){
+  var ticker=sym.replace(/[&]/g,'')+'.NS';
+  var url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(ticker)+'?interval=1d&range=5d';
+  withTimeout(fetch(url,{mode:'cors'}).then(function(r){return r.json();}),8000)
+  .then(function(d){
+    var res=d&&d.chart&&d.chart.result&&d.chart.result[0];
+    if(!res) return;
+    var meta=res.meta||{};
+    var prev=meta.chartPreviousClose||meta.regularMarketPrice;
+    var p=meta.regularMarketPrice||0;
+    var closes=(res.indicators&&res.indicators.quote&&res.indicators.quote[0]&&res.indicators.quote[0].close)||[];
+    var recent=closes.filter(function(c){return c!=null;}).slice(-5);
+    ST.prices[sym]={
+      p:p, chg:p-prev, pct:prev?(p-prev)/prev*100:0,
+      h:meta.regularMarketDayHigh||p, l:meta.regularMarketDayLow||p,
+      h52:meta.fiftyTwoWeekHigh||0, l52:meta.fiftyTwoWeekLow||0,
+      vol:meta.regularMarketVolume||0, avgVol:meta.averageDailyVolume3Month||0,
+      closes:recent, ts:Date.now()
+    };
+    if(ST.selectedId===sym) renderDetail();
+    renderList();
+  }).catch(function(){});
+}
+
+// ── GROQ ──────────────────────────────────────────────────────
+var _gt=[];
+function groqWait(){
+  return new Promise(function(resolve){
+    var now=Date.now();
+    _gt=_gt.filter(function(t){return now-t<60000;});
+    if(_gt.length>=20){
+      var wait=60000-(now-_gt[0])+500;
+      setTimeout(function(){_gt.push(Date.now());resolve();},wait);
+    } else {_gt.push(Date.now());resolve();}
+  });
+}
+
+function buildContext(co,px){
+  var lines=['STOCK: '+co.name+' (NSE:'+co.symbol+')','SCAN: '+ST.label,''];
+  if(px&&px.p){
+    var chgStr=(px.pct>=0?'▲ +':'▼ ')+Math.abs(px.pct).toFixed(2)+'%';
+    lines.push('PRICE TODAY: ₹'+px.p.toFixed(2)+' ('+chgStr+')');
+    lines.push('DAY RANGE: ₹'+px.l.toFixed(2)+' – ₹'+px.h.toFixed(2));
+    if(px.h52) lines.push('52W RANGE: ₹'+px.l52.toFixed(0)+' – ₹'+px.h52.toFixed(0));
+    if(px.avgVol&&px.vol){
+      var vs=(px.vol/px.avgVol).toFixed(1);
+      if(parseFloat(vs)>1.5) lines.push('VOLUME: '+vs+'x average — unusual activity');
+    }
+    if(px.h52&&px.p>=px.h52*0.97) lines.push('⚡ Near 52-WEEK HIGH');
+    if(px.l52&&px.p<=px.l52*1.05) lines.push('⚠ Near 52-WEEK LOW');
+    if(px.closes&&px.closes.length>=3){
+      var f=px.closes[0],la=px.closes[px.closes.length-1];
+      if(f>0) lines.push('5-DAY TREND: '+(((la-f)/f)*100).toFixed(1)+'%');
+    }
+  } else {
+    lines.push('Price data: not available');
+  }
+  return lines.join('\n');
+}
+
+function callGroq(co,px){
+  var ctx=buildContext(co,px);
+  var sys='You are an expert Indian stock analyst. Analyse the price data provided and return ONLY valid JSON. No markdown. No backticks. Start with { end with }. Base sentiment strictly on price action: up >2% = POSITIVE, down >2% = NEGATIVE, else NEUTRAL. If near 52w high = bullish signal. Volume spike = alert.';
+  var prompt=ctx+'\n\nReturn JSON:\n{"overall_sentiment":"POSITIVE|NEGATIVE|NEUTRAL","sentiment_strength":1-10,"one_liner":"specific observation with numbers","price_outlook":"STRONG_BUY|BUY|HOLD|SELL|STRONG_SELL","alert_level":"CRITICAL|HIGH|MEDIUM|LOW|NONE","alert_headline":"","estimated_impact_pct":0,"news_items":[{"category":"PRICE_ACTION","headline":"price observation","detail":"2 sentences","sentiment":"POSITIVE|NEGATIVE|NEUTRAL","impact":"HIGH|MEDIUM|LOW","impact_reason":"why this matters for traders","price_effect":"UP|DOWN|NEUTRAL","magnitude":"LARGE|MODERATE|SMALL"}],"bull_case":"based on price action","bear_case":"based on price action","key_catalysts":["price levels to watch"],"key_risks":["downside risks"],"fii_activity":{"status":"UNKNOWN","net_flow_cr":null,"consecutive_days":null,"holding_pct":null,"signal":"NEUTRAL"}}';
+  return groqWait().then(function(){
+    return fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+ST.groqKey},
+      body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:800,temperature:0.2,
+        messages:[{role:'system',content:sys},{role:'user',content:prompt}]})
+    });
+  }).then(function(r){
+    if(!r.ok) return r.text().then(function(b){throw new Error(r.status+' '+b.slice(0,60));});
+    return r.json();
+  }).then(function(d){
+    var txt=(d.choices[0].message.content||'').trim().replace(/```json|```/g,'').trim();
+    var j0=txt.indexOf('{'),j1=txt.lastIndexOf('}');
+    if(j0>-1&&j1>j0) txt=txt.slice(j0,j1+1);
+    return JSON.parse(txt);
+  });
+}
+
+// ── SCAN ENGINE ───────────────────────────────────────────────
+var _q=[],_a=0,_C=5,_wd=null;
+
+function startScan(label,resume){
+  if(!ST.groqKey){toast('⚠ Set Groq key first — click SET GROQ KEY','#ef4444');return;}
+  ST.label=label||getNowLabel();
+  ST.running=true;ST.paused=false;
+  if(resume){
+    var done=new Set(Object.keys(ST.results));
+    _q=COMPANIES.filter(function(c){return !done.has(c.symbol);});
+    toast('▶ Resuming — '+_q.length+' stocks remaining','#34d399');
+  } else {
+    ST.scannedCount=0;_q=COMPANIES.slice();
+  }
+  _a=0;
+  _wd=setInterval(function(){
+    if(!ST.running||ST.paused) return;
+    if(_a===0&&_q.length>0){toast('🔄 Auto-restart workers','#f97316');for(var i=0;i<_C;i++)nxt();}
+  },15000);
+  for(var i=0;i<_C;i++) nxt();
+  renderAll();
+}
+function stopScan(){ST.running=false;ST.paused=false;_q=[];_a=0;if(_wd){clearInterval(_wd);_wd=null;}renderAll();}
+function pauseScan(){ST.paused=!ST.paused;if(!ST.paused){for(var i=0;i<_C;i++)nxt();}renderAll();}
+
+function nxt(){
+  if(!ST.running||ST.paused||_a>=_C||_q.length===0) return;
+  var co=_q.shift();
+  if(!co){if(_a===0){ST.running=false;if(_wd){clearInterval(_wd);_wd=null;}toast('✅ Done — '+ST.scannedCount+' stocks scanned','#34d399');renderAll();}return;}
+  _a++;ST.scanning[co.symbol]=true;renderList();
+  scan1(co,0);
+}
+
+function scan1(co,attempt){
+  // Fetch CMP first, then call Groq with price context
+  var px=ST.prices[co.symbol]; // use cached if available
+  var priceReady = px ? Promise.resolve(px) :
+    withTimeout(
+      fetch('https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(co.symbol.replace(/[&]/g,'')+'.NS')+'?interval=1d&range=5d',{mode:'cors'})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var res=d&&d.chart&&d.chart.result&&d.chart.result[0];
+        if(!res) return null;
+        var meta=res.meta||{};
+        var prev=meta.chartPreviousClose||meta.regularMarketPrice;
+        var p=meta.regularMarketPrice||0;
+        var closes=(res.indicators&&res.indicators.quote&&res.indicators.quote[0]&&res.indicators.quote[0].close)||[];
+        var recent=closes.filter(function(c){return c!=null;}).slice(-5);
+        var px2={p:p,chg:p-prev,pct:prev?(p-prev)/prev*100:0,h:meta.regularMarketDayHigh||p,l:meta.regularMarketDayLow||p,h52:meta.fiftyTwoWeekHigh||0,l52:meta.fiftyTwoWeekLow||0,vol:meta.regularMarketVolume||0,avgVol:meta.averageDailyVolume3Month||0,closes:recent,ts:Date.now()};
+        ST.prices[co.symbol]=px2;
+        return px2;
+      }),
+      8000
+    ).catch(function(){return null;});
+
+  priceReady.then(function(px){
+    return callGroq(co,px);
+  }).then(function(result){
+    _a--;delete ST.scanning[co.symbol];
+    if(result){
+      result.scannedAt=ST.label;
+      if(result.news_items) result.news_items.forEach(function(n){n.scanLabel=ST.label;});
+      var prev=ST.results[co.symbol];
+      if(prev&&prev.news_items){
+        var seen={};prev.news_items.forEach(function(n){seen[n.headline]=1;});
+        result.news_items=(result.news_items||[]).filter(function(n){return !seen[n.headline];}).concat(prev.news_items);
+        result.scanHistory=(prev.scanHistory||[]).concat([{label:ST.label,ts:Date.now(),sentiment:prev.overall_sentiment,alert:prev.alert_level}]);
+      } else {
+        result.scanHistory=[{label:ST.label,ts:Date.now(),sentiment:result.overall_sentiment,alert:result.alert_level}];
+      }
+      ST.results[co.symbol]=result;ST.scannedCount++;
+      try{localStorage.setItem('sip_r',JSON.stringify(ST.results));}catch(e){}
+      if(result.alert_level==='CRITICAL'||result.alert_level==='HIGH'){
+        try{new Notification('⚡ '+result.alert_level+': '+co.symbol,{body:result.one_liner||''});}catch(e){}
+      }
+    }
+    renderList();if(ST.selectedId===co.symbol)renderDetail();renderTopBar();nxt();
+  }).catch(function(err){
+    var msg=(err.message||'').toString();
+    var is429=msg.indexOf('429')>-1,is401=msg.indexOf('401')>-1||msg.indexOf('invalid')>-1;
+    if(is401){toast('❌ Invalid Groq key — click SET GROQ KEY to update','#ef4444');stopScan();return;}
+    if((is429||msg.indexOf('fetch')>-1||msg.indexOf('timeout')>-1)&&attempt<4){
+      var wait=[5000,15000,35000,75000][attempt]||75000;
+      setTimeout(function(){scan1(co,attempt+1);},wait);
+    } else {
+      _a--;delete ST.scanning[co.symbol];
+      toast('⚠ Skipped '+co.symbol,'#64748b');nxt();
+    }
+  });
+}
+
+// ── SCHEDULER ────────────────────────────────────────────────
+function isMarketOpen(){var d=getIST(),m=d.getHours()*60+d.getMinutes(),wd=d.getDay();return wd>=1&&wd<=5&&m>=510&&m<780;}
+function nextScanT(){var d=getIST(),m=d.getHours()*60+d.getMinutes();return [{h:8,m:30,l:'8:30am'},{h:12,m:30,l:'12:30pm'}].filter(function(s){return s.h*60+s.m>m;})[0];}
+var _scKey=new Date().toDateString();
+setInterval(function(){
+  var d=getIST(),h=d.getHours(),m=d.getMinutes();
+  [{h:8,m:30,l:'8:30am'},{h:12,m:30,l:'12:30pm'}].forEach(function(st){
+    var k=_scKey+'_'+st.l;
+    if(h===st.h&&m===st.m&&ST.scansFired.indexOf(k)<0&&isMarketOpen()){
+      ST.scansFired.push(k);try{sessionStorage.setItem('sip_sf',JSON.stringify(ST.scansFired));}catch(e){}
+      startScan(getNowLabel());
+    }
+  });
+  renderTopBar();
+},15000);
+
+// ── RENDER TOPBAR ─────────────────────────────────────────────
+function renderTopBar(){
+  var tb=document.getElementById('topbar');if(!tb)return;
+  var rs=Object.values(ST.results);
+  var bulls=rs.filter(function(r){return r.overall_sentiment==='POSITIVE';}).length;
+  var bears=rs.filter(function(r){return r.overall_sentiment==='NEGATIVE';}).length;
+  var alerts=rs.filter(function(r){return r.alert_level&&r.alert_level!=='NONE';}).length;
+  var ns=nextScanT();
+  tb.innerHTML='';
+  // Title
+  var ti=div('display:flex;align-items:center;gap:6px;flex-shrink:0');
+  ti.innerHTML='<span style="color:#60a5fa;font-weight:700;font-size:13px;font-family:monospace">📡 STOCK INTEL PRO</span><span style="color:#34d399;font-size:9px;font-family:monospace">750·NSE·FREE</span>';
+  tb.appendChild(ti);
+  // Stats
+  var st=div('display:flex;gap:10px;align-items:center;flex-wrap:wrap');
+  st.innerHTML=sH('SCANNED',ST.scannedCount+'/750','#60a5fa')+sH('REM',(750-ST.scannedCount)+'','#64748b')+sH('▲',bulls,'#34d399')+sH('▼',bears,'#f87171')+sH('⚡',alerts,'#f97316');
+  tb.appendChild(st);
+  // Controls
+  var ct=div('display:flex;align-items:center;gap:5px;flex-shrink:0');
+  var mo=isMarketOpen();
+  ct.innerHTML='<div style="font-size:9px;font-family:monospace;color:'+(mo?'#34d399':'#64748b')+';margin-right:4px">'+(mo?'🟢 OPEN'+(ns?' · next: '+ns.l:''):'🔴 CLOSED')+'</div>';
+  ct.appendChild(btn('🔌 TEST','background:transparent;border:1px solid #64748b;color:#64748b;border-radius:3px;padding:4px 9px;font-size:10px;font-family:monospace',function(){
+    toast('Testing…','#64748b');
+    fetch('https://query1.finance.yahoo.com/v8/finance/chart/RELIANCE.NS?interval=1d&range=1d',{mode:'cors'})
+    .then(function(r){return r.json();}).then(function(d){
+      var p=d.chart.result[0].meta.regularMarketPrice;
+      toast('✅ Yahoo OK: RELIANCE ₹'+p.toFixed(0)+' — ready to scan!','#34d399');
+    }).catch(function(e){toast('❌ '+e.message,'#ef4444');});
+  }));
+  ct.appendChild(btn('🎯 DEMO','background:transparent;border:1px solid #a78bfa;color:#a78bfa;border-radius:3px;padding:4px 9px;font-size:10px;font-family:monospace',loadDemo));
+  if(!ST.running){
+    ct.appendChild(btn('▶ START','background:transparent;border:1px solid #34d399;color:#34d399;border-radius:3px;padding:4px 9px;font-size:10px;font-family:monospace',function(){startScan();}));
+    var rem=750-Object.keys(ST.results).length;
+    if(rem>0&&Object.keys(ST.results).length>0)
+      ct.appendChild(btn('⏩ RESUME('+rem+')','background:transparent;border:1px solid #60a5fa;color:#60a5fa;border-radius:3px;padding:4px 9px;font-size:10px;font-family:monospace',function(){startScan(null,true);}));
+  } else {
+    ct.appendChild(btn(ST.paused?'▶':'⏸','background:transparent;border:1px solid #facc15;color:#facc15;border-radius:3px;padding:4px 9px;font-size:10px;font-family:monospace',pauseScan));
+    ct.appendChild(btn('■ STOP','background:transparent;border:1px solid #ef4444;color:#ef4444;border-radius:3px;padding:4px 9px;font-size:10px;font-family:monospace',stopScan));
+  }
+  var ks=!!ST.groqKey;
+  ct.appendChild(btn(ks?'🔑 GROQ':'⚠ SET GROQ KEY',
+    'background:'+(ks?'rgba(52,211,153,0.1)':'rgba(239,68,68,0.15)')+';border:1px solid '+(ks?'#34d399':'#ef4444')+';color:'+(ks?'#34d399':'#ef4444')+';border-radius:3px;padding:4px 9px;font-size:10px;font-family:monospace',
+    function(){var k=prompt('Paste Groq API key (free at console.groq.com):','');if(k&&k.trim()){ST.groqKey=k.trim();try{localStorage.setItem('sip_groq',ST.groqKey);}catch(e){}renderTopBar();}}
+  ));
+  tb.appendChild(ct);
+}
+function sH(l,v,c){return '<div style="text-align:center"><div style="color:#64748b;font-size:8px;font-family:monospace">'+l+'</div><div style="color:'+c+';font-size:12px;font-weight:700;font-family:monospace">'+v+'</div></div>';}
+
+// ── RENDER LIST ───────────────────────────────────────────────
+function renderList(){
+  var lp=document.getElementById('lp');if(!lp)return;
+  lp.innerHTML='';
+  var inp=document.createElement('input');
+  inp.placeholder='Search…';inp.value=ST.filterText;
+  inp.style.cssText='width:100%;background:#1e293b;border:none;border-bottom:1px solid #334155;color:#e2e8f0;padding:8px 12px;font-size:11px;font-family:monospace';
+  inp.oninput=function(){ST.filterText=this.value;renderList();};
+  lp.appendChild(inp);
+  var tabs=div('display:flex;border-bottom:1px solid #1e293b;flex-shrink:0');
+  [{k:'all',l:'All'},{k:'bull',l:'▲'},{k:'bear',l:'▼'},{k:'alert',l:'⚡'}].forEach(function(t){
+    var b=btn(t.l,'flex:1;background:'+(ST.filterTab===t.k?'rgba(96,165,250,0.1)':'transparent')+';border:none;border-bottom:2px solid '+(ST.filterTab===t.k?'#60a5fa':'transparent')+';color:'+(ST.filterTab===t.k?'#60a5fa':'#64748b')+';padding:6px 4px;font-size:11px;font-family:monospace',
+      function(){ST.filterTab=t.k;renderList();});
+    tabs.appendChild(b);
+  });
+  lp.appendChild(tabs);
+  var list=div('overflow-y:auto;flex:1');
+  var ft=ST.filterText.toLowerCase();
+  COMPANIES.filter(function(co){
+    if(ft&&co.name.toLowerCase().indexOf(ft)<0&&co.symbol.toLowerCase().indexOf(ft)<0) return false;
+    var r=ST.results[co.symbol];
+    if(ST.filterTab==='bull') return r&&r.overall_sentiment==='POSITIVE';
+    if(ST.filterTab==='bear') return r&&r.overall_sentiment==='NEGATIVE';
+    if(ST.filterTab==='alert') return r&&r.alert_level&&r.alert_level!=='NONE';
+    return true;
+  }).forEach(function(co){
+    var r=ST.results[co.symbol],sc=SENT[r&&r.overall_sentiment]||SENT.NEUTRAL;
+    var isSc=!!ST.scanning[co.symbol],isSel=ST.selectedId===co.symbol;
+    var px=ST.prices[co.symbol];
+    var row=div('padding:8px 12px;border-bottom:1px solid #1e293b;border-left:3px solid '+(isSc?'#60a5fa':r?sc.c:'#1e293b')+';background:'+(isSel?'#1e3a5f':isSc?'rgba(96,165,250,0.04)':'transparent')+';cursor:pointer;position:relative;overflow:hidden');
+    if(isSc){var bar=div('position:absolute;bottom:0;left:0;height:1px;width:40%;background:linear-gradient(90deg,transparent,#60a5fa,transparent);animation:slidein 1.5s linear infinite');row.appendChild(bar);}
+    var ab=r&&r.alert_level&&r.alert_level!=='NONE'?'<span style="color:'+ALC[r.alert_level]+';font-size:9px;font-family:monospace">'+r.alert_level+'</span>':(isSc?'<span style="color:#60a5fa;font-size:9px;font-family:monospace">…</span>':'');
+    var ts=r&&r.scannedAt?r.scannedAt:'';
+    var sp=ts.match(/^(\d{2}-[A-Za-z]{3}-\d{4})\s+(\d{2}:\d{2})$/);
+    var td=sp?sp[2]+' '+sp[1].slice(0,6):ts;
+    row.innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:center">'+
+        '<span style="color:'+(r?sc.c:'#475569')+';font-family:monospace;font-weight:700;font-size:11px">'+co.symbol+'</span>'+
+        '<div style="display:flex;gap:4px;align-items:center">'+
+          (px?'<span style="color:'+(px.pct>=0?'#34d399':'#f87171')+';font-size:10px;font-family:monospace;font-weight:700">₹'+px.p.toLocaleString('en-IN',{maximumFractionDigits:0})+'</span>':'')+
+          ab+'</div></div>'+
+      '<div style="display:flex;justify-content:space-between;margin-top:1px">'+
+        '<span style="color:#64748b;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px">'+co.name+'</span>'+
+        (px?'<span style="color:'+(px.pct>=0?'#34d399':'#f87171')+';font-size:9px;font-family:monospace">'+(px.pct>=0?'▲':'▼')+Math.abs(px.pct).toFixed(2)+'%</span>':'')+
+      '</div>'+
+      (td?'<div style="color:#475569;font-size:8px;font-family:monospace;margin-top:1px">🕐 '+td+'</div>':'')+
+      (r&&r.one_liner?'<div style="color:#475569;font-size:9px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+r.one_liner+'</div>':'');
+    row.onclick=function(){if(r||isSc){ST.selectedId=co.symbol;renderList();renderDetail();}};
+    list.appendChild(row);
+  });
+  lp.appendChild(list);
+}
+
+// ── RENDER DETAIL ─────────────────────────────────────────────
+function renderDetail(){
+  var rp=document.getElementById('rp');if(!rp)return;rp.innerHTML='';
+  if(!ST.selectedId){
+    rp.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#94a3b8;font-family:monospace;gap:10px"><div style="font-size:48px">📡</div><div style="font-size:13px;letter-spacing:2px">SELECT A STOCK</div><div style="font-size:11px;color:#475569">Click any scanned stock</div><div style="margin-top:16px"><button onclick="loadDemo()" style="background:rgba(124,58,237,0.1);border:1px solid #7c3aed;color:#a78bfa;border-radius:4px;padding:8px 18px;font-size:12px;font-family:monospace;cursor:pointer">🎯 Load Demo</button></div></div>';
+    return;
+  }
+  var co=COMPANIES.find(function(c){return c.symbol===ST.selectedId;});
+  var r=ST.results[ST.selectedId];
+  if(!co||!r){rp.innerHTML='<div style="padding:20px;color:#94a3b8;font-family:monospace">'+(ST.scanning[ST.selectedId]?'⏳ Scanning…':'Not scanned yet')+'</div>';return;}
+  var sc=SENT[r.overall_sentiment]||SENT.NEUTRAL;
+  var all=r.news_items||[];
+  var pos=all.filter(function(n){return n.sentiment==='POSITIVE';});
+  var neg=all.filter(function(n){return n.sentiment==='NEGATIVE';});
+  var hi=all.filter(function(n){return n.impact==='HIGH';});
+  var top3=all.slice().sort(function(a,b){return ({HIGH:3,MEDIUM:2,LOW:1}[b.impact]||0)-({HIGH:3,MEDIUM:2,LOW:1}[a.impact]||0);}).slice(0,3);
+  var px=ST.prices[co.symbol];
+
+  var hdr=div('padding:14px 18px;background:#fff;border-bottom:1px solid #e2e8f0;flex-shrink:0');
+  hdr.innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+    '<div style="flex:1">'+
+      '<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px">'+
+        '<span style="font-size:20px;font-weight:700;font-family:monospace;color:#0f172a">'+co.symbol+'</span>'+
+        '<span style="font-size:12px;color:#374151">'+co.name+'</span>'+
+      '</div>'+
+      (px?'<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px">'+
+        '<span style="font-size:22px;font-weight:700;font-family:monospace;color:#0f172a">₹'+px.p.toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2})+'</span>'+
+        '<span style="font-size:13px;font-family:monospace;color:'+(px.pct>=0?'#34d399':'#f87171')+';font-weight:600">'+(px.pct>=0?'▲ +':'▼ ')+Math.abs(px.pct).toFixed(2)+'%</span>'+
+        '<span style="font-size:10px;color:#94a3b8;font-family:monospace">H:₹'+px.h.toFixed(0)+' L:₹'+px.l.toFixed(0)+(px.h52?' · 52W:₹'+px.l52.toFixed(0)+'-₹'+px.h52.toFixed(0):'')+'</span>'+
+        '<button onclick="fetchCMP(''+co.symbol+'')" style="background:transparent;border:1px solid #e2e8f0;color:#94a3b8;border-radius:3px;padding:1px 7px;font-size:9px;font-family:monospace;cursor:pointer">↻</button>'+
+      '</div>':'<div style="margin-bottom:6px"><button onclick="fetchCMP(''+co.symbol+'')" style="background:rgba(96,165,250,0.1);border:1px solid #60a5fa;color:#60a5fa;border-radius:3px;padding:3px 10px;font-size:9px;font-family:monospace;cursor:pointer">↻ Load Price</button></div>')+
+      '<div>'+
+        chip(sc.icon+' '+r.overall_sentiment+' '+(r.sentiment_strength||0)+'/10',sc.c,sc.bg)+
+        (r.alert_level&&r.alert_level!=='NONE'?chip('⚡ '+r.alert_level,ALC[r.alert_level],'rgba(239,68,68,0.08)'):'')+
+        (r.estimated_impact_pct!=null?chip((r.estimated_impact_pct>=0?'+':'')+r.estimated_impact_pct+'%',r.estimated_impact_pct>=0?'#34d399':'#f87171','rgba(52,211,153,0.05)'):'')+
+        (r.scannedAt?chip('🕐 '+r.scannedAt,'#64748b','rgba(100,116,139,0.08)'):'')+
+      '</div>'+
+    '</div>'+
+    '<button onclick="ST.selectedId=null;renderDetail()" style="background:transparent;border:1px solid #e2e8f0;color:#374151;border-radius:3px;padding:3px 8px;cursor:pointer">✕</button>'+
+    '</div>'+
+    (r.one_liner?'<div style="margin-top:8px;color:#3b82f6;font-size:11px;background:rgba(59,130,246,0.05);border-radius:4px;padding:6px 10px;border-left:3px solid rgba(59,130,246,0.3)">'+r.one_liner+'</div>':'');
+  rp.appendChild(hdr);
+
+  // FII strip
+  if(r.fii_activity&&r.fii_activity.status&&r.fii_activity.status!=='UNKNOWN'){
+    var fii=r.fii_activity,fc=fii.status==='BUYING'?'#34d399':fii.status==='SELLING'?'#f87171':'#94a3b8';
+    var fs=div('display:flex;gap:12px;align-items:center;padding:7px 18px;border-bottom:1px solid #e2e8f0;flex-shrink:0');
+    fs.innerHTML='<span style="font-size:9px;font-family:monospace;color:#64748b">FII/DII</span><span style="color:'+fc+';font-size:10px;font-weight:700;font-family:monospace">'+(fii.status==='BUYING'?'▲ BUYING':fii.status==='SELLING'?'▼ SELLING':'◆ NEUTRAL')+'</span>';
+    rp.appendChild(fs);
+  }
+
+  // Tab bar
+  var tb=div('display:flex;border-bottom:1px solid #e2e8f0;background:#fff;flex-shrink:0');
+  [{k:'top3',l:'⭐ TOP 3'},{k:'all',l:'All('+all.length+')'},{k:'pos',l:'▲('+pos.length+')'},{k:'neg',l:'▼('+neg.length+')'},{k:'hi',l:'⚡('+hi.length+')'},{k:'ana',l:'📊'}].forEach(function(t){
+    tb.appendChild(btn(t.l,'padding:8px 10px;font-size:10px;font-family:monospace;background:'+(ST.detailTab===t.k?'rgba(59,130,246,0.06)':'transparent')+';border:none;border-bottom:2px solid '+(ST.detailTab===t.k?'#3b82f6':'transparent')+';color:'+(ST.detailTab===t.k?'#3b82f6':'#64748b')+';cursor:pointer',
+      function(){ST.detailTab=t.k;renderDetail();}));
+  });
+  rp.appendChild(tb);
+
+  var body=div('flex:1;overflow-y:auto;padding:14px 18px;background:#f8fafc');
+
+  // Scan log
+  if(r.scanHistory&&r.scanHistory.length){
+    var hist=div('background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px 14px;margin-bottom:12px');
+    hist.innerHTML='<div style="color:#94a3b8;font-size:9px;font-family:monospace;letter-spacing:1px;margin-bottom:8px">📅 SCAN LOG</div>';
+    var hr=div('display:flex;gap:8px;flex-wrap:wrap');
+    r.scanHistory.forEach(function(sh){
+      var ssc=SENT[sh.sentiment]||SENT.NEUTRAL;
+      var sp2=sh.label&&sh.label.match(/^(\d{2}-[A-Za-z]{3}-\d{4})\s+(\d{2}:\d{2})$/);
+      var shd=div('background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;padding:6px 10px;min-width:90px');
+      shd.innerHTML='<div style="font-family:monospace;font-weight:700;color:#3b82f6;font-size:12px">'+(sp2?sp2[2]:sh.label)+'</div>'+(sp2?'<div style="font-family:monospace;color:#94a3b8;font-size:8px">'+sp2[1]+'</div>':'')+
+        '<div style="color:'+ssc.c+';font-size:9px">'+ssc.icon+' '+sh.sentiment+'</div>'+
+        (sh.alert&&sh.alert!=='NONE'?'<div style="color:#f87171;font-size:9px">⚡ '+sh.alert+'</div>':'');
+      hr.appendChild(shd);
+    });
+    hist.appendChild(hr);body.appendChild(hist);
+  }
+
+  if(ST.detailTab==='top3'){
+    body.innerHTML+='<div style="color:#facc15;font-size:10px;font-family:monospace;font-weight:700;margin-bottom:10px">⭐ TOP 3 EVENTS</div>';
+    if(!top3.length) body.innerHTML+='<div style="color:#94a3b8;text-align:center;padding:30px">No events found</div>';
+    else ['🥇','🥈','🥉'].forEach(function(m,i){if(top3[i]){var w=div('display:flex;gap:8px;margin-bottom:8px');var md=div('font-size:18px;flex-shrink:0');md.textContent=m;w.appendChild(md);w.appendChild(newsCard(top3[i]));body.appendChild(w);}});
+  } else if(ST.detailTab==='ana'){
+    body.appendChild(analysisPanel(r,all,pos,neg,hi));
+  } else {
+    var items=ST.detailTab==='pos'?pos:ST.detailTab==='neg'?neg:ST.detailTab==='hi'?hi:all;
+    if(!items.length) body.innerHTML='<div style="color:#94a3b8;text-align:center;padding:40px;font-family:monospace">NO ITEMS</div>';
+    else items.forEach(function(item){body.appendChild(newsCard(item));});
+  }
+  rp.appendChild(body);
+}
+
+function newsCard(item){
+  var ic=item.impact==='HIGH'?'#f87171':item.impact==='MEDIUM'?'#fb923c':'#475569';
+  var sc=SENT[item.sentiment]||SENT.NEUTRAL;
+  var card=div('border-left:3px solid '+ic+';background:#fff;border-radius:5px;padding:10px 13px;margin-bottom:8px');
+  var sl=item.scanLabel||'';
+  var sp=sl.match(/^(\d{2}-[A-Za-z]{3}-\d{4})\s+(\d{2}:\d{2})$/);
+  var slD=sp?sp[2]+' '+sp[1].slice(0,6):sl;
+  card.innerHTML=
+    '<div style="display:flex;justify-content:space-between;margin-bottom:5px">'+
+      '<span style="font-size:9px;font-family:monospace;color:#60a5fa;background:rgba(96,165,250,0.1);padding:2px 7px;border-radius:3px">'+(item.category||'NEWS')+'</span>'+
+      '<div style="display:flex;gap:4px"><span style="color:'+sc.c+';font-size:9px;font-family:monospace">'+sc.icon+' '+item.sentiment+'</span><span style="color:'+ic+';font-size:9px;font-family:monospace;background:'+ic+'18;border-radius:3px;padding:0 4px">'+item.impact+'</span></div>'+
+    '</div>'+
+    '<div style="color:#0f172a;font-size:12px;font-weight:700;line-height:1.4;margin-bottom:5px">'+(item.headline||'')+'</div>'+
+    (item.detail?'<div style="color:#374151;font-size:11px;line-height:1.6;margin-bottom:6px">'+item.detail+'</div>':'')+
+    (item.impact_reason?'<div style="background:rgba(29,78,216,0.05);border-left:3px solid #3b82f6;border-radius:0 4px 4px 0;padding:6px 10px;margin-bottom:5px"><div style="color:#1d4ed8;font-size:9px;font-family:monospace;font-weight:700;margin-bottom:3px">📌 WHY THIS MOVES THE STOCK</div><div style="color:#1e3a8a;font-size:11px;line-height:1.6">'+item.impact_reason+'</div></div>':'')+
+    (slD?'<span style="font-size:8px;font-family:monospace;color:#64748b;background:rgba(100,116,139,0.1);border-radius:3px;padding:1px 5px">🕐 '+slD+'</span>':'');
+  return card;
+}
+
+function analysisPanel(r,all,pos,neg,hi){
+  var wrap=div('display:flex;flex-direction:column;gap:10px');
+  var grid=div('display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px');
+  [{l:'TOTAL',v:all.length,c:'#60a5fa'},{l:'POSITIVE',v:pos.length,c:'#34d399'},{l:'NEGATIVE',v:neg.length,c:'#f87171'},{l:'HIGH IMPACT',v:hi.length,c:'#fb923c'},{l:'CONFIDENCE',v:(r.sentiment_strength||0)+'/10',c:'#facc15'},{l:'EST MOVE',v:r.estimated_impact_pct!=null?(r.estimated_impact_pct>=0?'+':'')+r.estimated_impact_pct+'%':'N/A',c:'#60a5fa'}].forEach(function(s){
+    var sd=div('background:#fff;border:1px solid #e8ecf0;border-radius:4px;padding:9px 11px');
+    sd.innerHTML='<div style="color:#94a3b8;font-size:8px;letter-spacing:1px;font-family:monospace;margin-bottom:4px">'+s.l+'</div><div style="color:'+s.c+';font-size:18px;font-weight:700;font-family:monospace">'+s.v+'</div>';
+    grid.appendChild(sd);
+  });
+  wrap.appendChild(grid);
+  if(r.bull_case){var b=div('background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.2);border-radius:4px;padding:10px 12px');b.innerHTML='<div style="color:#34d399;font-size:9px;font-weight:700;font-family:monospace;margin-bottom:5px">▲ BULL CASE</div><div style="color:#475569;font-size:11px;line-height:1.6">'+r.bull_case+'</div>';wrap.appendChild(b);}
+  if(r.bear_case){var bb=div('background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.2);border-radius:4px;padding:10px 12px');bb.innerHTML='<div style="color:#f87171;font-size:9px;font-weight:700;font-family:monospace;margin-bottom:5px">▼ BEAR CASE</div><div style="color:#475569;font-size:11px;line-height:1.6">'+r.bear_case+'</div>';wrap.appendChild(bb);}
+  if(r.key_catalysts&&r.key_catalysts.length){var c=div('background:rgba(96,165,250,0.04);border:1px solid rgba(96,165,250,0.14);border-radius:4px;padding:10px 12px');c.innerHTML='<div style="color:#60a5fa;font-size:9px;font-weight:700;font-family:monospace;margin-bottom:6px">🚀 CATALYSTS</div>'+r.key_catalysts.map(function(x){return '<div style="color:#bfdbfe;font-size:11px;padding:2px 0">→ '+x+'</div>';}).join('');wrap.appendChild(c);}
+  if(r.key_risks&&r.key_risks.length){var rr=div('background:rgba(251,146,60,0.04);border:1px solid rgba(251,146,60,0.14);border-radius:4px;padding:10px 12px');rr.innerHTML='<div style="color:#fb923c;font-size:9px;font-weight:700;font-family:monospace;margin-bottom:6px">⚠ RISKS</div>'+r.key_risks.map(function(x){return '<div style="color:#fed7aa;font-size:11px;padding:2px 0">⚠ '+x+'</div>';}).join('');wrap.appendChild(rr);}
+  return wrap;
+}
+
+// ── FII TRACKER ───────────────────────────────────────────────
+var FII={loading:false,lastFetch:0,deals:[],agg:[],log:[],window:'7d',inst:'all'};
+function fiiWin(b){FII.window=b.getAttribute('data-w');renderFII();}
+function fiiInst(b){FII.inst=b.getAttribute('data-k');renderFII();}
+function wMs(w){var n=Date.now();return w==='3d'?n-3*86400000:w==='7d'?n-7*86400000:w==='15d'?n-15*86400000:n-31*86400000;}
+function detInst(txt){
+  if(/HDFC.{0,15}(MUTUAL|MF|AMC|FUND)/i.test(txt)) return {type:'MF',label:'HDFC AMC'};
+  if(/ICICI.{0,15}(PRUDENTIAL|PRU|MF|AMC|FUND)/i.test(txt)) return {type:'MF',label:'ICICI PRU'};
+  if(/SBI.{0,15}(MUTUAL|MF|AMC|FUND)/i.test(txt)) return {type:'MF',label:'SBI MF'};
+  if(/MORGAN STANLEY/i.test(txt)) return {type:'FII',label:'Morgan Stanley'};
+  if(/GOLDMAN/i.test(txt)) return {type:'FII',label:'Goldman Sachs'};
+  if(/NOMURA/i.test(txt)) return {type:'FII',label:'Nomura'};
+  if(/JP.?MORGAN/i.test(txt)) return {type:'FII',label:'JP Morgan'};
+  if(/BLACKROCK/i.test(txt)) return {type:'FII',label:'BlackRock'};
+  if(/NORGES/i.test(txt)) return {type:'FII',label:'Norges Bank'};
+  if(/FII|FPI|FOREIGN (PORTFOLIO|INSTITUTIONAL)/i.test(txt)) return {type:'FII',label:'FII/FPI'};
+  return null;
+}
+function parseDeal(item){
+  var t=item.title||'',full=t+' '+(item.desc||'');
+  var sym='',coN='';
+  for(var i=0;i<COMPANIES.length;i++){
+    var c=COMPANIES[i],s=c.symbol.toUpperCase();
+    if(new RegExp('\\b'+s.replace(/[&]/g,'\\&')+'\\b').test(full.toUpperCase())){sym=c.symbol;coN=c.name;break;}
+    var n=c.name.split(' ')[0].toUpperCase();
+    if(n.length>=6&&full.toUpperCase().indexOf(n)>-1){sym=c.symbol;coN=c.name;break;}
+  }
+  if(!sym) return null;
+  var isBuy=/\b(buy|bought|acqui|purchas|increas|accumul)\b/i.test(full);
+  var isSell=/\b(sell|sold|reduc|exit|offload|decreas)\b/i.test(full);
+  if(!isBuy&&!isSell) return null;
+  var inst=detInst(full);if(!inst) return null;
+  var vm=full.match(/([\d,]+(?:\.\d+)?)\s*(?:crore|Cr|CR)/i);
+  return{date:item.pub?new Date(item.pub).toLocaleDateString('en-IN',{day:'2-digit',month:'short'}):'',ts:item.pub?new Date(item.pub).getTime():Date.now(),symbol:sym,company:coN,client:inst.label,institution:inst,action:isBuy?'BUY':'SELL',valueCr:vm?parseFloat(vm[1].replace(/,/g,''))||0:0,headline:t};
+}
+function loadFIIData(){
+  if(FII.loading) return;
+  if(Date.now()-FII.lastFetch<900000){renderFII();return;}
+  FII.loading=true;FII.log=[];renderFII();
+  var qs=['bulk deal NSE FII FPI India 2025','block deal NSE FPI crore India 2025','"HDFC Mutual Fund" bought OR sold NSE','"ICICI Prudential" fund bought sold India','"SBI Mutual Fund" bought sold NSE','"Morgan Stanley" India NSE bought sold','FII bought sold India NSE crore today','FPI bought sold NSE India shares crore','promoter stake increased decreased NSE India'];
+  var all=[],seen={};
+  var r2jBase='https://api.rss2json.com/v1/api.json?rss_url=';
+  var gnBase='https://news.google.com/rss/search?q=';
+  var gnSuffix='&hl=en-IN&gl=IN&ceid=IN:en';
+  Promise.all(qs.map(function(q){
+    var url=r2jBase+encodeURIComponent(gnBase+encodeURIComponent(q)+gnSuffix);
+    return withTimeout(fetch(url).then(function(r){return r.json();}),10000)
+    .then(function(d){
+      var items=(d&&d.items)||[];
+      FII.log.push({q:q,n:items.length});
+      items.forEach(function(item){
+        var deal=parseDeal({title:(item.title||'').replace(/<[^>]+>/g,'').trim(),desc:(item.description||'').replace(/<[^>]+>/g,'').trim(),pub:item.pubDate||''});
+        if(deal){var k=deal.headline.slice(0,60).toLowerCase();if(!seen[k]){seen[k]=1;all.push(deal);}}
+      });
+    }).catch(function(){FII.log.push({q:q,n:0,err:true});});
+  })).then(function(){
+    FII.deals=all;FII.lastFetch=Date.now();FII.loading=false;
+    toast('✅ FII data — '+all.length+' deals found','#34d399');
+    renderFII();
+  });
+}
+function renderFII(){
+  var p=document.getElementById('fp');if(!p)return;
+  if(FII.loading){p.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:300px;color:#a78bfa;font-family:monospace;font-size:13px">⏳ FETCHING FII DATA…</div>';return;}
+  if(!FII.lastFetch){
+    p.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:400px;gap:16px"><div style="font-size:48px">🌍</div><div style="color:#a78bfa;font-size:13px;font-family:monospace;letter-spacing:2px">FII / MF TRACKER</div><div style="color:#475569;font-size:11px;font-family:monospace;text-align:center;line-height:1.8">Tracks FII/FPI + HDFC AMC + ICICI Pru + SBI MF<br>buying & selling across Nifty 750</div><button onclick="loadFIIData()" style="background:rgba(167,139,250,0.15);border:1px solid #a78bfa;color:#a78bfa;border-radius:6px;padding:10px 24px;font-size:12px;font-family:monospace;cursor:pointer">▶ LOAD FII DATA</button></div>';
+    return;
+  }
+  var cutoff=wMs(FII.window),inst=FII.inst;
+  var filtered=FII.deals.filter(function(d){
+    if(d.ts<cutoff)return false;
+    if(inst==='fii')return d.institution.type==='FII';
+    if(inst==='hdfc')return d.institution.label==='HDFC AMC';
+    if(inst==='icici')return d.institution.label==='ICICI PRU';
+    if(inst==='sbi')return d.institution.label==='SBI MF';
+    return true;
+  });
+  var byS={};
+  filtered.forEach(function(d){
+    if(!byS[d.symbol])byS[d.symbol]={sym:d.symbol,co:d.company,buy:0,sell:0,insts:new Set(),deals:[]};
+    if(d.action==='BUY')byS[d.symbol].buy+=d.valueCr;else byS[d.symbol].sell+=d.valueCr;
+    byS[d.symbol].insts.add(d.institution.label+'('+d.action+')');byS[d.symbol].deals.push(d);
+  });
+  var summ=Object.values(byS).map(function(s){s.net=s.buy-s.sell;s.sig=s.net>0.5?'BUY':s.net<-0.5?'SELL':'NEUTRAL';s.il=Array.from(s.insts);return s;}).sort(function(a,b){return Math.abs(b.net)-Math.abs(a.net);});
+  var buyers=summ.filter(function(s){return s.sig==='BUY';});
+  var sellers=summ.filter(function(s){return s.sig==='SELL';});
+  var hits=FII.log.reduce(function(a,l){return a+(l.n||0);},0);
+
+  var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">';
+  html+='<div><div style="color:#a78bfa;font-weight:700;font-size:14px;font-family:monospace">🌍 FII / MF TRACKER</div>';
+  html+='<div style="color:#475569;font-size:10px;font-family:monospace;margin-top:2px">'+FII.log.length+' sources · '+hits+' articles · '+FII.deals.length+' deals</div></div>';
+  html+='<button onclick="FII.lastFetch=0;loadFIIData()" style="background:rgba(167,139,250,0.1);border:1px solid #a78bfa;color:#a78bfa;border-radius:4px;padding:5px 14px;font-size:10px;font-family:monospace;cursor:pointer">🔄 REFRESH</button></div>';
+  // Controls
+  html+='<div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap">';
+  html+='<div style="display:flex;gap:3px;background:#1e293b;border-radius:4px;padding:3px">';
+  [{w:'3d',l:'3D'},{w:'7d',l:'7D'},{w:'15d',l:'15D'},{w:'1m',l:'1M'}].forEach(function(t){var a=FII.window===t.w;html+='<button onclick="fiiWin(this)" data-w="'+t.w+'" style="background:'+(a?'rgba(167,139,250,0.2)':'transparent')+';border:none;border-radius:3px;color:'+(a?'#a78bfa':'#64748b')+';padding:4px 10px;font-size:9px;font-family:monospace;font-weight:'+(a?700:400)+';cursor:pointer">'+t.l+'</button>';});
+  html+='</div><div style="display:flex;gap:3px;background:#1e293b;border-radius:4px;padding:3px">';
+  [{k:'all',l:'All'},{k:'fii',l:'FII'},{k:'hdfc',l:'HDFC'},{k:'icici',l:'ICICI'},{k:'sbi',l:'SBI MF'}].forEach(function(f){var a=FII.inst===f.k;html+='<button onclick="fiiInst(this)" data-k="'+f.k+'" style="background:'+(a?'rgba(251,191,36,0.15)':'transparent')+';border:none;border-radius:3px;color:'+(a?'#fbbf24':'#64748b')+';padding:4px 10px;font-size:9px;font-family:monospace;font-weight:'+(a?700:400)+';cursor:pointer">'+f.l+'</button>';});
+  html+='</div></div>';
+  // Stats
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:16px">';
+  [{l:'DEALS',v:filtered.length,c:'#60a5fa'},{l:'BUYING',v:buyers.length+' stocks',c:'#34d399'},{l:'SELLING',v:sellers.length+' stocks',c:'#f87171'},{l:'NET',v:summ.length?'₹'+summ.reduce(function(a,s){return a+s.net;},0).toFixed(0)+'Cr':'N/A',c:'#facc15'}].forEach(function(s){
+    html+='<div style="background:#1e293b;border-radius:5px;padding:10px 12px"><div style="color:#475569;font-size:8px;font-family:monospace;margin-bottom:4px">'+s.l+'</div><div style="color:'+s.c+';font-size:14px;font-weight:700;font-family:monospace">'+s.v+'</div></div>';
+  });
+  html+='</div>';
+  // Two columns
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">';
+  function col(list,action,c){
+    var h='<div><div style="color:'+c+';font-size:10px;font-family:monospace;font-weight:700;margin-bottom:8px;padding:6px 10px;background:'+c+'18;border-radius:4px;border-left:3px solid '+c+'">'+(action==='BUY'?'▲ BUYING':'▼ SELLING')+' ('+FII.window.toUpperCase()+')</div>';
+    if(!list.length) h+='<div style="color:#475569;font-size:11px;text-align:center;padding:20px">No signals</div>';
+    list.slice(0,15).forEach(function(s){
+      var co_=COMPANIES.find(function(x){return x.symbol===s.sym;});
+      h+='<div style="background:#1e293b;border-radius:5px;padding:10px 12px;margin-bottom:6px;border-left:3px solid '+c+'">'+
+        '<div style="display:flex;justify-content:space-between"><span style="color:#e2e8f0;font-family:monospace;font-weight:700;font-size:12px">'+s.sym+'</span>'+(s.net?'<span style="color:'+c+';font-size:11px;font-family:monospace">'+(action==='BUY'?'▲':'▼')+' ₹'+Math.abs(s.net).toFixed(1)+'Cr</span>':'')+'</div>'+
+        '<div style="color:#64748b;font-size:9px">'+(co_?co_.name.slice(0,28):s.co.slice(0,28))+'</div>'+
+        '<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px">'+s.il.slice(0,3).map(function(i){var ic=i.indexOf('FII')>-1||i.indexOf('FPI')>-1?'#60a5fa':'#fbbf24';return '<span style="color:'+ic+';background:'+ic+'18;border-radius:3px;padding:1px 5px;font-size:8px">'+i.slice(0,20)+'</span>';}).join('')+'</div>'+
+      '</div>';
+    });
+    return h+'</div>';
+  }
+  html+=col(buyers,'BUY','#34d399')+col(sellers,'SELL','#f87171');
+  html+='</div>';
+  // Deal log
+  if(filtered.length){
+    html+='<div style="background:#1e293b;border-radius:6px;overflow:hidden"><table style="width:100%;border-collapse:collapse;font-size:10px;font-family:monospace"><thead><tr style="background:#0f172a">';
+    ['DATE','SYMBOL','INSTITUTION','TYPE','ACTION','VALUE'].forEach(function(h){html+='<th style="color:#64748b;padding:6px 10px;text-align:left;font-size:8px">'+h+'</th>';});
+    html+='</tr></thead><tbody>';
+    filtered.sort(function(a,b){return b.ts-a.ts;}).slice(0,40).forEach(function(d,i){
+      var tc=d.action==='BUY'?'#34d399':'#f87171',tyc=d.institution.type==='FII'?'#60a5fa':'#fbbf24';
+      html+='<tr style="border-bottom:1px solid #0f172a;background:'+(i%2?'rgba(30,41,59,0.5)':'transparent')+'">'+
+        '<td style="color:#64748b;padding:6px 10px">'+d.date+'</td>'+
+        '<td style="color:#e2e8f0;font-weight:700;padding:6px 10px">'+d.symbol+'</td>'+
+        '<td style="color:#94a3b8;padding:6px 10px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+d.client+'</td>'+
+        '<td style="padding:6px 10px"><span style="color:'+tyc+';background:'+tyc+'18;border-radius:3px;padding:1px 5px;font-size:8px">'+d.institution.type+'</span></td>'+
+        '<td style="padding:6px 10px"><span style="color:'+tc+';font-weight:700">'+(d.action==='BUY'?'▲ BUY':'▼ SELL')+'</span></td>'+
+        '<td style="color:'+(d.valueCr?tc:'#64748b')+';font-weight:700;padding:6px 10px">'+(d.valueCr?'₹'+d.valueCr.toFixed(1)+'Cr':'news')+'</td></tr>';
+      html+='<tr style="border-bottom:1px solid #0f172a"><td colspan="6" style="color:#475569;font-size:9px;padding:2px 10px 6px;font-style:italic">'+d.headline.slice(0,120)+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }
+  p.innerHTML=html;
+}
+
+// ── DEMO DATA ─────────────────────────────────────────────────
+function loadDemo(){
+  var now=getNowLabel(),prev='15-Mar-2026 08:30';
+  [{s:'RELIANCE',sent:'POSITIVE',str:8,al:'HIGH',imp:3.2,ol:'Strong Q3 PAT ₹18,540Cr — beats estimates by 12%; Jio adds 8M subscribers',news:[{category:'EARNINGS',headline:'Q3 PAT ₹18,540Cr — beats estimates by 12%',detail:'Revenue grew 11% YoY. Jio EBITDA up 18%.',sentiment:'POSITIVE',impact:'HIGH',impact_reason:'Earnings beat drives gap-up at open',price_effect:'UP',magnitude:'LARGE'},{category:'PRICE_ACTION',headline:'Stock up 3.2% on heavy volume — 2.5x average',detail:'Strong institutional buying. Near 52-week high.',sentiment:'POSITIVE',impact:'HIGH',impact_reason:'Volume surge confirms conviction buying',price_effect:'UP',magnitude:'MODERATE'}],bull:'Jio ARPU expansion accelerating; new energy re-rating catalyst.',bear:'High 5G capex pressure on near-term FCF.',cat:['Jio monetisation','New energy revenue'],risk:['Capex overshoot','Oil price volatility']},
+   {s:'HDFCBANK',sent:'POSITIVE',str:7,al:'MEDIUM',imp:2.1,ol:'NIM recovery to 3.6% confirmed; Morgan Stanley upgrades to Overweight ₹1,950',news:[{category:'ANALYST',headline:'Morgan Stanley upgrades to Overweight, target ₹1,950',detail:'Cites NIM recovery and improving deposit franchise.',sentiment:'POSITIVE',impact:'HIGH',impact_reason:'Tier-1 upgrade triggers institutional buying',price_effect:'UP',magnitude:'MODERATE'}],bull:'NIM recovery intact; merger synergies materialising.',bear:'Loan growth below pre-merger levels.',cat:['NIM expansion','Cost synergies'],risk:['MFI stress','Slow deposits']},
+   {s:'WIPRO',sent:'NEGATIVE',str:6,al:'MEDIUM',imp:-2.3,ol:'Q4 guidance -1% to +1% — misses street estimate of +1.5%',news:[{category:'EARNINGS',headline:'Q4 revenue guidance -1% to +1% — below consensus',detail:'Americas1 declined 3.2% QoQ. BFSI weakness persists.',sentiment:'NEGATIVE',impact:'HIGH',impact_reason:'Below-consensus guidance triggers analyst downgrades',price_effect:'DOWN',magnitude:'MODERATE'}],bull:'Cost restructuring; GenAI build progressing.',bear:'Revenue lagging peers; client mining weak.',cat:['Large deal wins'],risk:['Market share loss']}
+  ].forEach(function(d){
+    ST.results[d.s]={overall_sentiment:d.sent,sentiment_strength:d.str,alert_level:d.al,alert_headline:d.ol,one_liner:d.ol,estimated_impact_pct:d.imp,news_items:d.news.map(function(n){n.scanLabel=prev;return n;}),bull_case:d.bull,bear_case:d.bear,key_catalysts:d.cat,key_risks:d.risk,scannedAt:now,scanHistory:[{label:prev,ts:Date.now()-14400000,sentiment:d.sent,alert:d.al},{label:now,ts:Date.now(),sentiment:d.sent,alert:d.al}],fii_activity:{status:'UNKNOWN',net_flow_cr:null,consecutive_days:null,holding_pct:null,signal:'NEUTRAL'}};
+    fetchCMP(d.s);
+  });
+  ST.scannedCount=3;
+  toast('✅ Demo loaded — click RELIANCE, HDFCBANK or WIPRO','#7c3aed');
+  renderAll();
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+function renderAll(){renderTopBar();renderList();renderDetail();}
+try{Notification.requestPermission();}catch(e){}
+
+// Ensure DOM is fully ready before rendering
+// Run on load
+window.onload = function() {
+  try { renderAll(); } catch(e) { showErr('renderAll: ' + e.message); return; }
+  setTimeout(function(){
+    try {
+      Object.keys(ST.results).slice(0,50).forEach(function(s){ fetchCMP(s); });
+    } catch(e) {}
+  }, 1000);
+};
+
+function showErr(msg) {
+  var d = document.createElement('div');
+  d.style.cssText = 'color:#ef4444;font-family:monospace;padding:20px;background:#1e293b;border:1px solid #ef4444;border-radius:6px;margin:20px;font-size:12px';
+  d.textContent = 'ERROR: ' + msg;
+  document.body.appendChild(d);
+}
+
+window.onerror = function(msg, src, line) {
+  showErr(msg + ' (line ' + line + ')');
+  return false;
+};
+</script>
+</body>
+</html>
