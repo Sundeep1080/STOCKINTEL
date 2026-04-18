@@ -3445,7 +3445,7 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
     </div>
     <div class="zd-input-grp">
       <span class="zd-input-lbl">API Key</span>
-      <input type="text" class="zd-input" id="zdApiKey" placeholder="Your API key" autocomplete="off">
+      <input type="password" class="zd-input" id="zdApiKey" placeholder="Your API key" autocomplete="off">
     </div>
     <div class="zd-input-grp">
       <span class="zd-input-lbl">Access Token</span>
@@ -6388,7 +6388,15 @@ function toggleTheme() {
         </button>
         <button class="btn btn-primary" id="lrnCorrBtn" onclick="lrnShowCorrelations()"
                 style="padding:5px 14px;font-size:10px;background:#6366f1;border-color:#6366f1;">
-          <i class="fas fa-diagram-project"></i> Correlation Analysis
+          <i class="fas fa-diagram-project"></i> Correlations
+        </button>
+        <button class="btn btn-primary" id="lrnFullAnalysisBtn" onclick="lrnShowFullAnalysis()"
+                style="padding:5px 14px;font-size:10px;background:#059669;border-color:#059669;">
+          <i class="fas fa-brain"></i> Full Analysis
+        </button>
+        <button class="btn btn-primary" onclick="lrnGenerateLearningPortfolios()"
+                style="padding:5px 14px;font-size:10px;background:#d97706;border-color:#d97706;">
+          <i class="fas fa-layer-group"></i> Learning Portfolios
         </button>
       </div>
 
@@ -6461,6 +6469,33 @@ function toggleTheme() {
 
       <!-- Correlation Analysis Panel — shown on demand -->
       <div id="lrnCorrPanel" style="display:none;border-top:1px solid var(--border)"></div>
+
+      <!-- Multibagger Candidates Panel -->
+      <div id="lrnMultibaggerPanel" style="display:none"></div>
+
+      <!-- Indicator Comparison Panel -->
+      <div id="lrnIndicatorPanel" style="display:none"></div>
+
+      <!-- Cross-Sector Lag Correlation Panel -->
+      <div id="lrnLagPanel" style="display:none"></div>
+
+      <!-- Zerodha Historical Data Button -->
+      <div style="padding:8px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--bg3)">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--text2);font-weight:700">
+          <i class="fas fa-database" style="color:#6366f1;margin-right:5px"></i>ZERODHA HISTORICAL
+        </span>
+        <button class="btn btn-primary" onclick="zdFetchHistorical(100)"
+                style="padding:4px 12px;font-size:10px;background:#6366f1;border-color:#6366f1;">
+          <i class="fas fa-download"></i> Fetch 100 Days OHLC
+        </button>
+        <button class="btn btn-primary" onclick="zdFetchHistorical(250)"
+                style="padding:4px 12px;font-size:10px;background:#6366f1;border-color:#6366f1;">
+          <i class="fas fa-download"></i> Fetch 250 Days OHLC
+        </button>
+        <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">
+          Connect Zerodha first → then fetch historical OHLC to eliminate CSV uploads
+        </span>
+      </div>
     </div>
 
   </div>
@@ -7626,8 +7661,8 @@ let zdPrices   = {};
 // Restore saved credentials from sessionStorage on load
 (function zdRestore() {
   document.addEventListener('DOMContentLoaded', ()=>{
-    const k = sessionStorage.getItem('zd_api_key');
-    const t = sessionStorage.getItem('zd_token');
+    const k = localStorage.getItem('zd_api_key');
+    const t = localStorage.getItem('zd_token');
     if (k && t) {
       zdApiKey=k; zdToken=t;
       const kEl=document.getElementById('zdApiKey');
@@ -7645,8 +7680,8 @@ function zdConnect() {
   if(!kEl||!tEl) return;
   zdApiKey=kEl.value.trim(); zdToken=tEl.value.trim();
   if(!zdApiKey||!zdToken){ zdSetStatus('Enter both API key and access token','err'); return; }
-  sessionStorage.setItem('zd_api_key',zdApiKey);
-  sessionStorage.setItem('zd_token',zdToken);
+  localStorage.setItem('zd_api_key',zdApiKey);
+  localStorage.setItem('zd_token',zdToken);
   zdSetStatus('Testing connection...','fetch'); zdSetDot('fetching');
   zdFetchPrices(['NSE:RELIANCE']).then(r=>{
     if(r.ok){
@@ -7655,6 +7690,7 @@ function zdConnect() {
       zdSetDot('live');
       document.getElementById('zdFetchBtn').disabled=false;
       toast('Zerodha connected — live prices enabled','ok');
+      zdScheduleDailyFetch();
     } else {
       zdSetStatus('❌ '+(r.error||'Auth failed — check API key and token'),'err');
       zdSetDot('error'); zdLiveMode=false;
@@ -8509,13 +8545,322 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(e => console.warn('LRN init (non-critical):', e));
 });
 
+/* ═══════════════════════════════════════════════════════
+   ZERODHA HISTORICAL DATA API — No CSV upload needed
+═══════════════════════════════════════════════════════ */
+let zdInstruments = {};
+let zdAutoHistInterval = null;
 
-  const a=pePortfolios.filter(p=>p.status==='active').length;
-  const b=peArchive.length;
-  const e1=document.getElementById('tabBadgeActive');
-  const e2=document.getElementById('tabBadgeArchive');
-  if(e1)e1.textContent=a;
-  if(e2)e2.textContent=b;
+async function zdFetchInstruments() {
+  const cached = localStorage.getItem('zd_instruments');
+  if (cached) { try { zdInstruments=JSON.parse(cached); return true; } catch(e){} }
+  zdSetStatus('Fetching instrument list...','fetch');
+  try {
+    const res = await fetch(`${ZD_WORKER}/kite/instruments/NSE`,{
+      headers:{'X-Kite-Version':'3','Authorization':`token ${zdApiKey}:${zdToken}`}
+    });
+    if (!res.ok) return false;
+    const text = await res.text();
+    const lines = text.trim().split('\n');
+    const hdr = lines[0].split(',');
+    const si=hdr.indexOf('tradingsymbol'), ti=hdr.indexOf('instrument_token'), gi=hdr.indexOf('segment');
+    zdInstruments={};
+    lines.slice(1).forEach(l=>{const c=l.split(','); if(c[gi]==='NSE') zdInstruments[c[si]]=c[ti];});
+    localStorage.setItem('zd_instruments',JSON.stringify(zdInstruments));
+    console.log(`ZD: Cached ${Object.keys(zdInstruments).length} NSE instruments`);
+    return true;
+  } catch(e) { return false; }
+}
+
+async function zdFetchHistorical(days=5) {
+  if (!zdLiveMode) return;
+  const symbols = zdBuildSymbolList().map(s=>s.replace('NSE:',''));
+  if (!symbols.length) { zdSetStatus('No stocks loaded yet','fetch'); return; }
+  if (!Object.keys(zdInstruments).length) {
+    if (!await zdFetchInstruments()) { zdSetStatus('Failed to fetch instrument list','err'); return; }
+  }
+  const to = new Date(), from = new Date();
+  from.setDate(from.getDate()-days-5);
+  const fromStr=from.toISOString().slice(0,10), toStr=to.toISOString().slice(0,10);
+  zdSetStatus(`Fetching ${days}d OHLC for ${symbols.length} stocks...`,'fetch'); zdSetDot('fetching');
+  let updated=0;
+  const BATCH=20;
+  for (let i=0;i<symbols.length;i+=BATCH) {
+    const batch=symbols.slice(i,i+BATCH);
+    await Promise.allSettled(batch.map(async sym=>{
+      const token=zdInstruments[sym]; if(!token) return;
+      try {
+        const url=`${ZD_WORKER}/kite/instruments/historical/${token}/day?from=${fromStr}&to=${toStr}`;
+        const res=await fetch(url,{headers:{'X-Kite-Version':'3','Authorization':`token ${zdApiKey}:${zdToken}`}});
+        if (!res.ok) return;
+        const data=await res.json();
+        if (data.data?.candles?.length) {
+          if (!uploadedParsed) uploadedParsed={};
+          if (!uploadedParsed[sym]) uploadedParsed[sym]={rows:[]};
+          const existing=new Set(uploadedParsed[sym].rows.map(r=>String(r.date).slice(0,10)));
+          data.data.candles.forEach(([dt,o,h,l,cl])=>{
+            const d=dt.slice(0,10);
+            if(!existing.has(d)) uploadedParsed[sym].rows.push({date:d,op:o,hi:h,lo:l,cl});
+          });
+          uploadedParsed[sym].rows.sort((a,b)=>String(a.date)<String(b.date)?-1:1);
+          zdPrices[sym]=data.data.candles[data.data.candles.length-1][4];
+          updated++;
+        }
+      } catch(e){}
+    }));
+    zdSetStatus(`Fetching OHLC... ${Math.min(i+BATCH,symbols.length)}/${symbols.length}`,'fetch');
+  }
+  zdSetDot('live');
+  zdSetStatus(`✅ ${updated} stocks historical data updated · ${new Date().toLocaleTimeString('en-IN')}`,'ok');
+  zdUpdatePortfolios();
+}
+
+function zdScheduleDailyFetch() {
+  setInterval(()=>{
+    const ist=getIST(), h=ist.getUTCHours(), m=ist.getUTCMinutes();
+    if (h===16&&m<=5&&zdLiveMode) {
+      const today=ist.toISOString().slice(0,10);
+      if (localStorage.getItem('zd_last_hist')!==today) {
+        localStorage.setItem('zd_last_hist',today);
+        zdFetchHistorical(2).then(()=>toast('📊 Daily OHLC auto-fetched','ok'));
+      }
+    }
+  },60000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MULTIBAGGER IDENTIFICATION
+═══════════════════════════════════════════════════════ */
+async function lrnFindMultibaggers() {
+  const db=await lrnOpenDB();
+  const all=await new Promise(res=>{
+    const req=db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
+    req.onsuccess=e=>res(e.target.result||[]); req.onerror=()=>res([]);
+  });
+  const resolved=all.filter(r=>r.outcome!==null&&r.outcomePrice&&r.entryPrice);
+  if (resolved.length<20){toast('Need 20+ resolved trades for multibagger analysis','warn');return;}
+
+  const stockScores={};
+  resolved.forEach(r=>{
+    if(!stockScores[r.symbol]) stockScores[r.symbol]={sym:r.symbol,sector:r.sector,wins:0,losses:0,n:0,retSum:0,maxStreak:0,cur:0,premSigs:0,rejZone:0};
+    const s=stockScores[r.symbol]; s.n++;
+    const ret=(r.outcomePrice-r.entryPrice)/r.entryPrice*100; s.retSum+=ret;
+    if(r.outcome==='tp'){s.wins++;s.cur++;s.maxStreak=Math.max(s.maxStreak,s.cur);}
+    else{s.losses++;s.cur=0;}
+    if(r.signal==='B1-OS'||r.signal==='B2'||r.signal==='B1-MOM') s.premSigs++;
+    if(r.zone==='rej_lo') s.rejZone++;
+  });
+
+  const candidates=Object.values(stockScores)
+    .filter(s=>s.n>=3)
+    .map(s=>{
+      const wr=s.wins/s.n; const avgRet=s.retSum/s.n;
+      const mbScore=Math.round(wr*40+Math.min(avgRet/1.5,1)*20+(s.premSigs/s.n)*20+(s.rejZone/s.n)*10+(s.maxStreak/s.n)*10);
+      return {...s,wr:Math.round(wr*100),avgRet:+avgRet.toFixed(2),mbScore};
+    })
+    .sort((a,b)=>b.mbScore-a.mbScore).slice(0,20);
+
+  const panel=document.getElementById('lrnMultibaggerPanel');
+  if (!panel) return;
+  panel.style.display='block';
+  const rows=candidates.map((s,i)=>`<tr>
+    <td><strong>${['🥇','🥈','🥉'][i]||''} ${s.sym}</strong></td>
+    <td style="font-size:10px;color:var(--text2)">${(s.sector||'').slice(0,15)}</td>
+    <td style="color:${s.wr>=65?'var(--bull)':s.wr>=50?'var(--amber)':'var(--bear)'};font-weight:700">${s.wr}%</td>
+    <td style="color:${s.avgRet>0?'var(--bull)':'var(--bear)'}">${s.avgRet>0?'+':''}${s.avgRet}%</td>
+    <td style="color:var(--text2)">${s.n}</td>
+    <td style="color:var(--amber);font-weight:700">${s.maxStreak}</td>
+    <td><span style="padding:2px 8px;border-radius:8px;background:${s.mbScore>=70?'rgba(5,150,105,0.12)':'rgba(217,119,6,0.10)'};
+              color:${s.mbScore>=70?'var(--bull)':'var(--amber)'};font-weight:700;font-family:var(--mono);font-size:10px">
+      ${s.mbScore}/100</span></td>
+  </tr>`).join('');
+  panel.innerHTML=`
+    <div style="padding:10px 16px;font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.8px;border-top:1px solid var(--border)">
+      🚀 Multibagger Candidates — Ranked by Composite Score
+    </div>
+    <div style="overflow-x:auto">
+      <table class="wr-live-table">
+        <thead><tr><th>Stock</th><th>Sector</th><th>Win%</th><th>Avg Ret</th><th>Trades</th><th>Best Streak</th><th>MB Score</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div style="padding:8px 16px;font-family:var(--mono);font-size:9px;color:var(--text3);border-top:1px solid var(--border)">
+      MB Score = Win rate(40%) + Return quality(20%) + Premium signals B1/B2(20%) + REJ zone(10%) + Win streak(10%). Score≥70 = strong candidate. Needs 250-day data for reliability.
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   INDICATOR COMPARISON — HMA+SMI vs alternatives
+═══════════════════════════════════════════════════════ */
+async function lrnCompareIndicators() {
+  const db=await lrnOpenDB();
+  const all=await new Promise(res=>{
+    const req=db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
+    req.onsuccess=e=>res(e.target.result||[]); req.onerror=()=>res([]);
+  });
+  const resolved=all.filter(r=>r.outcome!==null);
+  if (resolved.length<20) { toast('Need 20+ resolved trades','warn'); return null; }
+  const tpPct=1.5, slPct=3.0;
+  const setups={
+    'HMA+SMI B1-OS':     resolved.filter(r=>r.signal==='B1-OS'),
+    'HMA+SMI B2':        resolved.filter(r=>r.signal==='B2'),
+    'HMA+SMI B3':        resolved.filter(r=>r.signal==='B3'),
+    'SMI < -40 (deep)':  resolved.filter(r=>r.smi<-40),
+    'SMI < -20':         resolved.filter(r=>r.smi<-20),
+    'REJ zone only':     resolved.filter(r=>r.zone==='rej_lo'),
+    'BelVA zone only':   resolved.filter(r=>r.zone==='below_va'),
+    'B1-OS + REJ':       resolved.filter(r=>r.signal==='B1-OS'&&r.zone==='rej_lo'),
+    'B2 + REJ':          resolved.filter(r=>r.signal==='B2'&&r.zone==='rej_lo'),
+    'Weekly aligned':    resolved.filter(r=>r.weeklyAligned),
+    'Bull regime only':  resolved.filter(r=>r.regime==='bull'),
+    'B1-OS + Bull':      resolved.filter(r=>r.signal==='B1-OS'&&r.regime==='bull'),
+  };
+  return Object.entries(setups).map(([name,trades])=>{
+    if(!trades.length) return null;
+    const wins=trades.filter(t=>t.outcome==='tp').length;
+    const wr=Math.round(wins/trades.length*100);
+    const ev=+((wr/100*tpPct)-((100-wr)/100*slPct)).toFixed(2);
+    return {name,n:trades.length,wr,ev};
+  }).filter(Boolean).sort((a,b)=>b.ev-a.ev);
+}
+
+/* ═══════════════════════════════════════════════════════
+   CROSS-SECTOR LAGGED CORRELATION
+═══════════════════════════════════════════════════════ */
+async function lrnComputeLagCorr() {
+  const db=await lrnOpenDB();
+  const all=await new Promise(res=>{
+    const req=db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
+    req.onsuccess=e=>res(e.target.result||[]); req.onerror=()=>res([]);
+  });
+  const resolved=all.filter(r=>r.outcome!==null);
+  if (resolved.length<30) { toast('Need 30+ resolved trades for lag correlation','warn'); return null; }
+  const dates=[...new Set(resolved.map(r=>r.date))].sort();
+  const sectors=[...new Set(resolved.map(r=>r.sector).filter(Boolean))];
+  const swr={};
+  sectors.forEach(s=>{ swr[s]={}; });
+  resolved.forEach(r=>{ const s=r.sector; if(!s) return; if(!swr[s][r.date]) swr[s][r.date]={w:0,n:0}; swr[s][r.date].n++; if(r.outcome==='tp') swr[s][r.date].w++; });
+  const results=[];
+  const goodSecs=sectors.filter(s=>Object.keys(swr[s]).length>=15);
+  for(let i=0;i<goodSecs.length;i++) for(let j=0;j<goodSecs.length;j++) {
+    if(i===j) continue;
+    for(let lag=1;lag<=3;lag++){
+      const pA=[],pB=[];
+      dates.forEach((d,idx)=>{ if(idx+lag>=dates.length) return; const dl=dates[idx+lag]; const a=swr[goodSecs[i]][d], b=swr[goodSecs[j]][dl]; if(a?.n>=2&&b?.n>=2){pA.push(a.w/a.n);pB.push(b.w/b.n);} });
+      if(pA.length<10) continue;
+      const n=pA.length; const mA=pA.reduce((s,v)=>s+v,0)/n, mB=pB.reduce((s,v)=>s+v,0)/n;
+      const num=pA.reduce((s,v,i)=>s+(v-mA)*(pB[i]-mB),0);
+      const dA=Math.sqrt(pA.reduce((s,v)=>s+(v-mA)**2,0)), dB=Math.sqrt(pB.reduce((s,v)=>s+(v-mB)**2,0));
+      if(dA<0.001||dB<0.001) continue;
+      const corr=num/(dA*dB);
+      if(Math.abs(corr)>=0.4) results.push({secA:goodSecs[i],secB:goodSecs[j],lag,corr:+corr.toFixed(2),n});
+    }
+  }
+  return results.sort((a,b)=>Math.abs(b.corr)-Math.abs(a.corr)).slice(0,12);
+}
+
+/* ═══════════════════════════════════════════════════════
+   LEARNING-BASED PORTFOLIO GENERATION
+═══════════════════════════════════════════════════════ */
+async function lrnGenerateLearningPortfolios() {
+  const db=await lrnOpenDB();
+  const all=await new Promise(res=>{
+    const req=db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
+    req.onsuccess=e=>res(e.target.result||[]); req.onerror=()=>res([]);
+  });
+  const resolved=all.filter(r=>r.outcome!==null);
+  if(resolved.length<20){toast('Need 20+ resolved trades to generate learning portfolios','warn');return;}
+  if(!allSignals.length){toast('Run Signal Scanner first','warn');return;}
+  const combos={};
+  resolved.forEach(r=>{
+    const k=`${r.signal}|${r.zone}`;
+    if(!combos[k]) combos[k]={wins:0,total:0,signal:r.signal,zone:r.zone};
+    combos[k].total++; if(r.outcome==='tp') combos[k].wins++;
+  });
+  const best=Object.values(combos).filter(c=>c.total>=5).map(c=>({...c,wr:Math.round(c.wins/c.total*100)})).sort((a,b)=>b.wr-a.wr).slice(0,3);
+  if(!best.length){toast('Not enough data per combo yet','warn');return;}
+  const sectorRank=rankSectors();
+  const capitalPF=parseInt(document.getElementById('pe_capital')?.value||'60000');
+  let built=0;
+  best.forEach((combo,i)=>{
+    const theme={
+      id:`LRN0${i+1}`, name:`LEARN ${combo.signal} ${combo.zone==='rej_lo'?'REJ↓':combo.zone}`,
+      icon:'fas fa-brain', iconBg:'rgba(99,102,241,0.12)', iconCol:'#6366f1',
+      desc:`Learning: ${combo.wr}% win rate · n=${combo.total} from your data`,
+      maxStocks:8, minStocks:3,
+      filter:s=>s.type==='buy'&&s.signal===combo.signal&&s.bandZone===combo.zone,
+      sort:(a,b)=>b.score-a.score
+    };
+    const pf=buildPortfolio(theme,30,capitalPF,sectorRank);
+    if(pf){ pf.cycleLabel='LEARN'; pf.isLearningBased=true; pf.historicalWR=combo.wr; pePortfolios.push(pf); built++; }
+  });
+  if(built>0){ peSave(); updateTabBadges(); renderPortfolioPage(); switchPage('p2'); toast(`✅ ${built} learning portfolios generated from your historical data`,'ok'); }
+  else toast('No qualifying stocks for learning combos today','warn');
+}
+
+/* ═══════════════════════════════════════════════════════
+   FULL ANALYSIS RUNNER
+═══════════════════════════════════════════════════════ */
+async function lrnShowFullAnalysis() {
+  const btn=document.getElementById('lrnFullAnalysisBtn');
+  if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Analysing...';}
+  try {
+    lrnShowCorrelations();
+    await lrnFindMultibaggers();
+    const [indResult,lagResult]=await Promise.all([lrnCompareIndicators(),lrnComputeLagCorr()]);
+
+    // Indicator panel
+    const indPanel=document.getElementById('lrnIndicatorPanel');
+    if(indPanel&&indResult?.length){
+      indPanel.style.display='block';
+      const rows=indResult.map(r=>`<tr>
+        <td style="font-size:10px"><strong>${r.name}</strong></td>
+        <td style="color:${r.wr>=65?'var(--bull)':r.wr>=50?'var(--amber)':'var(--bear)'};font-weight:700">${r.wr}%</td>
+        <td style="color:${r.ev>0?'var(--bull)':r.ev<0?'var(--bear)':'var(--wait)'};font-weight:700">${r.ev>0?'+':''}${r.ev}%</td>
+        <td style="color:var(--text3);font-size:10px">${r.n}</td>
+      </tr>`).join('');
+      indPanel.innerHTML=`<div style="padding:10px 16px;font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.8px;border-top:1px solid var(--border)">
+        ⚡ Indicator Comparison — EV per trade at +1.5%/-3%</div>
+        <div style="overflow-x:auto"><table class="wr-live-table">
+          <thead><tr><th>Setup</th><th>Win%</th><th>EV/Trade</th><th>N</th></tr></thead>
+          <tbody>${rows}</tbody></table></div>
+        <div style="padding:8px 16px;font-family:var(--mono);font-size:9px;color:var(--text3);border-top:1px solid var(--border)">
+          Positive EV = profitable setup at these TP/SL levels. Based on YOUR actual trade outcomes.</div>`;
+    }
+
+    // Lag correlation panel
+    const lagPanel=document.getElementById('lrnLagPanel');
+    if(lagPanel&&lagResult?.length){
+      lagPanel.style.display='block';
+      const rows=lagResult.map(r=>`<tr>
+        <td style="font-size:10px"><strong>${r.secA}</strong></td>
+        <td style="font-size:9px;color:var(--amber);text-align:center">→ ${r.lag}d →</td>
+        <td style="font-size:10px"><strong>${r.secB}</strong></td>
+        <td style="color:${r.corr>0?'var(--bull)':'var(--bear)'};font-weight:700">${r.corr>0?'+':''}${r.corr}</td>
+        <td style="color:var(--text3);font-size:9px">n=${r.n}</td>
+      </tr>`).join('');
+      lagPanel.innerHTML=`<div style="padding:10px 16px;font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.8px;border-top:1px solid var(--border)">
+        🔗 Cross-Sector Lagged Correlation (|r|≥0.4)</div>
+        <div style="overflow-x:auto"><table class="wr-live-table">
+          <thead><tr><th>Sector A leads...</th><th>Lag</th><th>...Sector B follows</th><th>r</th><th>N</th></tr></thead>
+          <tbody>${rows}</tbody></table></div>
+        <div style="padding:8px 16px;font-family:var(--mono);font-size:9px;color:var(--text3);border-top:1px solid var(--border)">
+          When Sector A signals are strong, Sector B tends to follow N days later. Needs 250-day data for reliability.</div>`;
+    } else if (lagPanel) {
+      lagPanel.style.display='block';
+      lagPanel.innerHTML='<div style="padding:12px 16px;font-family:var(--mono);font-size:10px;color:var(--text3);border-top:1px solid var(--border)">No significant lagged correlations found yet. Need more data across different market phases.</div>';
+    }
+  } catch(e){ console.error('Full analysis:',e); toast('Analysis error: '+e.message,'err'); }
+  if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-brain"></i> Full Analysis';}
+}
+
+function updateTabBadges() {
+  const a = pePortfolios.filter(p=>p.status==='active').length;
+  const b = peArchive.length;
+  const e1 = document.getElementById('tabBadgeActive');
+  const e2 = document.getElementById('tabBadgeArchive');
+  if (e1) e1.textContent = a;
+  if (e2) e2.textContent = b;
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
