@@ -11,7 +11,7 @@
   <meta name="description" content="IRAVAT SALT Signal Engine — NSE stock scanner with portfolio engine">
   <link rel="manifest" href="/DOT-POINTS/manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
-<title>IRAVAT · SALT v10 · Medallion Edition</title>
+<title>IRAVAT · SALT v9 · Medallion Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -3007,6 +3007,177 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
 .t20-sum-item:last-child  { border-right: none; }
 .t20-sum-val { font-size: 15px; font-weight: 700; color: var(--bright); }
 
+
+/* ═══════════════════════════════════════════════════════
+   DAILY PORTFOLIO ENGINE — Complete Redesign
+═══════════════════════════════════════════════════════ */
+.dpe-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dpe-topbar {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 10px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow-sm);
+}
+.dpe-topbar-left { display:flex; flex-direction:column; gap:8px; }
+.dpe-topbar-right { display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+.dpe-title {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bright);
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dpe-stats-row { display:flex; gap:0; }
+.dpe-stat {
+  display:flex; flex-direction:column; align-items:center;
+  padding: 0 14px;
+  border-right: 1px solid var(--border);
+}
+.dpe-stat:last-child { border-right:none; }
+.dpe-stat-val { font-family:var(--mono); font-size:20px; font-weight:700; color:var(--bright); line-height:1; }
+.dpe-stat-lbl { font-family:var(--mono); font-size:9px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+.dpe-param-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.dpe-lbl { font-family:var(--mono); font-size:10px; color:var(--text2); display:flex; align-items:center; gap:5px; }
+.dpe-lbl select, .dpe-lbl input {
+  padding:4px 7px; border:1px solid var(--border); border-radius:var(--radius);
+  background:var(--bg3); font-family:var(--mono); font-size:11px; color:var(--bright); outline:none;
+}
+.dpe-lbl select:focus, .dpe-lbl input:focus { border-color:var(--amber); }
+.dpe-btn-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.dpe-gate-msg {
+  font-family:var(--mono); font-size:10px; color:var(--text3);
+  padding:5px 10px; background:var(--bg3); border:1px solid var(--border);
+  border-radius:var(--radius); white-space:nowrap;
+}
+.dpe-gate-msg.ready { color:var(--bull); border-color:rgba(5,150,105,0.3); background:rgba(5,150,105,0.06); }
+.dpe-gate-msg.warn  { color:var(--amber); border-color:rgba(217,119,6,0.3); }
+.dpe-gate-msg.locked{ color:var(--bear);  border-color:rgba(220,38,38,0.3); }
+
+/* Portfolio pair — buy + sell side by side */
+.dpe-day-group {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.dpe-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border2);
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--mono);
+}
+.dpe-day-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bright);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dpe-day-meta { font-size:10px; color:var(--text3); }
+.dpe-day-ret  { font-size:14px; font-weight:700; font-family:var(--mono); }
+.dpe-pf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+@media (max-width: 900px) { .dpe-pf-grid { grid-template-columns: 1fr; } }
+
+/* Individual portfolio card (buy/sell) */
+.dpe-pf {
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+.dpe-pf:last-child { border-right: none; }
+.dpe-pf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.dpe-pf-header.buy  { background: rgba(5,150,105,0.06); border-left: 4px solid var(--bull); }
+.dpe-pf-header.sell { background: rgba(220,38,38,0.05); border-left: 4px solid var(--bear); }
+.dpe-pf-name {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dpe-pf-ret {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+.dpe-pf-ret.pos { color: var(--bull); }
+.dpe-pf-ret.neg { color: var(--bear); }
+.dpe-pf-ret.neu { color: var(--wait); }
+.dpe-pf-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  margin-top: 1px;
+}
+
+/* Day tracker dots */
+.dpe-day-dots { display:flex; gap:6px; align-items:center; }
+.dpe-dot {
+  width:32px; height:32px; border-radius:50%; display:grid; place-items:center;
+  font-family:var(--mono); font-size:9px; font-weight:700;
+  border:2px solid var(--border); color:var(--text3); background:var(--bg3); flex-shrink:0;
+}
+.dpe-dot.win  { background:rgba(5,150,105,0.12); border-color:var(--bull); color:var(--bull); }
+.dpe-dot.loss { background:rgba(220,38,38,0.10); border-color:var(--bear); color:var(--bear); }
+.dpe-dot.today{ border-color:var(--amber); color:var(--amber); background:rgba(217,119,6,0.08); }
+.dpe-dot.future{ opacity:0.3; }
+
+/* Stock rows in daily portfolio */
+.dpe-stock-table { width:100%; border-collapse:collapse; font-family:var(--mono); font-size:11px; }
+.dpe-stock-table th {
+  padding:5px 10px; font-size:8px; font-weight:700; color:var(--text3);
+  text-transform:uppercase; letter-spacing:0.8px; border-bottom:1px solid var(--border2);
+  background:var(--bg3); text-align:left; white-space:nowrap;
+}
+.dpe-stock-table td { padding:6px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.dpe-stock-table tr:last-child td { border-bottom:none; }
+.dpe-stock-table tr:hover td { background:rgba(217,119,6,0.03); }
+.dpe-spread-tag {
+  font-size:9px; font-weight:700; padding:1px 6px; border-radius:6px;
+  background:rgba(99,102,241,0.10); color:#6366f1;
+  border:1px solid rgba(99,102,241,0.25); white-space:nowrap;
+}
+
+/* Portfolio footer */
+.dpe-pf-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:6px 14px; background:var(--bg3); border-top:1px solid var(--border);
+  font-family:var(--mono); font-size:10px; color:var(--text2); flex-wrap:wrap; gap:6px;
+}
+
 </style>
 </head>
 <body>
@@ -5004,6 +5175,9 @@ async function runProcessing() {
 
   // Top 20 Trades — rebuild after every signal run
   setTimeout(() => { top20Build(); top20Render(); }, 100);
+  // DPE — update prices and time gate
+  dpeUpdatePrices();
+  dpeUpdateTimeGate();
 }
 
 /* ───────────────────────────────────────────────
@@ -6335,100 +6509,84 @@ function toggleTheme() {
        PAGE 2 — PORTFOLIO ENGINE
   ══════════════════════════════════════════════ -->
   <div class="page-section" id="page-p2">
-  <div class="pe-shell">
+  <div class="dpe-shell">
 
-    <!-- Top control bar -->
-    <div class="pe-topbar">
-      <div class="pe-topbar-title">
-        <i class="fas fa-layer-group" style="color:var(--amber)"></i>
-        PORTFOLIO ENGINE
-      </div>
-      <div class="pe-stat">
-        <span class="pe-stat-val" id="peActiveCount">0</span>
-        <span class="pe-stat-lbl">Active</span>
-      </div>
-      <div class="pe-stat">
-        <span class="pe-stat-val" id="peWinningCount" style="color:var(--bull)">0</span>
-        <span class="pe-stat-lbl">Winning</span>
-      </div>
-      <div class="pe-stat">
-        <span class="pe-stat-val" id="peLosingCount" style="color:var(--bear)">0</span>
-        <span class="pe-stat-lbl">Losing</span>
-      </div>
-      <div class="pe-stat">
-        <span class="pe-stat-val" id="peArchivedCount">0</span>
-        <span class="pe-stat-lbl">Archived</span>
-      </div>
-      <div class="pe-controls">
-        <div class="pe-param">
-          <label>Min Score</label>
-          <input type="number" id="pe_minScore" value="30" min="10" max="100" step="5"
-                 style="width:60px;">
+    <!-- ── DAILY PORTFOLIO ENGINE TOPBAR ── -->
+    <div class="dpe-topbar">
+      <div class="dpe-topbar-left">
+        <div class="dpe-title">
+          <i class="fas fa-bolt-lightning" style="color:var(--amber)"></i>
+          DAILY PORTFOLIO ENGINE
         </div>
-        <div class="pe-param">
-          <label>Capital/Portfolio ₹</label>
-          <input type="number" id="pe_capital" value="60000" min="10000" step="10000"
-                 style="width:90px;">
+        <div class="dpe-stats-row">
+          <div class="dpe-stat"><span class="dpe-stat-val" id="dpeActiveCount">0</span><span class="dpe-stat-lbl">Active</span></div>
+          <div class="dpe-stat"><span class="dpe-stat-val" id="dpeWinCount" style="color:var(--bull)">0</span><span class="dpe-stat-lbl">Winning</span></div>
+          <div class="dpe-stat"><span class="dpe-stat-val" id="dpeLoseCount" style="color:var(--bear)">0</span><span class="dpe-stat-lbl">Losing</span></div>
+          <div class="dpe-stat"><span class="dpe-stat-val" id="dpeArchCount">0</span><span class="dpe-stat-lbl">Archived</span></div>
         </div>
-        <div class="pe-param">
-          <label>TP / SL</label>
-          <select id="pe_tpsl"
-                  style="padding:4px 7px;border:1px solid var(--border);border-radius:var(--radius);
-                         background:var(--bg3);font-family:var(--mono);font-size:11px;
-                         font-weight:700;color:var(--bright);cursor:pointer;outline:none;">
-            <option value="1.5_3.0">+1.5% / -3.0% ⭐</option>
-            <option value="1.0_3.0">+1.0% / -3.0%</option>
-            <option value="2.0_4.0">+2.0% / -4.0%</option>
-            <option value="1.5_4.0">+1.5% / -4.0%</option>
-            <option value="2.0_3.0">+2.0% / -3.0%</option>
-            <option value="2.5_5.0">+2.5% / -5.0%</option>
-            <option value="1.0_2.0">+1.0% / -2.0%</option>
-          </select>
+      </div>
+      <div class="dpe-topbar-right">
+        <div class="dpe-param-row">
+          <label class="dpe-lbl">TP
+            <select id="dpe_tp" onchange="dpeUpdatePrices()">
+              <option value="2.0">+2.0%</option>
+              <option value="1.5">+1.5%</option>
+              <option value="2.5">+2.5%</option>
+              <option value="3.0">+3.0%</option>
+            </select>
+          </label>
+          <label class="dpe-lbl">SL
+            <select id="dpe_sl" onchange="dpeUpdatePrices()">
+              <option value="3.5">-3.5%</option>
+              <option value="3.0">-3.0%</option>
+              <option value="4.0">-4.0%</option>
+              <option value="2.5">-2.5%</option>
+            </select>
+          </label>
+          <label class="dpe-lbl">Size
+            <select id="dpe_size">
+              <option value="15">Top 15</option>
+              <option value="10">Top 10</option>
+              <option value="20">Top 20</option>
+              <option value="25">Top 25</option>
+            </select>
+          </label>
+          <label class="dpe-lbl">Capital ₹
+            <input type="number" id="dpe_capital" value="300000" step="50000" style="width:100px">
+          </label>
         </div>
-        <button class="btn btn-primary" id="peGenBtn" onclick="generatePortfolios()" disabled
-                style="padding:8px 18px;font-size:12px;">
-          <i class="fas fa-magic"></i> Generate Portfolios
-        </button>
-        <div id="peScheduleInfo" style="font-family:var(--mono);font-size:10px;color:var(--text3);padding:6px 10px;
-             background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
-             min-width:180px;line-height:1.6;">
-          <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
-            <i class="fas fa-calendar" style="color:var(--amber);"></i>
-            <span id="peScheduleText" style="font-weight:700;">Mon · Wed · Fri</span>
-          </div>
-          <div id="peTimeGateMsg" style="font-size:9px;color:var(--text3);">Load CSV to check status</div>
-          <div id="peCountdown" style="font-size:9px;color:var(--amber);display:none;"></div>
+        <div class="dpe-btn-row">
+          <div id="dpeTimeGate" class="dpe-gate-msg">Load CSV + Generate Signals first</div>
+          <button class="btn btn-primary" id="dpeGenBtn" onclick="dpeGenerate()" disabled
+                  style="padding:8px 20px;font-size:12px;font-weight:700;">
+            <i class="fas fa-bolt"></i> Generate Daily Portfolios
+          </button>
+          <button class="btn btn-ghost" onclick="dpeClearAll()" style="padding:7px 12px;font-size:11px;">
+            <i class="fas fa-trash"></i> Clear All
+          </button>
+          <button class="btn btn-export" onclick="dpeExportCSV()" style="padding:7px 12px;font-size:11px;">
+            <i class="fas fa-download"></i> Export CSV
+          </button>
         </div>
-        <button class="btn btn-ghost" onclick="clearPortfolios()"
-                style="padding:8px 14px;font-size:11px;">
-          <i class="fas fa-trash-alt"></i> Clear All
-        </button>
-        <button class="btn btn-ghost" onclick="resetStorage()"
-                style="padding:8px 14px;font-size:11px;color:var(--bear);">
-          <i class="fas fa-rotate"></i> Reset Storage
-        </button>
-        <button class="btn btn-export" onclick="exportAllActiveCSV()"
-                style="padding:8px 14px;font-size:11px;">
-          <i class="fas fa-download"></i> Export All CSV
-        </button>
       </div>
     </div>
 
-    <!-- Regime Warning Banner (compact, portfolio-only context) -->
-    <div id="peRegimeBanner" style="display:none;padding:8px 14px;border-radius:var(--radius);
+    <!-- ── REGIME BANNER ── -->
+    <div id="dpeRegimeBanner" style="display:none;padding:8px 16px;border-radius:var(--radius);
          font-family:var(--mono);font-size:11px;border:1px solid;"></div>
 
-    <!-- Portfolio cards grid -->
-    <div class="pe-grid" id="peGrid">
-      <div class="pe-empty" id="peEmpty">
-        <i class="fas fa-layer-group"></i>
-        <h3>NO PORTFOLIOS GENERATED</h3>
-        <p>First run Signal Scanner (Page 1) to load your CSV data, then click <strong>Generate Portfolios</strong> above. The engine will construct 10 themed portfolios from your top-scoring signals.</p>
+    <!-- ── ACTIVE PORTFOLIOS GRID ── -->
+    <div id="dpeGrid">
+      <div class="pe-empty" id="dpeEmpty">
+        <i class="fas fa-bolt-lightning"></i>
+        <h3>NO DAILY PORTFOLIOS YET</h3>
+        <p>Generate Signals on Page 1, then click <strong>Generate Daily Portfolios</strong> between 3:00pm–3:30pm IST.
+        A Buy Portfolio and Sell Portfolio will be created and tracked for 4 trading days.</p>
       </div>
     </div>
 
   </div>
-  </div><!-- end page-p2 -->
+</div><!-- end page-p2 -->
 
   <!-- ══════════════════════════════════════════════
        PAGE 3 — PORTFOLIO ARCHIVE
@@ -6505,6 +6663,45 @@ function toggleTheme() {
         <i class="fas fa-clock-rotate-left"></i>
         <h3>NO ARCHIVED PORTFOLIOS</h3>
         <p>Portfolios auto-dissolve after 5 trading days and move here. The backtest panel above will populate automatically as portfolios complete.</p>
+      </div>
+    </div>
+
+    <!-- ═══ DAILY PORTFOLIO ARCHIVE ═══ -->
+    <div class="learn-panel" id="dpeArchivePanel" style="margin-bottom:8px">
+      <div class="learn-header">
+        <div class="learn-title">
+          <i class="fas fa-bolt-lightning" style="color:var(--amber)"></i>
+          DAILY PORTFOLIO ARCHIVE
+        </div>
+        <div style="display:flex;gap:0">
+          <div class="learn-stat">
+            <span class="learn-stat-val" id="dpeArchTotal">0</span>
+            <span class="learn-stat-lbl">Total</span>
+          </div>
+          <div class="learn-stat">
+            <span class="learn-stat-val" id="dpeArchWins" style="color:var(--bull)">0</span>
+            <span class="learn-stat-lbl">Profitable</span>
+          </div>
+          <div class="learn-stat">
+            <span class="learn-stat-val" id="dpeArchAvgRet">—</span>
+            <span class="learn-stat-lbl">Avg Return</span>
+          </div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:6px">
+          <button class="btn btn-export" onclick="dpeExportCSV()"
+                  style="padding:5px 12px;font-size:10px;">
+            <i class="fas fa-download"></i> Export All
+          </button>
+          <button class="btn btn-ghost" onclick="if(confirm('Clear DPE archive?')){dpeArchive=[];dpeSave();dpeRenderArchive();}"
+                  style="padding:5px 12px;font-size:10px;color:var(--bear);">
+            <i class="fas fa-trash"></i> Clear
+          </button>
+        </div>
+      </div>
+      <div id="dpeArchiveGrid" style="padding:12px 16px">
+        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;padding:20px">
+          No dissolved portfolios yet. Daily portfolios appear here after 4 trading days.
+        </div>
       </div>
     </div>
 
@@ -6717,8 +6914,8 @@ function switchPage(id) {
   document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.getElementById('tab-' + id).classList.add('active');
-  if (id === 'p2') renderPortfolioPage();
-  if (id === 'p3') { renderArchivePage(); lrnOpenDB().then(()=>lrnRenderDashboard()).catch(e=>console.warn('LRN render:',e)); }
+  if (id === 'p2') { dpeRenderPage(); }
+  if (id === 'p3') { renderArchivePage(); dpeRenderArchive(); lrnOpenDB().then(()=>lrnRenderDashboard()).catch(e=>console.warn('LRN render:',e)); }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -8970,6 +9167,414 @@ function top20ExportCSV() {
 }
 
 
+/* ═══════════════════════════════════════════════════════
+   DAILY PORTFOLIO ENGINE — v1
+   Buy + Sell portfolios every weekday 3:00-3:30pm IST
+   Dissolves after 4 trading days or TP/SL hit
+   Sell side uses option spreads
+═══════════════════════════════════════════════════════ */
+
+const DPE_STORE_KEY = 'iravat_dpe_v1';
+const DPE_ARCH_KEY  = 'iravat_dpe_arch_v1';
+const DPE_HOLD_DAYS = 4;
+
+let dpePortfolios = [];
+let dpeArchive    = [];
+
+function dpeSave() {
+  try {
+    localStorage.setItem(DPE_STORE_KEY, JSON.stringify(dpePortfolios));
+    localStorage.setItem(DPE_ARCH_KEY,  JSON.stringify(dpeArchive));
+  } catch(e) { console.warn('DPE save:', e); }
+}
+function dpeLoad() {
+  try {
+    const p=localStorage.getItem(DPE_STORE_KEY);
+    const a=localStorage.getItem(DPE_ARCH_KEY);
+    if(p) dpePortfolios=JSON.parse(p);
+    if(a) dpeArchive=JSON.parse(a);
+  } catch(e) { dpePortfolios=[]; dpeArchive=[]; }
+}
+
+function dpeIsWindow() {
+  const ist=getIST(), h=ist.getUTCHours(), m=ist.getUTCMinutes(), mins=h*60+m;
+  return mins>=570 && mins<=600; // 3:00-3:30pm IST
+}
+function dpeIsWeekday() { const d=getIST().getUTCDay(); return d>=1&&d<=5; }
+function dpeGetDayName() { return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][getIST().getUTCDay()]; }
+
+function dpeGetDissolveDate(genDate) {
+  const d=new Date(genDate+'T00:00:00Z'); let added=0;
+  while(added<DPE_HOLD_DAYS){ d.setDate(d.getDate()+1); if(d.getUTCDay()!==0&&d.getUTCDay()!==6) added++; }
+  return d.toISOString().slice(0,10);
+}
+
+function dpeScore(s) {
+  let sc=s.score*0.30;
+  const sigW={'B1-OS':100,'B1-MOM':88,'B2':95,'B3':40,'S1-OB':100,'S1-MOM':88,'S2':95,'S3':40};
+  sc+=(sigW[s.signal]||0)*0.25;
+  const zoneW={'rej_lo':100,'below_va':65,'va':35,'above_va':65,'rej_hi':100};
+  sc+=(zoneW[s.bandZone]||0)*0.20;
+  const hist=s.type==='buy'?s.history?.buyStats:s.history?.sellStats;
+  if(hist?.resolved>=3) sc+=hist.winRate*0.25;
+  if(s.weeklyTrend==='bull'&&s.type==='buy') sc+=10;
+  if(s.weeklyTrend==='bear'&&s.type==='sell') sc+=10;
+  return Math.round(sc*10)/10;
+}
+
+function dpeBuildPortfolio(direction, size, tpPct, slPct, capital) {
+  const isBuy=direction==='buy';
+  const sectorCount={};
+  const candidates=allSignals
+    .filter(s=>s.type===direction&&!s.isIndex&&(s.barsAgo||99)===0)
+    .map(s=>({...s,dpeScore:dpeScore(s)}))
+    .sort((a,b)=>b.dpeScore-a.dpeScore)
+    .filter(s=>{ const sec=s.sector||'N/A'; sectorCount[sec]=(sectorCount[sec]||0)+1; return sectorCount[sec]<=3; })
+    .slice(0,size);
+
+  if(candidates.length<3) return null;
+  const perStock=Math.round(capital/candidates.length/100)*100;
+  const today=getIST().toISOString().slice(0,10);
+
+  const stocks=candidates.map(s=>{
+    const tp=isBuy?+(s.price*(1+tpPct/100)).toFixed(2):+(s.price*(1-tpPct/100)).toFixed(2);
+    const sl=isBuy?+(s.price*(1-slPct/100)).toFixed(2):+(s.price*(1+slPct/100)).toFixed(2);
+    const spreads=getOptionSpreads?getOptionSpreads(s.signal,s.bandZone):['—','—'];
+    const hist=isBuy?s.history?.buyStats:s.history?.sellStats;
+    const wr=hist?.resolved>=3?Math.round(hist.winRate||0):null;
+    const ev=wr!==null?+((wr/100*tpPct)-((100-wr)/100*slPct)).toFixed(2):null;
+    return {
+      symbol:s.symbol,signal:s.signal,zone:s.bandZone,score:s.score,
+      dpeScore:s.dpeScore,sector:s.sector||'N/A',index:s.index||'N/A',
+      entryPrice:s.price,currentPrice:s.price,tp,sl,tpPct,slPct,
+      allocation:perStock,status:'open',wr,ev,
+      spread1:spreads[0]||'—',spread2:spreads[1]||'—',
+      weeklyTrend:s.weeklyTrend,entryDate:today,exitPrice:null,exitDate:null,
+    };
+  });
+
+  return {
+    direction,stocks,
+    totalCapital:stocks.reduce((s,x)=>s+x.allocation,0),
+    currentReturn:0,status:'active',
+  };
+}
+
+function dpeGenerate() {
+  if(!allSignals.length){ toast('Run Generate Signals first','warn'); return; }
+  if(!dpeIsWindow()){ toast('Generate between 3:00–3:30pm IST only','warn'); return; }
+  if(!dpeIsWeekday()){ toast('Weekdays only','warn'); return; }
+  const today=getIST().toISOString().slice(0,10);
+  if(dpePortfolios.find(p=>p.genDate===today&&p.status==='active')){
+    toast('Portfolio already generated today','info'); return;
+  }
+  const tpPct=parseFloat(document.getElementById('dpe_tp')?.value||'2.0');
+  const slPct=parseFloat(document.getElementById('dpe_sl')?.value||'3.5');
+  const size=parseInt(document.getElementById('dpe_size')?.value||'15');
+  const capital=parseInt(document.getElementById('dpe_capital')?.value||'300000');
+  const regime=getPortfolioRegimeStatus();
+
+  const buyPf =dpeBuildPortfolio('buy', size, tpPct, slPct, capital/2);
+  const sellPf=dpeBuildPortfolio('sell',size, tpPct, slPct, capital/2);
+  if(!buyPf&&!sellPf){ toast('No qualifying signals today','warn'); return; }
+
+  const entry={
+    id:'DPE-'+today,genDate:today,dayName:dpeGetDayName(),
+    dissolveDate:dpeGetDissolveDate(today),
+    regime:regime.status,regimeKelly:regime.kelly,
+    day:1,status:'active',
+    buyPf:buyPf||null,sellPf:sellPf||null,
+    dayReturns:[null,null,null,null],
+    lastUpdated:today,
+  };
+  dpePortfolios.push(entry);
+  dpeSave(); dpeUpdateBadges(); dpeRenderPage(); switchPage('p2');
+  const bc=buyPf?.stocks?.length||0, sc2=sellPf?.stocks?.length||0;
+  toast('✅ '+dpeGetDayName()+' Portfolio: '+bc+' buy + '+sc2+' sell · Dissolves '+entry.dissolveDate,'ok');
+  dpeLogToLearning(entry);
+}
+
+function dpeUpdatePrices() {
+  if(!dpePortfolios.length||!uploadedParsed) return;
+  const today=getIST().toISOString().slice(0,10);
+  let updated=0;
+  dpePortfolios.filter(p=>p.status==='active').forEach(entry=>{
+    if(entry.lastUpdated===today) return;
+    ['buyPf','sellPf'].forEach(side=>{
+      const pf=entry[side]; if(!pf) return;
+      const isBuy=side==='buyPf';
+      pf.stocks.forEach(st=>{
+        if(st.status==='tp'||st.status==='sl') return;
+        const info=uploadedParsed[st.symbol];
+        if(!info?.rows?.length) return;
+        const last=info.rows[info.rows.length-1];
+        st.currentPrice=last.cl;
+        const hi=last.hi, lo=last.lo;
+        if(isBuy){
+          if(hi>=st.tp){st.status='tp';st.exitPrice=st.tp;st.exitDate=today;}
+          else if(lo<=st.sl){st.status='sl';st.exitPrice=st.sl;st.exitDate=today;}
+          else{ const r=(st.currentPrice-st.entryPrice)/st.entryPrice*100; st.status=r>=st.tpPct*0.75?'near_tp':r<=-st.slPct*0.75?'near_sl':'open'; }
+        } else {
+          if(lo<=st.tp){st.status='tp';st.exitPrice=st.tp;st.exitDate=today;}
+          else if(hi>=st.sl){st.status='sl';st.exitPrice=st.sl;st.exitDate=today;}
+          else{ const r=(st.entryPrice-st.currentPrice)/st.entryPrice*100; st.status=r>=st.tpPct*0.75?'near_tp':r<=-st.slPct*0.75?'near_sl':'open'; }
+        }
+      });
+      let inv=0,cur=0;
+      pf.stocks.forEach(st=>{
+        inv+=st.allocation;
+        const ep=st.status==='tp'?st.tp:st.status==='sl'?st.sl:st.currentPrice;
+        const ret=(ep-st.entryPrice)/st.entryPrice;
+        cur+=st.allocation*(1+(isBuy?ret:-ret));
+      });
+      pf.currentReturn=inv>0?+((cur-inv)/inv*100).toFixed(2):0;
+    });
+    const avgRet=[entry.buyPf,entry.sellPf].filter(Boolean).map(p=>p.currentReturn);
+    const dayIdx=Math.min(entry.day-1,DPE_HOLD_DAYS-1);
+    if(dayIdx>=0&&avgRet.length) entry.dayReturns[dayIdx]=+(avgRet.reduce((a,b)=>a+b,0)/avgRet.length).toFixed(2);
+    entry.day=Math.min(entry.day+1,DPE_HOLD_DAYS+1);
+    entry.lastUpdated=today; updated++;
+    if(entry.day>DPE_HOLD_DAYS||today>=entry.dissolveDate) dpeDissolve(entry);
+  });
+  if(updated>0){dpeSave();dpeUpdateBadges();toast('DPE prices updated for '+updated+' portfolio(s)','ok');}
+}
+
+function dpeDissolve(entry) {
+  entry.status='dissolved';
+  const pfList=[entry.buyPf,entry.sellPf].filter(Boolean);
+  entry.finalReturn=pfList.length?+(pfList.reduce((s,p)=>s+p.currentReturn,0)/pfList.length).toFixed(2):0;
+  entry.dissolvedDate=getIST().toISOString().slice(0,10);
+  if(!dpeArchive.find(a=>a.id===entry.id)) dpeArchive.unshift({...entry});
+  dpeSave();
+}
+
+function dpeClearAll(){
+  if(!confirm('Clear all active daily portfolios?')) return;
+  dpePortfolios=[]; dpeSave(); dpeUpdateBadges(); dpeRenderPage();
+  toast('Daily portfolios cleared','info');
+}
+
+function dpeExportCSV(){
+  const all=[...dpePortfolios,...dpeArchive];
+  if(!all.length){toast('No data to export','warn');return;}
+  const rows=['Date,Day,Status,Side,Symbol,Signal,Zone,Score,Entry,Current,TP,SL,Alloc,WR%,EV%,PfRet,Spread,Sector'];
+  all.forEach(entry=>{
+    ['buyPf','sellPf'].forEach(side=>{
+      const pf=entry[side]; if(!pf) return;
+      pf.stocks.forEach(st=>{
+        rows.push([entry.genDate,entry.dayName,entry.status,side.replace('Pf',''),
+          st.symbol,st.signal,st.zone,st.score,st.entryPrice,st.currentPrice,
+          st.tp,st.sl,st.allocation,st.wr??'',st.ev??'',pf.currentReturn,
+          '"'+st.spread1+'"',st.sector].join(','));
+      });
+    });
+  });
+  const blob=new Blob([rows.join('\n')],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='iravat_dpe_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  toast('Exported daily portfolio data','ok');
+}
+
+function dpeUpdateTimeGate(){
+  const btn=document.getElementById('dpeGenBtn');
+  const msg=document.getElementById('dpeTimeGate');
+  if(!btn||!msg) return;
+  if(!allSignals.length){btn.disabled=true;msg.textContent='Run Generate Signals first';msg.className='dpe-gate-msg';return;}
+  if(!dpeIsWeekday()){btn.disabled=true;msg.textContent='Weekend — no portfolio today';msg.className='dpe-gate-msg warn';return;}
+  const today=getIST().toISOString().slice(0,10);
+  if(dpePortfolios.find(p=>p.genDate===today&&p.status==='active')){
+    btn.disabled=true;
+    msg.textContent='✓ '+dpeGetDayName()+' portfolio active · Dissolves '+(dpePortfolios.find(p=>p.genDate===today)?.dissolveDate||'');
+    msg.className='dpe-gate-msg ready'; return;
+  }
+  if(dpeIsWindow()){
+    btn.disabled=false; btn.style.background='var(--bull)';
+    msg.textContent='✅ '+dpeGetDayName()+' 3:00–3:30pm · GENERATE NOW';
+    msg.className='dpe-gate-msg ready';
+  } else {
+    const ist=getIST(),h=ist.getUTCHours(),m=ist.getUTCMinutes(),mins=h*60+m;
+    const until=Math.max(0,570-mins);
+    btn.disabled=true; btn.style.background='';
+    if(mins<570){msg.textContent='🕐 Opens at 3:00pm IST ('+Math.floor(until/60)+'h '+until%60+'m)';msg.className='dpe-gate-msg warn';}
+    else{msg.textContent='🔒 Window closed. Retry tomorrow 3:00pm.';msg.className='dpe-gate-msg locked';}
+  }
+}
+setInterval(dpeUpdateTimeGate,30000);
+
+function dpeRenderPage(){
+  dpeCheckDissolutions();
+  const active=dpePortfolios.filter(p=>p.status==='active');
+  const winning=active.filter(p=>[p.buyPf,p.sellPf].filter(Boolean).reduce((s,x)=>s+x.currentReturn,0)>0);
+  const losing =active.filter(p=>[p.buyPf,p.sellPf].filter(Boolean).reduce((s,x)=>s+x.currentReturn,0)<0);
+  const setEl=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  setEl('dpeActiveCount',active.length); setEl('dpeWinCount',winning.length);
+  setEl('dpeLoseCount',losing.length);   setEl('dpeArchCount',dpeArchive.length);
+
+  // Regime banner
+  const banner=document.getElementById('dpeRegimeBanner');
+  if(banner){
+    const reg=getPortfolioRegimeStatus();
+    banner.style.display='block';
+    banner.style.background=reg.bg||'var(--bg3)';
+    banner.style.borderColor=reg.border||'var(--border)';
+    banner.style.color=reg.color||'var(--text)';
+    banner.innerHTML='<i class="fas fa-satellite-dish" style="margin-right:8px"></i><strong>REGIME:</strong> '+reg.label+
+      '<span style="margin-left:12px;padding:2px 8px;border-radius:8px;background:'+reg.bg+';border:1px solid '+reg.border+';font-weight:700">Kelly '+Math.round((reg.kelly||1)*100)+'%</span>';
+  }
+
+  dpeUpdateTimeGate();
+  const grid=document.getElementById('dpeGrid');
+  const empty=document.getElementById('dpeEmpty');
+  if(!active.length){
+    grid.innerHTML='';
+    if(empty){empty.style.display='flex';grid.appendChild(empty);}
+    return;
+  }
+  if(empty) empty.style.display='none';
+  grid.innerHTML=[...active].sort((a,b)=>b.genDate.localeCompare(a.genDate)).map(e=>dpeRenderEntry(e)).join('');
+}
+
+function dpeRenderEntry(entry){
+  const pfList=[entry.buyPf,entry.sellPf].filter(Boolean);
+  const avgRet=pfList.length?+(pfList.reduce((s,p)=>s+p.currentReturn,0)/pfList.length).toFixed(2):0;
+  const retCls=avgRet>0?'pos':avgRet<0?'neg':'neu';
+  const dots=[1,2,3,4].map((d,i)=>{
+    const pnl=entry.dayReturns[i];
+    const cls=d>entry.day?'future':d===entry.day?'today':pnl>0?'win':pnl<0?'loss':'';
+    const lbl=pnl!==null?(pnl>=0?'+':'')+pnl+'%':'D'+d;
+    return '<div class="dpe-dot '+cls+'" title="Day '+d+'">'+lbl+'</div>';
+  }).join('');
+  const regBadge=entry.regime==='bear'?'<span style="font-size:9px;color:var(--bear)">🔴 BEAR</span>':
+    entry.regime==='bull'?'<span style="font-size:9px;color:var(--bull)">✅ BULL</span>':'';
+  return '<div class="dpe-day-group">'+
+    '<div class="dpe-day-header">'+
+      '<div class="dpe-day-label"><i class="fas fa-calendar-day" style="color:var(--amber)"></i>'+
+        entry.dayName+' '+entry.genDate+
+        '<span style="font-size:10px;padding:2px 7px;border-radius:8px;background:rgba(5,150,105,0.10);color:var(--bull);border:1px solid rgba(5,150,105,0.25)">Day '+entry.day+'/'+DPE_HOLD_DAYS+'</span>'+
+        regBadge+'</div>'+
+      '<div style="display:flex;align-items:center;gap:12px">'+
+        '<div class="dpe-day-dots">'+dots+'</div>'+
+        '<div><div class="dpe-day-ret '+retCls+'">'+(avgRet>=0?'+':'')+avgRet+'%</div>'+
+        '<div class="dpe-day-meta">Avg return · Dissolves '+entry.dissolveDate+'</div></div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="dpe-pf-grid">'+
+      (entry.buyPf ?dpeRenderPf(entry.buyPf, 'buy') :'<div class="dpe-pf" style="padding:20px;color:var(--text3);font-family:var(--mono);font-size:11px">No buy signals</div>')+
+      (entry.sellPf?dpeRenderPf(entry.sellPf,'sell'):'<div class="dpe-pf" style="padding:20px;color:var(--text3);font-family:var(--mono);font-size:11px">No sell signals</div>')+
+    '</div>'+
+  '</div>';
+}
+
+function dpeRenderPf(pf,side){
+  const isBuy=side==='buy';
+  const retCls=pf.currentReturn>0?'pos':pf.currentReturn<0?'neg':'neu';
+  const tpHit=pf.stocks.filter(s=>s.status==='tp').length;
+  const slHit=pf.stocks.filter(s=>s.status==='sl').length;
+  const open =pf.stocks.filter(s=>['open','near_tp','near_sl'].includes(s.status)).length;
+  const rows=pf.stocks.map(st=>{
+    const stsCls={tp:'ss-tp',sl:'ss-sl',open:'ss-open',near_tp:'ss-near-tp',near_sl:'ss-near-sl'}[st.status]||'ss-open';
+    const stsLbl={tp:'✓ TP',sl:'✗ SL',open:'◉',near_tp:'↑~TP',near_sl:'↓~SL'}[st.status]||'◉';
+    const zs={rej_lo:'REJ↓',below_va:'BelVA',va:'InVA',above_va:'AbvVA',rej_hi:'REJ↑'}[st.zone]||st.zone;
+    const ret=isBuy?((st.currentPrice-st.entryPrice)/st.entryPrice*100).toFixed(1):((st.entryPrice-st.currentPrice)/st.entryPrice*100).toFixed(1);
+    const retCl=parseFloat(ret)>0?'psr-ret-pos':parseFloat(ret)<0?'psr-ret-neg':'psr-ret-neu';
+    const wrD=st.wr!==null?st.wr+'%':'—';
+    const evD=st.ev!==null?(st.ev>0?'+':'')+st.ev+'%':'—';
+    return '<tr>'+
+      '<td style="font-weight:700;color:var(--bright);font-size:12px">'+st.symbol+'</td>'+
+      '<td style="font-weight:700;color:'+(isBuy?'var(--bull)':'var(--bear)')+';font-size:10px">'+st.signal+'</td>'+
+      '<td style="font-size:9px;color:var(--text2)">'+zs+'</td>'+
+      '<td style="color:var(--amber);font-weight:700;font-size:10px">'+st.score+'</td>'+
+      '<td style="font-size:10px;color:var(--text2)">₹'+st.entryPrice+'</td>'+
+      '<td style="font-size:10px;color:var(--bull)">₹'+st.tp+'</td>'+
+      '<td style="font-size:10px;color:var(--bear)">₹'+st.sl+'</td>'+
+      '<td class="'+retCl+'" style="font-weight:700">'+(parseFloat(ret)>0?'+':'')+ret+'%</td>'+
+      '<td style="font-size:10px;color:'+(st.wr>=60?'var(--bull)':st.wr>=50?'var(--amber)':'var(--bear)')+'">'+wrD+'</td>'+
+      '<td style="font-size:10px;color:var(--text2);font-style:italic">'+evD+'</td>'+
+      '<td><span class="dpe-spread-tag" title="'+st.spread2+'">'+st.spread1+'</span></td>'+
+      '<td><span class="psr-status '+stsCls+'" style="font-size:9px">'+stsLbl+'</span></td>'+
+    '</tr>';
+  }).join('');
+  return '<div class="dpe-pf">'+
+    '<div class="dpe-pf-header '+side+'">'+
+      '<div class="dpe-pf-name">'+
+        '<i class="fas fa-'+(isBuy?'arrow-trend-up':'arrow-trend-down')+'" style="color:'+(isBuy?'var(--bull)':'var(--bear)')+'"></i>'+
+        (isBuy?'BUY PORTFOLIO':'SELL PORTFOLIO — Option Spreads')+
+        '<span style="font-size:10px;font-weight:400;color:var(--text3)"> '+pf.stocks.length+' stocks</span>'+
+      '</div>'+
+      '<div style="text-align:right">'+
+        '<div class="dpe-pf-ret '+retCls+'">'+(pf.currentReturn>=0?'+':'')+pf.currentReturn+'%</div>'+
+        '<div class="dpe-pf-sub">₹'+(pf.totalCapital/100000).toFixed(1)+'L · '+tpHit+'✓ '+slHit+'✗ '+open+'◉</div>'+
+      '</div>'+
+    '</div>'+
+    '<div style="overflow-x:auto">'+
+      '<table class="dpe-stock-table">'+
+        '<thead><tr><th>Symbol</th><th>Signal</th><th>Zone</th><th>Score</th><th>Entry</th><th>TP</th><th>SL</th><th>Ret%</th><th>WR%</th><th>EV%</th><th>Spread</th><th>Status</th></tr></thead>'+
+        '<tbody>'+rows+'</tbody>'+
+      '</table>'+
+    '</div>'+
+    '<div class="dpe-pf-footer">'+
+      '<span>TP +'+( pf.stocks[0]?.tpPct||2)+'% / SL -'+(pf.stocks[0]?.slPct||3.5)+'%</span>'+
+      '<span style="color:var(--text3)">'+pf.stocks.slice(0,3).map(s=>s.symbol).join(' · ')+(pf.stocks.length>3?' +'+(pf.stocks.length-3)+' more':'')+'</span>'+
+    '</div>'+
+  '</div>';
+}
+
+function dpeCheckDissolutions(){
+  const today=getIST().toISOString().slice(0,10);
+  dpePortfolios.filter(p=>p.status==='active').forEach(p=>{
+    if(p.day>DPE_HOLD_DAYS||today>=p.dissolveDate) dpeDissolve(p);
+  });
+  dpePortfolios=dpePortfolios.filter(p=>p.status==='active');
+}
+
+async function dpeLogToLearning(entry){
+  try{
+    const db=await lrnOpenDB();
+    const tx=db.transaction('daily_log','readwrite');
+    tx.objectStore('daily_log').put({
+      date:entry.genDate,regime:entry.regime,
+      dpeBuyCount:entry.buyPf?.stocks?.length||0,
+      dpeSellCount:entry.sellPf?.stocks?.length||0,
+      dpeDissolve:entry.dissolveDate,
+    });
+  }catch(e){}
+}
+
+function dpeRenderArchive(){
+  const grid=document.getElementById('dpeArchiveGrid');
+  if(!grid) return;
+  const setEl=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  setEl('dpeArchTotal',dpeArchive.length);
+  setEl('dpeArchWins',dpeArchive.filter(p=>p.finalReturn>0).length);
+  const avgRet=dpeArchive.length?+(dpeArchive.reduce((s,p)=>s+(p.finalReturn||0),0)/dpeArchive.length).toFixed(2):null;
+  setEl('dpeArchAvgRet',avgRet!==null?(avgRet>=0?'+':'')+avgRet+'%':'—');
+
+  if(!dpeArchive.length){
+    grid.innerHTML='<div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;padding:20px">No dissolved portfolios yet.</div>';
+    return;
+  }
+  grid.innerHTML=dpeArchive.slice(0,10).map(entry=>{
+    const retCls=entry.finalReturn>0?'var(--bull)':entry.finalReturn<0?'var(--bear)':'var(--wait)';
+    const bc=entry.buyPf?.stocks?.length||0, sc2=entry.sellPf?.stocks?.length||0;
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px">'+
+      '<div><strong style="color:var(--bright)">'+entry.dayName+' '+entry.genDate+'</strong>'+
+        '<span style="font-size:9px;color:var(--text3);margin-left:8px">'+bc+' buy · '+sc2+' sell · '+DPE_HOLD_DAYS+' days</span></div>'+
+      '<div style="display:flex;gap:16px;align-items:center">'+
+        '<span style="font-size:10px;color:var(--text3)">Dissolved '+entry.dissolvedDate+'</span>'+
+        '<span style="font-weight:700;color:'+retCls+';font-size:14px">'+(entry.finalReturn>=0?'+':'')+entry.finalReturn+'%</span>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+  dpeLoad(); dpeCheckDissolutions(); dpeUpdateBadges();
+});
+
 let zdInstruments = {};
 let zdAutoHistInterval = null;
 
@@ -9277,13 +9882,14 @@ async function lrnShowFullAnalysis() {
 }
 
 function updateTabBadges() {
-  const a = pePortfolios.filter(p=>p.status==='active').length;
+  const a = dpePortfolios.filter(p=>p.status==='active').length || pePortfolios.filter(p=>p.status==='active').length;
   const b = peArchive.length;
   const e1 = document.getElementById('tabBadgeActive');
   const e2 = document.getElementById('tabBadgeArchive');
   if (e1) e1.textContent = a;
   if (e2) e2.textContent = b;
 }
+function dpeUpdateBadges() { updateTabBadges(); }
 
 document.addEventListener('DOMContentLoaded', ()=>{
   // PWA manifest path fixed for /DOT-POINTS/
@@ -9551,22 +10157,4 @@ if ('serviceWorker' in navigator && location.hostname === 'sundeep1080.github.io
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/DOT-POINTS/sw.js', { scope: '/DOT-POINTS/' })
       .then(r => {
-        console.log('IRAVAT SW:', r.scope);
-        // Check for updates
-        r.addEventListener('updatefound', () => {
-          const newWorker = r.installing;
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              toast('App updated — reload to get latest version', 'info');
-            }
-          });
-        });
-      })
-      .catch(e => console.log('SW skip:', e.message));
-  });
-}
-
-</script>
-
-</body>
-</html>
+     
