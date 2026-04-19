@@ -11,7 +11,7 @@
   <meta name="description" content="IRAVAT SALT Signal Engine — NSE stock scanner with portfolio engine">
   <link rel="manifest" href="/DOT-POINTS/manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
-<title>IRAVAT · SALT v9 · Medallion Edition</title>
+<title>IRAVAT · SALT v10 · Medallion Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -2887,6 +2887,126 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
 .learn-insight .insight-warn { color: var(--amber); font-weight: 700; }
 .learn-insight .insight-bad  { color: var(--bear); font-weight: 700; }
 
+
+/* ═══════════════════════════════════════════════════════
+   TOP 20 TRADES PANEL
+═══════════════════════════════════════════════════════ */
+.t20-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--amber);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.t20-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border2);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.t20-title {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bright);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.8px;
+}
+.t20-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.t20-controls select, .t20-controls input {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg2);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--bright);
+  outline: none;
+}
+.t20-controls select:focus { border-color: var(--amber); }
+.t20-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.t20-table th {
+  padding: 7px 10px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom: 1px solid var(--border2);
+  background: var(--bg3);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.t20-table th:hover { color: var(--amber); }
+.t20-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.t20-table tr:last-child td { border-bottom: none; }
+.t20-table tr:hover td { background: rgba(217,119,6,0.04); }
+.t20-rank {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  text-align: center;
+}
+.t20-rank.gold   { color: #d97706; }
+.t20-rank.silver { color: #9ca3af; }
+.t20-rank.bronze { color: #ea580c; }
+.t20-sym {
+  font-weight: 700;
+  color: var(--bright);
+  font-size: 12px;
+}
+.t20-conf {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.conf-h  { background:rgba(5,150,105,0.12);  color:#047857; border:1px solid rgba(5,150,105,0.3); }
+.conf-m  { background:rgba(217,119,6,0.10);  color:#92400e; border:1px solid rgba(217,119,6,0.3); }
+.conf-l  { background:rgba(220,38,38,0.09);  color:#b91c1c; border:1px solid rgba(220,38,38,0.22); }
+.conf-na { background:rgba(107,114,128,0.07);color:var(--wait); border:1px solid var(--border); }
+.t20-summary {
+  display: flex;
+  gap: 0;
+  padding: 8px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg3);
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text2);
+}
+.t20-sum-item {
+  padding: 0 14px;
+  border-right: 1px solid var(--border);
+}
+.t20-sum-item:first-child { padding-left: 0; }
+.t20-sum-item:last-child  { border-right: none; }
+.t20-sum-val { font-size: 15px; font-weight: 700; color: var(--bright); }
+
 </style>
 </head>
 <body>
@@ -3434,6 +3554,89 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
         <div style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:10px;">Run scan to populate analytics.</div>
       </div>
     </div>
+  </div>
+
+  <!-- ── TOP 20 TRADES PANEL ── -->
+  <div class="t20-panel" id="top20Panel" style="display:none">
+    <div class="t20-header">
+      <div class="t20-title">
+        <i class="fas fa-ranking-star" style="color:var(--amber)"></i>
+        TOP 20 TRADES — Today &amp; Tomorrow
+        <span style="font-size:10px;color:var(--text3);font-weight:400" id="top20Date"></span>
+      </div>
+      <div class="t20-controls">
+        <label style="font-family:var(--mono);font-size:10px;color:var(--text2)">TP
+          <select id="t20TP" onchange="top20Refresh()">
+            <option value="2.0">+2.0%</option>
+            <option value="1.5">+1.5%</option>
+            <option value="2.5">+2.5%</option>
+            <option value="3.0">+3.0%</option>
+          </select>
+        </label>
+        <label style="font-family:var(--mono);font-size:10px;color:var(--text2)">SL
+          <select id="t20SL" onchange="top20Refresh()">
+            <option value="3.5">-3.5%</option>
+            <option value="3.0">-3.0%</option>
+            <option value="4.0">-4.0%</option>
+            <option value="2.5">-2.5%</option>
+          </select>
+        </label>
+        <label style="font-family:var(--mono);font-size:10px;color:var(--text2)">Show
+          <select id="t20Count" onchange="top20Render()">
+            <option value="20">Top 20</option>
+            <option value="10">Top 10</option>
+            <option value="30">Top 30</option>
+            <option value="50">All signals</option>
+          </select>
+        </label>
+        <label style="font-family:var(--mono);font-size:10px;color:var(--text2)">Signal
+          <select id="t20SigFilter" onchange="top20Refresh()">
+            <option value="all">All signals</option>
+            <option value="B1-OS">B1-OS only</option>
+            <option value="B1-MOM">B1-MOM only</option>
+            <option value="B2">B2 only</option>
+            <option value="B3">B3 only</option>
+            <option value="premium">B1-OS + B2 only</option>
+          </select>
+        </label>
+        <button class="btn btn-primary" onclick="top20Refresh()"
+                style="padding:5px 14px;font-size:11px;">
+          <i class="fas fa-rotate"></i> Refresh
+        </button>
+        <button class="btn btn-export" onclick="top20ExportCSV()"
+                style="padding:5px 12px;font-size:11px;">
+          <i class="fas fa-download"></i> Export
+        </button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="t20-table" id="top20Table">
+        <thead>
+          <tr>
+            <th onclick="top20Sort('rank')">#</th>
+            <th onclick="top20Sort('sym')">Symbol</th>
+            <th onclick="top20Sort('sig')">Signal</th>
+            <th onclick="top20Sort('zone')">Zone</th>
+            <th onclick="top20Sort('score')">Score</th>
+            <th onclick="top20Sort('price')">Price</th>
+            <th onclick="top20Sort('tp')">TP</th>
+            <th onclick="top20Sort('sl')">SL</th>
+            <th onclick="top20Sort('wr')">Win Rate</th>
+            <th onclick="top20Sort('ev')">EV/Trade</th>
+            <th onclick="top20Sort('days')">Avg Days</th>
+            <th onclick="top20Sort('n')">N (History)</th>
+            <th>Confidence</th>
+            <th onclick="top20Sort('sector')">Sector</th>
+          </tr>
+        </thead>
+        <tbody id="top20Body">
+          <tr><td colspan="14" style="text-align:center;padding:20px;color:var(--text3);font-family:var(--mono)">
+            Run Generate Signals to compute Top 20
+          </td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="t20-summary" id="top20Summary"></div>
   </div>
 
   <!-- ── ZERODHA LIVE CMP PANEL ── -->
@@ -4798,6 +5001,9 @@ async function runProcessing() {
 
   // Learning engine — runs after every Generate Signals
   lrnRunDaily().catch(e => console.warn('Learning engine error:', e));
+
+  // Top 20 Trades — rebuild after every signal run
+  setTimeout(() => { top20Build(); top20Render(); }, 100);
 }
 
 /* ───────────────────────────────────────────────
@@ -8546,8 +8752,224 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ═══════════════════════════════════════════════════════
-   ZERODHA HISTORICAL DATA API — No CSV upload needed
+   TOP 20 TRADES ENGINE
+   Ranks all buy signals by composite score using
+   252-day historical win rates per stock per signal
 ═══════════════════════════════════════════════════════ */
+
+let top20Data    = [];
+let top20SortKey = 'rank';
+let top20SortAsc = true;
+
+function top20CompositeScore(s) {
+  let score = 0;
+  // 1. Base signal score (35%)
+  const sigW = {'B1-OS':100,'B1-MOM':88,'B2':95,'B3':40};
+  score += (sigW[s.signal]||0) * 0.35;
+  // 2. Historical win rate (35%)
+  if (s.wr !== null) score += s.wr * 0.35;
+  else score += 50 * 0.20; // neutral if no history
+  // 3. Zone quality (15%)
+  const zoneW = {'rej_lo':100,'below_va':65,'va':35,'above_va':20,'rej_hi':0};
+  score += (zoneW[s.bandZone]||0) * 0.15;
+  // 4. Expected value (10%)
+  if (s.ev !== null) score += Math.max(0, s.ev) * 10;
+  // 5. Weekly alignment (5%)
+  if (s.weeklyTrend === 'bull' && s.type === 'buy') score += 5;
+  return Math.round(score * 10) / 10;
+}
+
+function top20Build() {
+  if (!allSignals || !allSignals.length) return;
+
+  const tpPct = parseFloat(document.getElementById('t20TP')?.value || '2.0') / 100;
+  const slPct = parseFloat(document.getElementById('t20SL')?.value || '3.5') / 100;
+  const sigFilter = document.getElementById('t20SigFilter')?.value || 'all';
+
+  // Filter buy signals
+  let candidates = allSignals.filter(s =>
+    s.type === 'buy' &&
+    !s.isIndex &&
+    (s.barsAgo || 99) <= 1  // today and yesterday's fresh signals
+  );
+
+  if (sigFilter === 'premium')
+    candidates = candidates.filter(s => s.signal==='B1-OS' || s.signal==='B2');
+  else if (sigFilter !== 'all')
+    candidates = candidates.filter(s => s.signal === sigFilter);
+
+  // Compute per-stock historical win rate from signal analytics data
+  // Pull from the live learning engine if available, else from signal history
+  top20Data = candidates.map(s => {
+    // Try to get win rate from Signal Analytics (existing backtest data)
+    let wr = null, n = 0, avgDays = null;
+    if (s.history) {
+      const stats = s.history.buyStats;
+      if (stats && stats.resolved >= 5) {
+        wr = Math.round(stats.winRate || 0);
+        n  = stats.resolved;
+        avgDays = stats.avgDays || null;
+      }
+    }
+
+    const ev = wr !== null
+      ? +((wr/100 * tpPct*100) - ((100-wr)/100 * slPct*100)).toFixed(2)
+      : null;
+
+    return {
+      symbol:   s.symbol,
+      signal:   s.signal,
+      zone:     s.bandZone,
+      score:    s.score,
+      sector:   s.sector,
+      index:    s.index,
+      price:    s.price,
+      tp:       +(s.price * (1+tpPct)).toFixed(2),
+      sl:       +(s.price * (1-slPct)).toFixed(2),
+      tpPct:    tpPct*100,
+      slPct:    slPct*100,
+      wr, n, ev, avgDays,
+      weeklyTrend: s.weeklyTrend,
+      smi:      s.smi,
+      type:     s.type,
+      bandZone: s.bandZone,
+      history:  s.history,
+    };
+  });
+
+  // Compute composite score and rank
+  top20Data.forEach(s => { s.compScore = top20CompositeScore(s); });
+  top20Data.sort((a,b) => b.compScore - a.compScore);
+  top20Data.forEach((s,i) => { s.rank = i+1; });
+}
+
+function top20Render() {
+  const count  = parseInt(document.getElementById('t20Count')?.value || '20');
+  const panel  = document.getElementById('top20Panel');
+  const tbody  = document.getElementById('top20Body');
+  const sumEl  = document.getElementById('top20Summary');
+  const dateEl = document.getElementById('top20Date');
+  if (!panel || !tbody) return;
+
+  panel.style.display = 'block';
+  if (dateEl) {
+    const d = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+    dateEl.textContent = `· ${d}`;
+  }
+
+  if (!top20Data.length) {
+    tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--text3);font-family:var(--mono)">No signals found</td></tr>';
+    return;
+  }
+
+  // Sort
+  const sorted = [...top20Data];
+  const sortFns = {
+    rank:   (a,b)=>a.rank-b.rank,
+    sym:    (a,b)=>a.symbol.localeCompare(b.symbol),
+    sig:    (a,b)=>a.signal.localeCompare(b.signal),
+    zone:   (a,b)=>a.zone.localeCompare(b.zone),
+    score:  (a,b)=>b.score-a.score,
+    price:  (a,b)=>a.price-b.price,
+    tp:     (a,b)=>a.tp-b.tp,
+    sl:     (a,b)=>b.sl-a.sl,
+    wr:     (a,b)=>(b.wr||0)-(a.wr||0),
+    ev:     (a,b)=>(b.ev||0)-(a.ev||0),
+    days:   (a,b)=>(a.avgDays||99)-(b.avgDays||99),
+    n:      (a,b)=>b.n-a.n,
+    sector: (a,b)=>(a.sector||'').localeCompare(b.sector||''),
+  };
+  if (sortFns[top20SortKey]) sorted.sort(sortFns[top20SortKey]);
+  if (!top20SortAsc) sorted.reverse();
+
+  const display = sorted.slice(0, count);
+
+  tbody.innerHTML = display.map((s,i) => {
+    const rankCls = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    const sigCol  = s.signal.startsWith('B')?'var(--bull)':'var(--bear)';
+    const zoneShort = {rej_lo:'REJ↓',below_va:'BelVA',va:'InVA',above_va:'AbvVA',rej_hi:'REJ↑'}[s.zone]||s.zone;
+
+    // Confidence badge
+    let confCls='conf-na', confTxt='NEW';
+    if (s.wr !== null) {
+      if (s.wr>=65&&s.n>=10)      { confCls='conf-h'; confTxt='HIGH'; }
+      else if (s.wr>=55&&s.n>=5)  { confCls='conf-m'; confTxt='MOD'; }
+      else                         { confCls='conf-l'; confTxt='LOW'; }
+    }
+
+    const wrDisp  = s.wr  !== null ? `<strong style="color:${s.wr>=60?'var(--bull)':s.wr>=50?'var(--amber)':'var(--bear)'}">${s.wr}%</strong>` : '<span style="color:var(--text3)">—</span>';
+    const evDisp  = s.ev  !== null ? `<span style="color:${s.ev>0?'var(--bull)':s.ev<0?'var(--bear)':'var(--wait)'};font-weight:700">${s.ev>0?'+':''}${s.ev}%</span>` : '<span style="color:var(--text3)">—</span>';
+    const daysDisp= s.avgDays!==null ? `${s.avgDays}d` : '—';
+
+    return `<tr>
+      <td class="t20-rank ${rankCls}">${i+1}</td>
+      <td class="t20-sym">${s.symbol}</td>
+      <td><span style="font-weight:700;color:${sigCol}">${s.signal}</span></td>
+      <td style="font-size:10px;color:var(--text2)">${zoneShort}</td>
+      <td style="color:var(--amber);font-weight:700">${s.score}</td>
+      <td style="font-weight:700;color:var(--bright)">₹${s.price}</td>
+      <td style="color:var(--bull);font-weight:700">₹${s.tp} <span style="font-size:9px;opacity:0.7">(+${s.tpPct}%)</span></td>
+      <td style="color:var(--bear);font-weight:700">₹${s.sl} <span style="font-size:9px;opacity:0.7">(-${s.slPct}%)</span></td>
+      <td>${wrDisp} <span style="font-size:9px;color:var(--text3)">${s.n>=5?'n='+s.n:s.n>0?'n='+s.n:''}</span></td>
+      <td>${evDisp}</td>
+      <td style="color:var(--text2)">${daysDisp}</td>
+      <td style="color:var(--text3);font-size:10px">${s.n>=5?s.n+' trades':s.n>0?s.n+' (thin)':'No data'}</td>
+      <td><span class="t20-conf ${confCls}">${confTxt}</span></td>
+      <td style="font-size:10px;color:var(--text2)">${(s.sector||'').slice(0,16)}</td>
+    </tr>`;
+  }).join('');
+
+  // Summary bar
+  const withWR  = top20Data.filter(s=>s.wr!==null);
+  const highConf= withWR.filter(s=>s.wr>=65&&s.n>=10);
+  const posEV   = withWR.filter(s=>s.ev!==null&&s.ev>0);
+  const avgWR   = withWR.length ? Math.round(withWR.reduce((s,x)=>s+(x.wr||0),0)/withWR.length) : 0;
+  const premium = top20Data.filter(s=>s.signal==='B1-OS'||s.signal==='B2');
+
+  if (sumEl) {
+    sumEl.innerHTML = `
+      <div class="t20-sum-item"><div class="t20-sum-val">${top20Data.length}</div>Total signals</div>
+      <div class="t20-sum-item"><div class="t20-sum-val" style="color:var(--bull)">${highConf.length}</div>High confidence</div>
+      <div class="t20-sum-item"><div class="t20-sum-val" style="color:var(--amber)">${premium.length}</div>Premium (B1-OS+B2)</div>
+      <div class="t20-sum-item"><div class="t20-sum-val">${avgWR}%</div>Avg win rate</div>
+      <div class="t20-sum-item"><div class="t20-sum-val" style="color:var(--bull)">${posEV.length}</div>Positive EV signals</div>
+      <div class="t20-sum-item" style="color:var(--text3);font-size:9px;align-self:center">
+        TP +${display[0]?.tpPct||2}% · SL -${display[0]?.slPct||3.5}% · Max hold 5 days
+      </div>`;
+  }
+}
+
+function top20Sort(key) {
+  if (top20SortKey === key) top20SortAsc = !top20SortAsc;
+  else { top20SortKey = key; top20SortAsc = key==='rank'; }
+  top20Render();
+}
+
+function top20Refresh() {
+  top20Build();
+  top20Render();
+}
+
+function top20ExportCSV() {
+  if (!top20Data.length) { toast('No data to export','warn'); return; }
+  const tpPct = parseFloat(document.getElementById('t20TP')?.value||'2.0');
+  const slPct = parseFloat(document.getElementById('t20SL')?.value||'3.5');
+  const rows = ['Rank,Symbol,Signal,Zone,Score,Price,TP,SL,TP_pct,SL_pct,WinRate,EV_pct,AvgDays,N_history,Confidence,Sector,Index,CompScore'];
+  top20Data.forEach(s => {
+    const conf = s.wr===null?'NEW':s.wr>=65&&s.n>=10?'HIGH':s.wr>=55&&s.n>=5?'MODERATE':'LOW';
+    rows.push([s.rank,s.symbol,s.signal,s.zone,s.score,s.price,s.tp,s.sl,
+               tpPct,slPct,s.wr??'',s.ev??'',s.avgDays??'',s.n,conf,
+               s.sector,s.index,s.compScore].join(','));
+  });
+  const blob = new Blob([rows.join('\n')],{type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `iravat_top20_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  toast(`Exported ${top20Data.length} signals → CSV`,'ok');
+}
+
+
 let zdInstruments = {};
 let zdAutoHistInterval = null;
 
