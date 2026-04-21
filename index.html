@@ -2745,439 +2745,32 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
 .live-pnl-pos { color: var(--bull) !important; font-weight:700; }
 .live-pnl-neg { color: var(--bear) !important; font-weight:700; }
 
-
-/* ═══════════════════════════════════════════════════════
-   LEARNING ENGINE — Self-Learning System
-═══════════════════════════════════════════════════════ */
-.learn-panel {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-.learn-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border2);
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.learn-title {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--bright);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  letter-spacing: 0.8px;
-}
-.learn-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 14px;
-  border-right: 1px solid var(--border);
-}
-.learn-stat:last-of-type { border-right: none; }
-.learn-stat-val {
-  font-family: var(--mono);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--bright);
-  line-height: 1;
-}
-.learn-stat-lbl {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 2px;
-}
-.confidence-badge {
-  font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 10px;
-  white-space: nowrap;
-}
-.conf-backtest  { background:rgba(107,114,128,0.10); color:var(--text3);  border:1px solid var(--border); }
-.conf-early     { background:rgba(217,119,6,0.10);   color:var(--amber);  border:1px solid rgba(217,119,6,0.3); }
-.conf-live      { background:rgba(5,150,105,0.10);   color:var(--bull);   border:1px solid rgba(5,150,105,0.3); }
-.conf-high      { background:rgba(5,150,105,0.18);   color:#047857;       border:1px solid rgba(5,150,105,0.4); }
-
-/* Win rate table — live */
-.wr-live-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--mono);
-  font-size: 11px;
-}
-.wr-live-table th {
-  padding: 7px 12px;
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  border-bottom: 1px solid var(--border2);
-  background: var(--bg3);
-  text-align: left;
-  white-space: nowrap;
-}
-.wr-live-table td {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
-.wr-live-table tr:last-child td { border-bottom: none; }
-.wr-live-table tr:hover td { background: rgba(217,119,6,0.03); }
-.wr-bar-wrap { display:flex; align-items:center; gap:6px; }
-.wr-bar { flex:1; height:8px; background:var(--bg3); border-radius:4px; overflow:hidden; min-width:80px; }
-.wr-bar-fill { height:100%; border-radius:4px; }
-
-/* Learning settings panel */
-.learn-settings {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-  background: var(--bg3);
-}
-.learn-settings label {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text2);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.learn-settings select, .learn-settings input {
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg2);
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--bright);
-  outline: none;
-}
-.learn-settings select:focus, .learn-settings input:focus {
-  border-color: var(--amber);
-}
-.learn-insight {
-  padding: 10px 16px;
-  background: rgba(99,102,241,0.04);
-  border-top: 1px solid var(--border);
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text2);
-  line-height: 1.8;
-}
-.learn-insight strong { color: #6366f1; }
-.learn-insight .insight-good { color: var(--bull); font-weight: 700; }
-.learn-insight .insight-warn { color: var(--amber); font-weight: 700; }
-.learn-insight .insight-bad  { color: var(--bear); font-weight: 700; }
-
-
-/* ═══════════════════════════════════════════════════════
-   TOP 20 TRADES PANEL
-═══════════════════════════════════════════════════════ */
-.t20-panel {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--amber);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-.t20-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border2);
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.t20-title {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--bright);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  letter-spacing: 0.8px;
-}
-.t20-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.t20-controls select, .t20-controls input {
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--bg2);
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--bright);
-  outline: none;
-}
-.t20-controls select:focus { border-color: var(--amber); }
-.t20-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--mono);
-  font-size: 11px;
-}
-.t20-table th {
-  padding: 7px 10px;
-  font-size: 9px;
-  font-weight: 700;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  border-bottom: 1px solid var(--border2);
-  background: var(--bg3);
-  text-align: left;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.t20-table th:hover { color: var(--amber); }
-.t20-table td {
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
-.t20-table tr:last-child td { border-bottom: none; }
-.t20-table tr:hover td { background: rgba(217,119,6,0.04); }
-.t20-rank {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text3);
-  text-align: center;
-}
-.t20-rank.gold   { color: #d97706; }
-.t20-rank.silver { color: #9ca3af; }
-.t20-rank.bronze { color: #ea580c; }
-.t20-sym {
-  font-weight: 700;
-  color: var(--bright);
-  font-size: 12px;
-}
-.t20-conf {
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 8px;
-  white-space: nowrap;
-}
-.conf-h  { background:rgba(5,150,105,0.12);  color:#047857; border:1px solid rgba(5,150,105,0.3); }
-.conf-m  { background:rgba(217,119,6,0.10);  color:#92400e; border:1px solid rgba(217,119,6,0.3); }
-.conf-l  { background:rgba(220,38,38,0.09);  color:#b91c1c; border:1px solid rgba(220,38,38,0.22); }
-.conf-na { background:rgba(107,114,128,0.07);color:var(--wait); border:1px solid var(--border); }
-.t20-summary {
-  display: flex;
-  gap: 0;
-  padding: 8px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--bg3);
-  flex-wrap: wrap;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text2);
-}
-.t20-sum-item {
-  padding: 0 14px;
-  border-right: 1px solid var(--border);
-}
-.t20-sum-item:first-child { padding-left: 0; }
-.t20-sum-item:last-child  { border-right: none; }
-.t20-sum-val { font-size: 15px; font-weight: 700; color: var(--bright); }
-
-
-/* ═══════════════════════════════════════════════════════
-   DAILY PORTFOLIO ENGINE — Complete Redesign
-═══════════════════════════════════════════════════════ */
-.dpe-shell {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.dpe-topbar {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 10px 16px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  box-shadow: var(--shadow-sm);
-}
-.dpe-topbar-left { display:flex; flex-direction:column; gap:8px; }
-.dpe-topbar-right { display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
-.dpe-title {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--bright);
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.dpe-stats-row { display:flex; gap:0; }
-.dpe-stat {
-  display:flex; flex-direction:column; align-items:center;
-  padding: 0 14px;
-  border-right: 1px solid var(--border);
-}
-.dpe-stat:last-child { border-right:none; }
-.dpe-stat-val { font-family:var(--mono); font-size:20px; font-weight:700; color:var(--bright); line-height:1; }
-.dpe-stat-lbl { font-family:var(--mono); font-size:9px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
-.dpe-param-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-.dpe-lbl { font-family:var(--mono); font-size:10px; color:var(--text2); display:flex; align-items:center; gap:5px; }
-.dpe-lbl select, .dpe-lbl input {
-  padding:4px 7px; border:1px solid var(--border); border-radius:var(--radius);
-  background:var(--bg3); font-family:var(--mono); font-size:11px; color:var(--bright); outline:none;
-}
-.dpe-lbl select:focus, .dpe-lbl input:focus { border-color:var(--amber); }
-.dpe-btn-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-.dpe-gate-msg {
-  font-family:var(--mono); font-size:10px; color:var(--text3);
-  padding:5px 10px; background:var(--bg3); border:1px solid var(--border);
-  border-radius:var(--radius); white-space:nowrap;
-}
-.dpe-gate-msg.ready { color:var(--bull); border-color:rgba(5,150,105,0.3); background:rgba(5,150,105,0.06); }
-.dpe-gate-msg.warn  { color:var(--amber); border-color:rgba(217,119,6,0.3); }
-.dpe-gate-msg.locked{ color:var(--bear);  border-color:rgba(220,38,38,0.3); }
-
-/* Portfolio pair — buy + sell side by side */
-.dpe-day-group {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-.dpe-day-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border2);
-  flex-wrap: wrap;
-  gap: 8px;
-  font-family: var(--mono);
-}
-.dpe-day-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--bright);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.dpe-day-meta { font-size:10px; color:var(--text3); }
-.dpe-day-ret  { font-size:14px; font-weight:700; font-family:var(--mono); }
-.dpe-pf-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-}
-@media (max-width: 900px) { .dpe-pf-grid { grid-template-columns: 1fr; } }
-
-/* Individual portfolio card (buy/sell) */
-.dpe-pf {
-  border-right: 1px solid var(--border);
-  overflow: hidden;
-}
-.dpe-pf:last-child { border-right: none; }
-.dpe-pf-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 14px;
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.dpe-pf-header.buy  { background: rgba(5,150,105,0.06); border-left: 4px solid var(--bull); }
-.dpe-pf-header.sell { background: rgba(220,38,38,0.05); border-left: 4px solid var(--bear); }
-.dpe-pf-name {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.dpe-pf-ret {
-  font-family: var(--mono);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1;
-}
-.dpe-pf-ret.pos { color: var(--bull); }
-.dpe-pf-ret.neg { color: var(--bear); }
-.dpe-pf-ret.neu { color: var(--wait); }
-.dpe-pf-sub {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--text3);
-  margin-top: 1px;
-}
-
-/* Day tracker dots */
-.dpe-day-dots { display:flex; gap:6px; align-items:center; }
-.dpe-dot {
-  width:32px; height:32px; border-radius:50%; display:grid; place-items:center;
-  font-family:var(--mono); font-size:9px; font-weight:700;
-  border:2px solid var(--border); color:var(--text3); background:var(--bg3); flex-shrink:0;
-}
-.dpe-dot.win  { background:rgba(5,150,105,0.12); border-color:var(--bull); color:var(--bull); }
-.dpe-dot.loss { background:rgba(220,38,38,0.10); border-color:var(--bear); color:var(--bear); }
-.dpe-dot.today{ border-color:var(--amber); color:var(--amber); background:rgba(217,119,6,0.08); }
-.dpe-dot.future{ opacity:0.3; }
-
-/* Stock rows in daily portfolio */
-.dpe-stock-table { width:100%; border-collapse:collapse; font-family:var(--mono); font-size:11px; }
-.dpe-stock-table th {
-  padding:5px 10px; font-size:8px; font-weight:700; color:var(--text3);
-  text-transform:uppercase; letter-spacing:0.8px; border-bottom:1px solid var(--border2);
-  background:var(--bg3); text-align:left; white-space:nowrap;
-}
-.dpe-stock-table td { padding:6px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
-.dpe-stock-table tr:last-child td { border-bottom:none; }
-.dpe-stock-table tr:hover td { background:rgba(217,119,6,0.03); }
-.dpe-spread-tag {
-  font-size:9px; font-weight:700; padding:1px 6px; border-radius:6px;
-  background:rgba(99,102,241,0.10); color:#6366f1;
-  border:1px solid rgba(99,102,241,0.25); white-space:nowrap;
-}
-
-/* Portfolio footer */
-.dpe-pf-footer {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:6px 14px; background:var(--bg3); border-top:1px solid var(--border);
-  font-family:var(--mono); font-size:10px; color:var(--text2); flex-wrap:wrap; gap:6px;
-}
-
+/* ── TOP 25 SMART RANKER ── */
+.t25-fbtn{padding:3px 9px;border:1px solid var(--border2);border-radius:3px;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--text2);background:var(--bg3);cursor:pointer;letter-spacing:.5px;transition:all .2s;}
+.t25-active{background:rgba(217,119,6,.12);color:var(--amber);border-color:rgba(217,119,6,.3);}
+.t25-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:9px 10px;position:relative;cursor:pointer;transition:all .2s;overflow:hidden;}
+.t25-card:hover{border-color:var(--amber);background:var(--bg2);transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.t25-card.buy{border-top:2px solid var(--bull);}
+.t25-card.sell{border-top:2px solid var(--bear);}
+.t25-rank{position:absolute;top:6px;right:7px;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text3);}
+.t25-rank.gold{color:#f59e0b;}.t25-rank.silver{color:#94a3b8;}.t25-rank.bronze{color:#b45309;}
+.t25-sym{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--bright);letter-spacing:.5px;}
+.t25-sig{font-family:var(--mono);font-size:10px;font-weight:700;margin-top:1px;}
+.t25-sig.buy{color:var(--bull);}.t25-sig.sell{color:var(--bear);}
+.t25-zone-tag{display:inline-block;padding:1px 5px;border-radius:2px;font-family:var(--mono);font-size:8px;font-weight:600;margin-top:3px;letter-spacing:.3px;}
+.t25-score-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin:6px 0 4px;}
+.t25-score-fill{height:100%;border-radius:2px;transition:width .5s ease;}
+.t25-meta{display:flex;justify-content:space-between;margin-top:4px;}
+.t25-meta span{font-family:var(--mono);font-size:9px;color:var(--text3);}
+.t25-tpsl{display:flex;gap:4px;margin-top:5px;}
+.t25-tp,.t25-sl{flex:1;text-align:center;padding:3px 4px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:700;}
+.t25-tp{background:rgba(5,150,105,.1);color:var(--bull);border:1px solid rgba(5,150,105,.2);}
+.t25-sl{background:rgba(220,38,38,.08);color:var(--bear);border:1px solid rgba(220,38,38,.18);}
+.t25-ev{margin-top:4px;text-align:center;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;}
+.t25-ev.pos{background:rgba(5,150,105,.1);color:var(--bull);}
+.t25-ev.neg{background:rgba(220,38,38,.07);color:#f87171;}
+.t25-ev.neu{background:rgba(217,119,6,.1);color:var(--amber);}
+.t25-score-num{font-family:var(--mono);font-size:19px;font-weight:700;line-height:1;margin-top:2px;}
 </style>
 </head>
 <body>
@@ -3573,6 +3166,73 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
   </div>
 
 
+  <!-- ══════════════════════════════════════════════════════════
+       TOP 25 SMART SIGNAL RANKER — injected v9.1
+  ══════════════════════════════════════════════════════════ -->
+  <div id="top25Panel" style="display:none;background:var(--bg2);border:1px solid var(--border2);
+       border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:2px;">
+
+    <!-- header row -->
+    <div style="display:flex;align-items:center;justify-content:space-between;
+         padding:10px 16px;background:linear-gradient(90deg,rgba(217,119,6,.08),transparent);
+         border-bottom:1px solid var(--border2);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:28px;height:28px;background:var(--amber);border-radius:5px;
+             display:grid;place-items:center;font-size:14px;">🏹</div>
+        <div>
+          <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--bright);letter-spacing:1px;">
+            TOP 25 SMART SIGNALS
+          </div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text2);letter-spacing:.5px;margin-top:1px;">
+            EV-ranked · sector-weighted TP/SL · B1-OS · B2 · B3 priority
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <!-- filter pills -->
+        <div style="display:flex;gap:4px;" id="t25TypeFilter">
+          <button onclick="t25SetType('all',this)"   class="t25-fbtn t25-active">ALL</button>
+          <button onclick="t25SetType('buy',this)"   class="t25-fbtn">BUY</button>
+          <button onclick="t25SetType('sell',this)"  class="t25-fbtn">SELL</button>
+        </div>
+        <div style="width:1px;height:20px;background:var(--border2);"></div>
+        <select id="t25IndexFilter" onchange="renderTop25()"
+          style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+                 font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;outline:none;">
+          <option value="all">All Indices</option>
+        </select>
+        <button onclick="renderTop25()" title="Refresh ranking"
+          style="padding:4px 10px;background:var(--amber);border:none;border-radius:4px;
+                 font-family:var(--mono);font-size:10px;font-weight:700;color:#000;cursor:pointer;">
+          ↻ RANK
+        </button>
+      </div>
+    </div>
+
+    <!-- score legend -->
+    <div style="display:flex;gap:0;padding:6px 16px;background:var(--bg3);border-bottom:1px solid var(--border);
+         font-family:var(--mono);font-size:9px;color:var(--text3);flex-wrap:wrap;gap:14px;align-items:center;">
+      <span style="color:var(--text2);font-weight:700;letter-spacing:1px;">SCORE COMPONENTS:</span>
+      <span>Trigger EV <span style="color:var(--amber)">(35pts)</span></span>
+      <span>Zone fit <span style="color:var(--amber)">(25pts)</span></span>
+      <span>Weekly align <span style="color:var(--amber)">(15pts)</span></span>
+      <span>Freshness <span style="color:var(--amber)">(15pts)</span></span>
+      <span>Sector health <span style="color:var(--amber)">(10pts)</span></span>
+      <span style="margin-left:auto;color:var(--text3)">TP/SL = sector-optimal from 250d backtest</span>
+    </div>
+
+    <!-- cards grid -->
+    <div id="top25Grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px 12px;">
+      <div style="grid-column:1/-1;text-align:center;padding:20px;font-family:var(--mono);
+           font-size:11px;color:var(--text3);">Generate signals first to see rankings</div>
+    </div>
+
+    <!-- footer summary -->
+    <div id="top25Footer" style="display:none;padding:7px 16px;border-top:1px solid var(--border);
+         background:var(--bg3);display:flex;gap:16px;align-items:center;font-family:var(--mono);font-size:10px;">
+    </div>
+  </div>
+
   <!-- ── TRADE INTELLIGENCE (collapsible) ── -->
   <div class="collapsible-panel" id="tradeIntelPanel" onclick="togglePanel('tradeIntelPanel')">
     <div class="collapsible-header">
@@ -3727,89 +3387,6 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
     </div>
   </div>
 
-  <!-- ── TOP 20 TRADES PANEL ── -->
-  <div class="t20-panel" id="top20Panel" style="display:none">
-    <div class="t20-header">
-      <div class="t20-title">
-        <i class="fas fa-ranking-star" style="color:var(--amber)"></i>
-        TOP 20 TRADES — Today &amp; Tomorrow
-        <span style="font-size:10px;color:var(--text3);font-weight:400" id="top20Date"></span>
-      </div>
-      <div class="t20-controls">
-        <label style="font-family:var(--mono);font-size:10px;color:var(--text2)">TP
-          <select id="t20TP" onchange="top20Refresh()">
-            <option value="2.0">+2.0%</option>
-            <option value="1.5">+1.5%</option>
-            <option value="2.5">+2.5%</option>
-            <option value="3.0">+3.0%</option>
-          </select>
-        </label>
-        <label style="font-family:var(--mono);font-size:10px;color:var(--text2)">SL
-          <select id="t20SL" onchange="top20Refresh()">
-            <option value="3.5">-3.5%</option>
-            <option value="3.0">-3.0%</option>
-            <option value="4.0">-4.0%</option>
-            <option value="2.5">-2.5%</option>
-          </select>
-        </label>
-        <label style="font-family:var(--mono);font-size:10px;color:var(--text2)">Show
-          <select id="t20Count" onchange="top20Render()">
-            <option value="20">Top 20</option>
-            <option value="10">Top 10</option>
-            <option value="30">Top 30</option>
-            <option value="50">All signals</option>
-          </select>
-        </label>
-        <label style="font-family:var(--mono);font-size:10px;color:var(--text2)">Signal
-          <select id="t20SigFilter" onchange="top20Refresh()">
-            <option value="all">All signals</option>
-            <option value="B1-OS">B1-OS only</option>
-            <option value="B1-MOM">B1-MOM only</option>
-            <option value="B2">B2 only</option>
-            <option value="B3">B3 only</option>
-            <option value="premium">B1-OS + B2 only</option>
-          </select>
-        </label>
-        <button class="btn btn-primary" onclick="top20Refresh()"
-                style="padding:5px 14px;font-size:11px;">
-          <i class="fas fa-rotate"></i> Refresh
-        </button>
-        <button class="btn btn-export" onclick="top20ExportCSV()"
-                style="padding:5px 12px;font-size:11px;">
-          <i class="fas fa-download"></i> Export
-        </button>
-      </div>
-    </div>
-    <div style="overflow-x:auto">
-      <table class="t20-table" id="top20Table">
-        <thead>
-          <tr>
-            <th onclick="top20Sort('rank')">#</th>
-            <th onclick="top20Sort('sym')">Symbol</th>
-            <th onclick="top20Sort('sig')">Signal</th>
-            <th onclick="top20Sort('zone')">Zone</th>
-            <th onclick="top20Sort('score')">Score</th>
-            <th onclick="top20Sort('price')">Price</th>
-            <th onclick="top20Sort('tp')">TP</th>
-            <th onclick="top20Sort('sl')">SL</th>
-            <th onclick="top20Sort('wr')">Win Rate</th>
-            <th onclick="top20Sort('ev')">EV/Trade</th>
-            <th onclick="top20Sort('days')">Avg Days</th>
-            <th onclick="top20Sort('n')">N (History)</th>
-            <th>Confidence</th>
-            <th onclick="top20Sort('sector')">Sector</th>
-          </tr>
-        </thead>
-        <tbody id="top20Body">
-          <tr><td colspan="14" style="text-align:center;padding:20px;color:var(--text3);font-family:var(--mono)">
-            Run Generate Signals to compute Top 20
-          </td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="t20-summary" id="top20Summary"></div>
-  </div>
-
   <!-- ── ZERODHA LIVE CMP PANEL ── -->
   <div class="zd-panel" id="zdPanel">
     <div class="zd-title">
@@ -3819,7 +3396,7 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
     </div>
     <div class="zd-input-grp">
       <span class="zd-input-lbl">API Key</span>
-      <input type="password" class="zd-input" id="zdApiKey" placeholder="Your API key" autocomplete="off">
+      <input type="text" class="zd-input" id="zdApiKey" placeholder="Your API key" autocomplete="off">
     </div>
     <div class="zd-input-grp">
       <span class="zd-input-lbl">Access Token</span>
@@ -4373,13 +3950,19 @@ function detectSALT(hma9arr, hma10arr, smiArr, smiSigArr, bandZone, p) {
 
   const isBuyZone  = bandZone === 'rej_lo' || bandZone === 'below_va';
   const isSellZone = bandZone === 'rej_hi' || bandZone === 'above_va';
+  const notSellZone = !isSellZone;
+  const notBuyZone  = !isBuyZone;
 
+  // B1-OS: HMA9 turn up + SMI deeply oversold — only in buy zones (confirmed reversal)
   if (d9 > 0 && pd9 < 0 && cSMI < -20 && cSIG < -20 && isBuyZone)  return 'B1-OS';
-  if (d9 > 0 && pd9 < 0 && cSMI >  25 && cSIG >  25 && isBuyZone)  return 'B1-MOM';
-  if (xUp && d10 > 0 && cSMI < -20 && cSIG < -20 && !isSellZone)   return 'B2';
-  if (d9 > 0 && d10 > 0 && cSMI > -10 && cSIG > -10 && !isSellZone) return 'B3';
+  // B1-MOM: HMA9 turn up + SMI > 25 (momentum/trending) — fires in ANY zone (momentum has no zone restriction)
+  if (d9 > 0 && pd9 < 0 && cSMI > 25 && cSIG > 25)                  return 'B1-MOM';
+  if (xUp && d10 > 0 && cSMI < -20 && cSIG < -20 && notSellZone)    return 'B2';
+  if (d9 > 0 && d10 > 0 && cSMI > -10 && cSIG > -10 && notSellZone) return 'B3';
+  // S1-OB: HMA9 turn down + SMI deeply overbought — only in sell zones (confirmed reversal)
   if (d9 < 0 && pd9 > 0 && cSMI >  20 && cSIG >  20 && isSellZone) return 'S1-OB';
-  if (d9 < 0 && pd9 > 0 && cSMI < -25 && cSIG < -25 && isSellZone) return 'S1-MOM';
+  // S1-MOM: HMA9 turn down + SMI < -25 (bearish momentum) — fires in ANY zone
+  if (d9 < 0 && pd9 > 0 && cSMI < -25 && cSIG < -25)               return 'S1-MOM';
   if (xDn && d10 < 0 && cSMI > 20 && cSIG > 20 && !isBuyZone)      return 'S2';
   if (d9 < 0 && d10 < 0 && cSMI < 10 && cSIG < 10 && !isBuyZone)   return 'S3';
   if (d9 > 0 && pd9 < 0 && d10 > 0)                                 return 'HSE';
@@ -4407,12 +3990,12 @@ function detectSALT_at(h9, h10, smi, smiSig, bandZone, p, atBar) {
   const xUp = c9>c10 && p9<=p10, xDn = c9<c10 && p9>=p10;
   const isBZ = bandZone==='rej_lo'||bandZone==='below_va';
   const isSZ = bandZone==='rej_hi'||bandZone==='above_va';
-  if (d9>0&&pd9<0&&cSMI<-20&&cSIG<-20&&isBZ) return 'B1-OS';
-  if (d9>0&&pd9<0&&cSMI>25&&cSIG>25&&isBZ)   return 'B1-MOM';
-  if (xUp&&d10>0&&cSMI<-20&&cSIG<-20&&!isSZ) return 'B2';
+  if (d9>0&&pd9<0&&cSMI<-20&&cSIG<-20&&isBZ)  return 'B1-OS';
+  if (d9>0&&pd9<0&&cSMI>25&&cSIG>25)           return 'B1-MOM';
+  if (xUp&&d10>0&&cSMI<-20&&cSIG<-20&&!isSZ)  return 'B2';
   if (d9>0&&d10>0&&cSMI>-10&&cSIG>-10&&!isSZ) return 'B3';
-  if (d9<0&&pd9>0&&cSMI>20&&cSIG>20&&isSZ)   return 'S1-OB';
-  if (d9<0&&pd9>0&&cSMI<-25&&cSIG<-25&&isSZ) return 'S1-MOM';
+  if (d9<0&&pd9>0&&cSMI>20&&cSIG>20&&isSZ)    return 'S1-OB';
+  if (d9<0&&pd9>0&&cSMI<-25&&cSIG<-25)        return 'S1-MOM';
   if (xDn&&d10<0&&cSMI>20&&cSIG>20&&!isBZ)   return 'S2';
   if (d9<0&&d10<0&&cSMI<10&&cSIG<10&&!isBZ)  return 'S3';
   if (d9>0&&pd9<0&&d10>0)                     return 'HSE';
@@ -4720,9 +4303,9 @@ function calcBarsAgo(h9arr, h10arr, smiArr, smiSigArr, bandZone, p, currentSig) 
 function calcScore(sig, bandZone, barsAgo, weeklyTrend, rr) {
   let score = 0;
 
-  // 1. Signal type (0-30)
-  const sigScore = { 'B1-OS':28,'B1-MOM':25,'B2':30,'B3':10,
-                     'S1-OB':28,'S1-MOM':25,'S2':30,'S3':10,
+  // 1. Signal type (0-30) — B1-MOM raised: SMI>25 momentum turns have strong backtest EV
+  const sigScore = { 'B1-OS':28,'B1-MOM':30,'B2':30,'B3':10,
+                     'S1-OB':28,'S1-MOM':28,'S2':30,'S3':10,
                      'HSE':5,'HLE':5,'SE':8,'LE':8,'WAIT':0 };
   score += sigScore[sig] ?? 0;
 
@@ -5169,15 +4752,6 @@ async function runProcessing() {
 
   document.getElementById('exportBtn').style.display = 'inline-flex';
   toast(`Generated ${results.length} signals from ${total} stocks in ${elapsed}s`, 'ok');
-
-  // Learning engine — runs after every Generate Signals
-  lrnRunDaily().catch(e => console.warn('Learning engine error:', e));
-
-  // Top 20 Trades — rebuild after every signal run
-  setTimeout(() => { top20Build(); top20Render(); }, 100);
-  // DPE — update prices and time gate
-  dpeUpdatePrices();
-  dpeUpdateTimeGate();
 }
 
 /* ───────────────────────────────────────────────
@@ -6509,84 +6083,100 @@ function toggleTheme() {
        PAGE 2 — PORTFOLIO ENGINE
   ══════════════════════════════════════════════ -->
   <div class="page-section" id="page-p2">
-  <div class="dpe-shell">
+  <div class="pe-shell">
 
-    <!-- ── DAILY PORTFOLIO ENGINE TOPBAR ── -->
-    <div class="dpe-topbar">
-      <div class="dpe-topbar-left">
-        <div class="dpe-title">
-          <i class="fas fa-bolt-lightning" style="color:var(--amber)"></i>
-          DAILY PORTFOLIO ENGINE
-        </div>
-        <div class="dpe-stats-row">
-          <div class="dpe-stat"><span class="dpe-stat-val" id="dpeActiveCount">0</span><span class="dpe-stat-lbl">Active</span></div>
-          <div class="dpe-stat"><span class="dpe-stat-val" id="dpeWinCount" style="color:var(--bull)">0</span><span class="dpe-stat-lbl">Winning</span></div>
-          <div class="dpe-stat"><span class="dpe-stat-val" id="dpeLoseCount" style="color:var(--bear)">0</span><span class="dpe-stat-lbl">Losing</span></div>
-          <div class="dpe-stat"><span class="dpe-stat-val" id="dpeArchCount">0</span><span class="dpe-stat-lbl">Archived</span></div>
-        </div>
+    <!-- Top control bar -->
+    <div class="pe-topbar">
+      <div class="pe-topbar-title">
+        <i class="fas fa-layer-group" style="color:var(--amber)"></i>
+        PORTFOLIO ENGINE
       </div>
-      <div class="dpe-topbar-right">
-        <div class="dpe-param-row">
-          <label class="dpe-lbl">TP
-            <select id="dpe_tp" onchange="dpeUpdatePrices()">
-              <option value="2.0">+2.0%</option>
-              <option value="1.5">+1.5%</option>
-              <option value="2.5">+2.5%</option>
-              <option value="3.0">+3.0%</option>
-            </select>
-          </label>
-          <label class="dpe-lbl">SL
-            <select id="dpe_sl" onchange="dpeUpdatePrices()">
-              <option value="3.5">-3.5%</option>
-              <option value="3.0">-3.0%</option>
-              <option value="4.0">-4.0%</option>
-              <option value="2.5">-2.5%</option>
-            </select>
-          </label>
-          <label class="dpe-lbl">Size
-            <select id="dpe_size">
-              <option value="15">Top 15</option>
-              <option value="10">Top 10</option>
-              <option value="20">Top 20</option>
-              <option value="25">Top 25</option>
-            </select>
-          </label>
-          <label class="dpe-lbl">Capital ₹
-            <input type="number" id="dpe_capital" value="300000" step="50000" style="width:100px">
-          </label>
+      <div class="pe-stat">
+        <span class="pe-stat-val" id="peActiveCount">0</span>
+        <span class="pe-stat-lbl">Active</span>
+      </div>
+      <div class="pe-stat">
+        <span class="pe-stat-val" id="peWinningCount" style="color:var(--bull)">0</span>
+        <span class="pe-stat-lbl">Winning</span>
+      </div>
+      <div class="pe-stat">
+        <span class="pe-stat-val" id="peLosingCount" style="color:var(--bear)">0</span>
+        <span class="pe-stat-lbl">Losing</span>
+      </div>
+      <div class="pe-stat">
+        <span class="pe-stat-val" id="peArchivedCount">0</span>
+        <span class="pe-stat-lbl">Archived</span>
+      </div>
+      <div class="pe-controls">
+        <div class="pe-param">
+          <label>Min Score</label>
+          <input type="number" id="pe_minScore" value="30" min="10" max="100" step="5"
+                 style="width:60px;">
         </div>
-        <div class="dpe-btn-row">
-          <div id="dpeTimeGate" class="dpe-gate-msg">Load CSV + Generate Signals first</div>
-          <button class="btn btn-primary" id="dpeGenBtn" onclick="dpeGenerate()" disabled
-                  style="padding:8px 20px;font-size:12px;font-weight:700;">
-            <i class="fas fa-bolt"></i> Generate Daily Portfolios
-          </button>
-          <button class="btn btn-ghost" onclick="dpeClearAll()" style="padding:7px 12px;font-size:11px;">
-            <i class="fas fa-trash"></i> Clear All
-          </button>
-          <button class="btn btn-export" onclick="dpeExportCSV()" style="padding:7px 12px;font-size:11px;">
-            <i class="fas fa-download"></i> Export CSV
-          </button>
+        <div class="pe-param">
+          <label>Capital/Portfolio ₹</label>
+          <input type="number" id="pe_capital" value="60000" min="10000" step="10000"
+                 style="width:90px;">
         </div>
+        <div class="pe-param">
+          <label>TP / SL</label>
+          <select id="pe_tpsl"
+                  style="padding:4px 7px;border:1px solid var(--border);border-radius:var(--radius);
+                         background:var(--bg3);font-family:var(--mono);font-size:11px;
+                         font-weight:700;color:var(--bright);cursor:pointer;outline:none;">
+            <option value="1.5_3.0">+1.5% / -3.0% ⭐</option>
+            <option value="1.0_3.0">+1.0% / -3.0%</option>
+            <option value="2.0_4.0">+2.0% / -4.0%</option>
+            <option value="1.5_4.0">+1.5% / -4.0%</option>
+            <option value="2.0_3.0">+2.0% / -3.0%</option>
+            <option value="2.5_5.0">+2.5% / -5.0%</option>
+            <option value="1.0_2.0">+1.0% / -2.0%</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="peGenBtn" onclick="generatePortfolios()" disabled
+                style="padding:8px 18px;font-size:12px;">
+          <i class="fas fa-magic"></i> Generate Portfolios
+        </button>
+        <div id="peScheduleInfo" style="font-family:var(--mono);font-size:10px;color:var(--text3);padding:6px 10px;
+             background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+             min-width:180px;line-height:1.6;">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
+            <i class="fas fa-calendar" style="color:var(--amber);"></i>
+            <span id="peScheduleText" style="font-weight:700;">Mon · Wed · Fri</span>
+          </div>
+          <div id="peTimeGateMsg" style="font-size:9px;color:var(--text3);">Load CSV to check status</div>
+          <div id="peCountdown" style="font-size:9px;color:var(--amber);display:none;"></div>
+        </div>
+        <button class="btn btn-ghost" onclick="clearPortfolios()"
+                style="padding:8px 14px;font-size:11px;">
+          <i class="fas fa-trash-alt"></i> Clear All
+        </button>
+        <button class="btn btn-ghost" onclick="resetStorage()"
+                style="padding:8px 14px;font-size:11px;color:var(--bear);">
+          <i class="fas fa-rotate"></i> Reset Storage
+        </button>
+        <button class="btn btn-export" onclick="exportAllActiveCSV()"
+                style="padding:8px 14px;font-size:11px;">
+          <i class="fas fa-download"></i> Export All CSV
+        </button>
       </div>
     </div>
 
-    <!-- ── REGIME BANNER ── -->
-    <div id="dpeRegimeBanner" style="display:none;padding:8px 16px;border-radius:var(--radius);
+    <!-- Regime Warning Banner (compact, portfolio-only context) -->
+    <div id="peRegimeBanner" style="display:none;padding:8px 14px;border-radius:var(--radius);
          font-family:var(--mono);font-size:11px;border:1px solid;"></div>
 
-    <!-- ── ACTIVE PORTFOLIOS GRID ── -->
-    <div id="dpeGrid">
-      <div class="pe-empty" id="dpeEmpty">
-        <i class="fas fa-bolt-lightning"></i>
-        <h3>NO DAILY PORTFOLIOS YET</h3>
-        <p>Generate Signals on Page 1, then click <strong>Generate Daily Portfolios</strong> between 3:00pm–3:30pm IST.
-        A Buy Portfolio and Sell Portfolio will be created and tracked for 4 trading days.</p>
+    <!-- Portfolio cards grid -->
+    <div class="pe-grid" id="peGrid">
+      <div class="pe-empty" id="peEmpty">
+        <i class="fas fa-layer-group"></i>
+        <h3>NO PORTFOLIOS GENERATED</h3>
+        <p>First run Signal Scanner (Page 1) to load your CSV data, then click <strong>Generate Portfolios</strong> above. The engine will construct 10 themed portfolios from your top-scoring signals.</p>
       </div>
     </div>
 
   </div>
-</div><!-- end page-p2 -->
+  </div><!-- end page-p2 -->
 
   <!-- ══════════════════════════════════════════════
        PAGE 3 — PORTFOLIO ARCHIVE
@@ -6666,241 +6256,6 @@ function toggleTheme() {
       </div>
     </div>
 
-    <!-- ═══ DAILY PORTFOLIO ARCHIVE ═══ -->
-    <div class="learn-panel" id="dpeArchivePanel" style="margin-bottom:8px">
-      <div class="learn-header">
-        <div class="learn-title">
-          <i class="fas fa-bolt-lightning" style="color:var(--amber)"></i>
-          DAILY PORTFOLIO ARCHIVE
-        </div>
-        <div style="display:flex;gap:0">
-          <div class="learn-stat">
-            <span class="learn-stat-val" id="dpeArchTotal">0</span>
-            <span class="learn-stat-lbl">Total</span>
-          </div>
-          <div class="learn-stat">
-            <span class="learn-stat-val" id="dpeArchWins" style="color:var(--bull)">0</span>
-            <span class="learn-stat-lbl">Profitable</span>
-          </div>
-          <div class="learn-stat">
-            <span class="learn-stat-val" id="dpeArchAvgRet">—</span>
-            <span class="learn-stat-lbl">Avg Return</span>
-          </div>
-        </div>
-        <div style="margin-left:auto;display:flex;gap:6px">
-          <button class="btn btn-export" onclick="dpeExportCSV()"
-                  style="padding:5px 12px;font-size:10px;">
-            <i class="fas fa-download"></i> Export All
-          </button>
-          <button class="btn btn-ghost" onclick="if(confirm('Clear DPE archive?')){dpeArchive=[];dpeSave();dpeRenderArchive();}"
-                  style="padding:5px 12px;font-size:10px;color:var(--bear);">
-            <i class="fas fa-trash"></i> Clear
-          </button>
-        </div>
-      </div>
-      <div id="dpeArchiveGrid" style="padding:12px 16px">
-        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;padding:20px">
-          No dissolved portfolios yet. Daily portfolios appear here after 4 trading days.
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ LEARNING ENGINE DASHBOARD ═══ -->
-    <div class="learn-panel" id="learnPanel">
-      <div class="learn-header">
-        <div class="learn-title">
-          <i class="fas fa-brain" style="color:#6366f1"></i>
-          SELF-LEARNING ENGINE — Forward-Tested Win Rates
-        </div>
-        <div style="display:flex;gap:0">
-          <div class="learn-stat">
-            <span class="learn-stat-val" id="lrnTotalSignals">0</span>
-            <span class="learn-stat-lbl">Signals Logged</span>
-          </div>
-          <div class="learn-stat">
-            <span class="learn-stat-val" id="lrnResolvedSignals">0</span>
-            <span class="learn-stat-lbl">Resolved</span>
-          </div>
-          <div class="learn-stat">
-            <span class="learn-stat-val" id="lrnTradingDays">0</span>
-            <span class="learn-stat-lbl">Trading Days</span>
-          </div>
-          <div class="learn-stat">
-            <span class="learn-stat-val" id="lrnOverallWR" style="color:var(--bull)">—</span>
-            <span class="learn-stat-lbl">Overall Win%</span>
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;align-items:center;margin-left:auto">
-          <span class="confidence-badge conf-backtest" id="lrnConfBadge">NO DATA</span>
-          <button class="btn btn-ghost" onclick="lrnClearAll()"
-                  style="padding:5px 12px;font-size:10px;color:var(--bear);">
-            <i class="fas fa-trash"></i> Clear Learning Data
-          </button>
-          <button class="btn btn-export" onclick="lrnExportCSV()"
-                  style="padding:5px 12px;font-size:10px;">
-            <i class="fas fa-download"></i> Export Learning Data
-          </button>
-        </div>
-      </div>
-
-      <!-- Settings row -->
-      <div class="learn-settings">
-        <label>
-          Learning TP:
-          <select id="lrnTP">
-            <option value="1.5">+1.5%</option>
-            <option value="1.0">+1.0%</option>
-            <option value="2.0">+2.0%</option>
-            <option value="2.5">+2.5%</option>
-          </select>
-        </label>
-        <label>
-          Learning SL:
-          <select id="lrnSL">
-            <option value="3.0">-3.0%</option>
-            <option value="2.0">-2.0%</option>
-            <option value="4.0">-4.0%</option>
-            <option value="5.0">-5.0%</option>
-          </select>
-        </label>
-        <label>
-          Max Hold Days:
-          <select id="lrnMaxDays">
-            <option value="5">5 days</option>
-            <option value="3">3 days</option>
-            <option value="7">7 days</option>
-            <option value="10">10 days</option>
-          </select>
-        </label>
-        <label>
-          Filter by Regime:
-          <select id="lrnRegimeFilter">
-            <option value="all">All Regimes</option>
-            <option value="bull">Bull Only</option>
-            <option value="bear">Bear Only</option>
-            <option value="mixed">Mixed Only</option>
-          </select>
-        </label>
-        <label>
-          Filter by Sector:
-          <select id="lrnSectorFilter"><option value="all">All Sectors</option></select>
-        </label>
-        <button class="btn btn-primary" onclick="lrnRenderDashboard()"
-                style="padding:5px 14px;font-size:10px;">
-          <i class="fas fa-rotate"></i> Refresh Stats
-        </button>
-        <button class="btn btn-primary" id="lrnCorrBtn" onclick="lrnShowCorrelations()"
-                style="padding:5px 14px;font-size:10px;background:#6366f1;border-color:#6366f1;">
-          <i class="fas fa-diagram-project"></i> Correlations
-        </button>
-        <button class="btn btn-primary" id="lrnFullAnalysisBtn" onclick="lrnShowFullAnalysis()"
-                style="padding:5px 14px;font-size:10px;background:#059669;border-color:#059669;">
-          <i class="fas fa-brain"></i> Full Analysis
-        </button>
-        <button class="btn btn-primary" onclick="lrnGenerateLearningPortfolios()"
-                style="padding:5px 14px;font-size:10px;background:#d97706;border-color:#d97706;">
-          <i class="fas fa-layer-group"></i> Learning Portfolios
-        </button>
-      </div>
-
-      <!-- Win Rate by Signal Type — LIVE -->
-      <div style="padding:12px 16px 0;font-family:var(--mono);font-size:10px;
-                  font-weight:700;color:var(--text2);letter-spacing:1px;
-                  text-transform:uppercase;border-top:1px solid var(--border);">
-        <i class="fas fa-chart-bar" style="color:#6366f1;margin-right:6px"></i>
-        Win Rate by Signal Type — Forward Tested
-      </div>
-      <div style="overflow-x:auto">
-        <table class="wr-live-table">
-          <thead>
-            <tr>
-              <th>Signal</th>
-              <th>Wins</th>
-              <th>Losses</th>
-              <th>Early Exit</th>
-              <th>Hold</th>
-              <th>Total</th>
-              <th>Win Rate</th>
-              <th>Avg Days</th>
-              <th>Confidence</th>
-            </tr>
-          </thead>
-          <tbody id="lrnSigTableBody">
-            <tr><td colspan="9" style="text-align:center;color:var(--text3);padding:20px">
-              Upload CSV and click Generate Signals to start accumulating learning data
-            </td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Win Rate by Zone — LIVE -->
-      <div style="padding:12px 16px 0;font-family:var(--mono);font-size:10px;
-                  font-weight:700;color:var(--text2);letter-spacing:1px;
-                  text-transform:uppercase;border-top:1px solid var(--border);margin-top:8px">
-        <i class="fas fa-layer-group" style="color:#6366f1;margin-right:6px"></i>
-        Win Rate by Band Zone — Forward Tested
-      </div>
-      <div style="overflow-x:auto">
-        <table class="wr-live-table">
-          <thead>
-            <tr>
-              <th>Zone</th>
-              <th>Wins</th>
-              <th>Losses</th>
-              <th>Early Exit</th>
-              <th>Hold</th>
-              <th>Total</th>
-              <th>Win Rate</th>
-              <th>Avg Days</th>
-              <th>Confidence</th>
-            </tr>
-          </thead>
-          <tbody id="lrnZoneTableBody">
-            <tr><td colspan="9" style="text-align:center;color:var(--text3);padding:20px">
-              No data yet
-            </td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Insights -->
-      <div class="learn-insight" id="lrnInsights">
-        <strong>📊 Learning Engine:</strong> No data accumulated yet.
-        Upload your historical CSV (250 days recommended) and click Generate Signals to seed the learning engine.
-        Win rates will update automatically on every subsequent upload.
-      </div>
-
-      <!-- Correlation Analysis Panel — shown on demand -->
-      <div id="lrnCorrPanel" style="display:none;border-top:1px solid var(--border)"></div>
-
-      <!-- Multibagger Candidates Panel -->
-      <div id="lrnMultibaggerPanel" style="display:none"></div>
-
-      <!-- Indicator Comparison Panel -->
-      <div id="lrnIndicatorPanel" style="display:none"></div>
-
-      <!-- Cross-Sector Lag Correlation Panel -->
-      <div id="lrnLagPanel" style="display:none"></div>
-
-      <!-- Zerodha Historical Data Button -->
-      <div style="padding:8px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--bg3)">
-        <span style="font-family:var(--mono);font-size:10px;color:var(--text2);font-weight:700">
-          <i class="fas fa-database" style="color:#6366f1;margin-right:5px"></i>ZERODHA HISTORICAL
-        </span>
-        <button class="btn btn-primary" onclick="zdFetchHistorical(100)"
-                style="padding:4px 12px;font-size:10px;background:#6366f1;border-color:#6366f1;">
-          <i class="fas fa-download"></i> Fetch 100 Days OHLC
-        </button>
-        <button class="btn btn-primary" onclick="zdFetchHistorical(250)"
-                style="padding:4px 12px;font-size:10px;background:#6366f1;border-color:#6366f1;">
-          <i class="fas fa-download"></i> Fetch 250 Days OHLC
-        </button>
-        <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">
-          Connect Zerodha first → then fetch historical OHLC to eliminate CSV uploads
-        </span>
-      </div>
-    </div>
-
   </div>
   </div><!-- end page-p3 -->
 
@@ -6914,8 +6269,8 @@ function switchPage(id) {
   document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.getElementById('tab-' + id).classList.add('active');
-  if (id === 'p2') { dpeRenderPage(); }
-  if (id === 'p3') { renderArchivePage(); dpeRenderArchive(); lrnOpenDB().then(()=>lrnRenderDashboard()).catch(e=>console.warn('LRN render:',e)); }
+  if (id === 'p2') renderPortfolioPage();
+  if (id === 'p3') renderArchivePage();
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -8064,8 +7419,8 @@ let zdPrices   = {};
 // Restore saved credentials from sessionStorage on load
 (function zdRestore() {
   document.addEventListener('DOMContentLoaded', ()=>{
-    const k = localStorage.getItem('zd_api_key');
-    const t = localStorage.getItem('zd_token');
+    const k = sessionStorage.getItem('zd_api_key');
+    const t = sessionStorage.getItem('zd_token');
     if (k && t) {
       zdApiKey=k; zdToken=t;
       const kEl=document.getElementById('zdApiKey');
@@ -8083,8 +7438,8 @@ function zdConnect() {
   if(!kEl||!tEl) return;
   zdApiKey=kEl.value.trim(); zdToken=tEl.value.trim();
   if(!zdApiKey||!zdToken){ zdSetStatus('Enter both API key and access token','err'); return; }
-  localStorage.setItem('zd_api_key',zdApiKey);
-  localStorage.setItem('zd_token',zdToken);
+  sessionStorage.setItem('zd_api_key',zdApiKey);
+  sessionStorage.setItem('zd_token',zdToken);
   zdSetStatus('Testing connection...','fetch'); zdSetDot('fetching');
   zdFetchPrices(['NSE:RELIANCE']).then(r=>{
     if(r.ok){
@@ -8093,7 +7448,6 @@ function zdConnect() {
       zdSetDot('live');
       document.getElementById('zdFetchBtn').disabled=false;
       toast('Zerodha connected — live prices enabled','ok');
-      zdScheduleDailyFetch();
     } else {
       zdSetStatus('❌ '+(r.error||'Auth failed — check API key and token'),'err');
       zdSetDot('error'); zdLiveMode=false;
@@ -8235,1661 +7589,14 @@ function zdMarketCloseCheck(){
 }
 setInterval(zdMarketCloseCheck,60000);
 
-/* ═══════════════════════════════════════════════════════
-   SELF-LEARNING ENGINE — IndexedDB Signal Logger
-   Separate from localStorage — survives Reset Storage
-   Records every fresh signal + tracks outcomes daily
-═══════════════════════════════════════════════════════ */
-
-const LRN_DB_NAME    = 'iravat_learning_v1';
-const LRN_DB_VERSION = 1;
-let   lrnDB          = null;
-
-// ── Open / Init IndexedDB ──
-function lrnOpenDB() {
-  return new Promise((resolve, reject) => {
-    if (lrnDB) { resolve(lrnDB); return; }
-    const req = indexedDB.open(LRN_DB_NAME, LRN_DB_VERSION);
-    req.onupgradeneeded = e => {
-      const db = e.target.result;
-      // Signal log — one entry per fresh signal detected
-      if (!db.objectStoreNames.contains('signal_log')) {
-        const sl = db.createObjectStore('signal_log', { keyPath:'id', autoIncrement:true });
-        sl.createIndex('by_date',   'date',   { unique:false });
-        sl.createIndex('by_symbol', 'symbol', { unique:false });
-        sl.createIndex('by_signal', 'signal', { unique:false });
-        sl.createIndex('by_zone',   'zone',   { unique:false });
-        sl.createIndex('by_outcome','outcome',{ unique:false });
-      }
-      // Daily market log
-      if (!db.objectStoreNames.contains('daily_log')) {
-        db.createObjectStore('daily_log', { keyPath:'date' });
-      }
-      // Win rate cache — pre-aggregated for fast display
-      if (!db.objectStoreNames.contains('wr_cache')) {
-        db.createObjectStore('wr_cache', { keyPath:'key' });
-      }
-    };
-    req.onsuccess = e => { lrnDB = e.target.result; resolve(lrnDB); };
-    req.onerror   = e => { console.error('LRN DB error:', e.target.error); reject(e.target.error); };
-  });
-}
-
-// ── Get today's CSV date ──
-function lrnGetCsvDate() {
-  if (!uploadedParsed) return null;
-  const symbols = Object.keys(uploadedParsed);
-  for (const sym of symbols) {
-    const rows = uploadedParsed[sym]?.rows;
-    if (rows && rows.length) {
-      const last = rows[rows.length-1];
-      return typeof last.date === 'string'
-        ? last.date.slice(0,10)
-        : (last.date instanceof Date ? last.date.toISOString().slice(0,10) : null);
-    }
-  }
-  return null;
-}
-
-// ── Get regime for today ──
-function lrnGetTodayRegime() {
-  if (!Object.keys(regimeData||{}).length) return 'unknown';
-  const keys = Object.keys(regimeData);
-  let bulls=0,bears=0;
-  keys.forEach(k=>{ const r=regimeData[k]; if(r.regime==='bull')bulls++; else if(r.regime==='bear')bears++; });
-  const n=keys.length;
-  if (bulls===n) return 'bull';
-  if (bears===n) return 'bear';
-  if (bears>n/2) return 'mostly_bear';
-  return 'mixed';
-}
-
-// ── CORE: Log fresh signals from today's run ──
-async function lrnLogSignals() {
-  const db = await lrnOpenDB();
-  const csvDate = lrnGetCsvDate();
-  if (!csvDate) return;
-
-  // Check if already logged today
-  const existing = await new Promise(res => {
-    const tx  = db.transaction('daily_log','readonly');
-    const req = tx.objectStore('daily_log').get(csvDate);
-    req.onsuccess = e => res(e.target.result);
-    req.onerror   = () => res(null);
-  });
-  if (existing) {
-    console.log('LRN: Already logged for', csvDate);
-    return;
-  }
-
-  const regime   = lrnGetTodayRegime();
-  const freshSigs = allSignals.filter(s =>
-    s.type === 'buy' &&
-    s.barsAgo === 0 &&   // FRESH signals only — Option B
-    !s.isIndex
-  );
-
-  // Write fresh signals to signal_log
-  const tx = db.transaction('signal_log','readwrite');
-  const store = tx.objectStore('signal_log');
-  let logged = 0;
-
-  for (const s of freshSigs) {
-    store.add({
-      date:        csvDate,
-      symbol:      s.symbol,
-      signal:      s.signal,
-      zone:        s.bandZone || s.zone,
-      score:       s.score || 0,
-      sector:      s.sector || 'N/A',
-      index:       s.index  || 'N/A',
-      regime:      regime,
-      smi:         +(s.smi||0).toFixed(1),
-      weeklyTrend: s.weeklyTrend || 'neut',
-      weeklyAligned: s.weeklyAligned || false,
-      entryPrice:  s.price,
-      outcome:     null,   // filled in by lrnTrackOutcomes
-      outcomePrice:null,
-      daysHeld:    null,
-      resolvedDate:null,
-    });
-    logged++;
-  }
-
-  // Write daily market summary
-  const dailyTx = db.transaction('daily_log','readwrite');
-  dailyTx.objectStore('daily_log').put({
-    date:      csvDate,
-    regime,
-    buyCount:  allSignals.filter(s=>s.type==='buy').length,
-    sellCount: allSignals.filter(s=>s.type==='sell').length,
-    waitCount: allSignals.filter(s=>s.type==='wait').length,
-    freshBuys: logged,
-    advDec:    (allSignals.filter(s=>s.type==='buy').length /
-               Math.max(1,allSignals.filter(s=>s.type==='sell').length)).toFixed(2),
-  });
-
-  await new Promise(res => { tx.oncomplete=res; tx.onerror=res; });
-  console.log(`LRN: Logged ${logged} fresh signals for ${csvDate}`);
-  toast(`Learning engine: logged ${logged} fresh signals for ${csvDate}`, 'ok');
-}
-
-// ── CORE: Track outcomes for previously logged open signals ──
-async function lrnTrackOutcomes() {
-  const db = await lrnOpenDB();
-  const csvDate = lrnGetCsvDate();
-  if (!csvDate || !uploadedParsed) return;
-
-  const tpPct = parseFloat(document.getElementById('lrnTP')?.value || '1.5') / 100;
-  const slPct = parseFloat(document.getElementById('lrnSL')?.value || '3.0') / 100;
-  const maxDays = parseInt(document.getElementById('lrnMaxDays')?.value || '5');
-
-  // Get all unresolved signals (outcome === null)
-  const allSignalRecs = await new Promise(res => {
-    const tx  = db.transaction('signal_log','readonly');
-    const req = tx.objectStore('signal_log').getAll();
-    req.onsuccess = e => res(e.target.result || []);
-    req.onerror   = () => res([]);
-  });
-  const unresolved = allSignalRecs.filter(r => r.outcome === null || r.outcome === undefined);
-
-  if (!unresolved.length) return;
-
-  let resolved = 0;
-  const updateTx = db.transaction('signal_log','readwrite');
-  const updateStore = updateTx.objectStore('signal_log');
-
-  for (const entry of unresolved) {
-    if (!entry.date || entry.date >= csvDate) continue; // skip today's signals
-
-    const info = uploadedParsed[entry.symbol];
-    if (!info || !info.rows.length) continue;
-
-    // Find the rows AFTER entry date
-    const entryDateStr = entry.date;
-    const entryIdx = info.rows.findIndex(r => {
-      const d = typeof r.date==='string' ? r.date.slice(0,10)
-                : r.date instanceof Date ? r.date.toISOString().slice(0,10) : '';
-      return d > entryDateStr;
-    });
-
-    if (entryIdx === -1) continue; // no forward data yet
-
-    const forwardRows = info.rows.slice(entryIdx, entryIdx + maxDays);
-    const tp = entry.entryPrice * (1 + tpPct);
-    const sl = entry.entryPrice * (1 - slPct);
-
-    let outcome = null, outcomePrice = null, daysHeld = null, resolvedDate = null;
-
-    for (let d = 0; d < forwardRows.length; d++) {
-      const row = forwardRows[d];
-      const hi  = row.hi, lo = row.lo, cl = row.cl;
-      const rowDate = typeof row.date==='string'
-        ? row.date.slice(0,10)
-        : row.date instanceof Date ? row.date.toISOString().slice(0,10) : '';
-
-      // Check if this is the last row we have (csvDate) and signal changed
-      // We can only check exit signal on the most recent bar
-      const sigChanged = rowDate === csvDate && (() => {
-        const cur = allSignals.find(s => s.symbol === entry.symbol);
-        if (!cur) return false;
-        // Exit if signal type changed from buy to non-buy, or signal itself changed
-        return cur.type !== 'buy' || (cur.signal !== entry.signal && cur.barsAgo === 0);
-      })();
-
-      // TP hit
-      if (hi >= tp) {
-        outcome = 'tp'; outcomePrice = +tp.toFixed(2);
-        daysHeld = d + 1; resolvedDate = rowDate; break;
-      }
-      // SL hit
-      if (lo <= sl) {
-        outcome = 'sl'; outcomePrice = +sl.toFixed(2);
-        daysHeld = d + 1; resolvedDate = rowDate; break;
-      }
-      // Exit signal triggered on this day
-      if (sigChanged) {
-        outcome = 'early_exit'; outcomePrice = +cl.toFixed(2);
-        daysHeld = d + 1; resolvedDate = rowDate; break;
-      }
-      // Max days reached
-      if (d === forwardRows.length - 1) {
-        outcome = 'hold'; outcomePrice = +cl.toFixed(2);
-        daysHeld = d + 1; resolvedDate = rowDate;
-      }
-    }
-
-    if (outcome) {
-      updateStore.put({ ...entry, outcome, outcomePrice, daysHeld, resolvedDate });
-      resolved++;
-    }
-  }
-
-  await new Promise(res => { updateTx.oncomplete=res; updateTx.onerror=res; });
-
-  if (resolved > 0) {
-    await lrnRebuildWRCache();
-    console.log(`LRN: Resolved ${resolved} signal outcomes`);
-  }
-}
-
-// ── Rebuild win rate cache from signal_log ──
-async function lrnRebuildWRCache() {
-  const db = await lrnOpenDB();
-  const regFilter = document.getElementById('lrnRegimeFilter')?.value || 'all';
-  const secFilter = document.getElementById('lrnSectorFilter')?.value || 'all';
-
-  // Get all resolved signals
-  const resolved = await new Promise(res => {
-    const tx  = db.transaction('signal_log','readonly');
-    const req = tx.objectStore('signal_log').getAll();
-    req.onsuccess = e => res((e.target.result||[]).filter(r =>
-      r.outcome !== null &&
-      (regFilter==='all' || r.regime===regFilter) &&
-      (secFilter==='all' || r.sector===secFilter)
-    ));
-    req.onerror = () => res([]);
-  });
-
-  // Aggregate by signal type and zone
-  const bySig  = {};
-  const byZone = {};
-  const SIG_ORDER  = ['B1-OS','B1-MOM','B2','B3','S1-OB','S1-MOM','S2','S3'];
-  const ZONE_ORDER = ['rej_lo','below_va','va','above_va','rej_hi'];
-
-  SIG_ORDER.forEach(k  => { bySig[k]  = {wins:0,losses:0,early:0,hold:0,total:0,days:0}; });
-  ZONE_ORDER.forEach(k => { byZone[k] = {wins:0,losses:0,early:0,hold:0,total:0,days:0}; });
-
-  resolved.forEach(r => {
-    const sk = r.signal;
-    const zk = r.zone;
-    const isWin = r.outcome === 'tp';
-    const isLoss= r.outcome === 'sl';
-    const isEarly = r.outcome === 'early_exit';
-    const isHold  = r.outcome === 'hold';
-    const days = r.daysHeld || 0;
-
-    if (bySig[sk]) {
-      bySig[sk].total++;
-      bySig[sk].days += days;
-      if (isWin)   bySig[sk].wins++;
-      if (isLoss)  bySig[sk].losses++;
-      if (isEarly) bySig[sk].early++;
-      if (isHold)  bySig[sk].hold++;
-    }
-    if (byZone[zk]) {
-      byZone[zk].total++;
-      byZone[zk].days += days;
-      if (isWin)   byZone[zk].wins++;
-      if (isLoss)  byZone[zk].losses++;
-      if (isEarly) byZone[zk].early++;
-      if (isHold)  byZone[zk].hold++;
-    }
-  });
-
-  // Write to cache
-  const cacheTx = db.transaction('wr_cache','readwrite');
-  const cacheStore = cacheTx.objectStore('wr_cache');
-  cacheStore.put({ key:'bySig',  data: bySig,  updated: new Date().toISOString() });
-  cacheStore.put({ key:'byZone', data: byZone, updated: new Date().toISOString() });
-  cacheStore.put({ key:'total',  data: resolved.length, updated: new Date().toISOString() });
-
-  await new Promise(res => { cacheTx.oncomplete=res; cacheTx.onerror=res; });
-  return { bySig, byZone, total: resolved.length };
-}
-
-// ── RENDER: Learning Dashboard ──
-async function lrnRenderDashboard() {
-  const db = await lrnOpenDB();
-
-  // Get counts
-  const totalSignals = await new Promise(res => {
-    const tx = db.transaction('signal_log','readonly');
-    const req = tx.objectStore('signal_log').count();
-    req.onsuccess = e => res(e.target.result||0);
-    req.onerror   = () => res(0);
-  });
-
-  // Single read for all entries — filter in JS (more reliable than IDBKeyRange on nullable)
-  const allEntries = await new Promise(res => {
-    const tx  = db.transaction('signal_log','readonly');
-    const req = tx.objectStore('signal_log').getAll();
-    req.onsuccess = e => res(e.target.result||[]);
-    req.onerror   = () => res([]);
-  });
-  const resolvedCount = allEntries.filter(e => e.outcome !== null && e.outcome !== undefined).length;
-  const winsCount     = allEntries.filter(e => e.outcome === 'tp').length;
-
-  const tradingDays = await new Promise(res => {
-    const tx  = db.transaction('daily_log','readonly');
-    const req = tx.objectStore('daily_log').count();
-    req.onsuccess = e => res(e.target.result||0);
-    req.onerror   = () => res(0);
-  });
-
-  // Update stat displays
-  const setEl = (id,v) => { const e=document.getElementById(id); if(e)e.textContent=v; };
-  setEl('lrnTotalSignals',    totalSignals);
-  setEl('lrnResolvedSignals', resolvedCount);
-  setEl('lrnTradingDays',     tradingDays);
-  setEl('lrnOverallWR', resolvedCount > 0
-    ? Math.round(winsCount/resolvedCount*100)+'%'
-    : '—');
-
-  // Confidence badge
-  const confBadge = document.getElementById('lrnConfBadge');
-  if (confBadge) {
-    if (resolvedCount === 0)      { confBadge.textContent='NO DATA';      confBadge.className='confidence-badge conf-backtest'; }
-    else if (resolvedCount < 50)  { confBadge.textContent='EARLY ('+resolvedCount+')'; confBadge.className='confidence-badge conf-early'; }
-    else if (resolvedCount < 200) { confBadge.textContent='LIVE ('+resolvedCount+')';  confBadge.className='confidence-badge conf-live'; }
-    else                          { confBadge.textContent='HIGH CONFIDENCE ('+resolvedCount+')'; confBadge.className='confidence-badge conf-high'; }
-  }
-
-  // Rebuild and render win rate tables
-  const stats = await lrnRebuildWRCache();
-  lrnRenderWRTable('lrnSigTableBody',  stats.bySig,
-    ['B1-OS','B1-MOM','B2','B3','S1-OB','S1-MOM','S2','S3'], 'signal');
-  lrnRenderWRTable('lrnZoneTableBody', stats.byZone,
-    ['rej_lo','below_va','va','above_va','rej_hi'], 'zone');
-
-  // Populate sector filter
-  const sectors = [...new Set(allEntries.map(e=>e.sector).filter(Boolean))].sort();
-  const secSel = document.getElementById('lrnSectorFilter');
-  if (secSel && sectors.length) {
-    const cur = secSel.value;
-    secSel.innerHTML = '<option value="all">All Sectors</option>' +
-      sectors.map(s=>`<option value="${s}"${s===cur?' selected':''}>${s}</option>`).join('');
-  }
-
-  // Generate insights
-  lrnGenerateInsights(stats, resolvedCount, tradingDays, winsCount);
-}
-
-function lrnRenderWRTable(tbodyId, data, order, type) {
-  const tbody = document.getElementById(tbodyId);
-  if (!tbody) return;
-
-  const ZONE_LABELS = {
-    rej_lo:'REJ↓ (B1/B2)', below_va:'Below VA',
-    va:'In Value Area', above_va:'Above VA', rej_hi:'REJ↑ (B9/B10)'
-  };
-
-  const maxTotal = Math.max(...Object.values(data).map(d=>d.total), 1);
-
-  tbody.innerHTML = order.map(k => {
-    const d = data[k] || {wins:0,losses:0,early:0,hold:0,total:0,days:0};
-    if (d.total === 0) {
-      return `<tr>
-        <td><strong>${type==='zone'?ZONE_LABELS[k]||k:k}</strong></td>
-        <td colspan="8" style="color:var(--text3);font-size:10px">No data yet</td>
-      </tr>`;
-    }
-    const wr      = Math.round(d.wins/d.total*100);
-    const barW    = Math.round(d.total/maxTotal*100);
-    const wrColor = wr>=65?'var(--bull)':wr>=55?'var(--amber)':'var(--bear)';
-    const avgDays = d.total>0 ? (d.days/d.total).toFixed(1) : '—';
-
-    // Confidence level
-    const confText = d.total<10?'⚪ THIN':d.total<50?'🟡 EARLY':d.total<200?'🟠 LIVE':'🟢 HIGH';
-    const isBuy = k.startsWith('B');
-    const labelColor = type==='signal'
-      ? (isBuy?'var(--bull)':'var(--bear)')
-      : 'var(--text)';
-
-    return `<tr>
-      <td><strong style="color:${labelColor}">${type==='zone'?ZONE_LABELS[k]||k:k}</strong></td>
-      <td style="color:var(--bull);font-weight:700">${d.wins}</td>
-      <td style="color:var(--bear);font-weight:700">${d.losses}</td>
-      <td style="color:var(--amber)">${d.early}</td>
-      <td style="color:var(--text3)">${d.hold}</td>
-      <td style="color:var(--text2)">${d.total}</td>
-      <td>
-        <div class="wr-bar-wrap">
-          <div class="wr-bar">
-            <div class="wr-bar-fill" style="width:${wr}%;background:${wrColor}"></div>
-          </div>
-          <span style="font-weight:700;color:${wrColor};min-width:36px">${wr}%</span>
-        </div>
-      </td>
-      <td style="color:var(--text2)">${avgDays}d</td>
-      <td><span style="font-size:9px">${confText} (n=${d.total})</span></td>
-    </tr>`;
-  }).join('');
-}
-
-function lrnGenerateInsights(stats, resolvedCount, tradingDays, winsCount) {
-  const el = document.getElementById('lrnInsights');
-  if (!el) return;
-
-  if (resolvedCount < 10) {
-    el.innerHTML = `<strong>📊 Learning Engine:</strong> Accumulating data...
-      ${resolvedCount} signals resolved so far.
-      <span class="insight-warn">Upload 250 days of historical data to seed the engine with ~2,000+ signal outcomes from day one.</span>`;
-    return;
-  }
-
-  const insights = [];
-  const SIG_ORDER = ['B1-OS','B1-MOM','B2','B3'];
-  const ZONE_ORDER = ['rej_lo','below_va','va','above_va','rej_hi'];
-  const ZONE_LABELS = {rej_lo:'REJ↓',below_va:'BelowVA',va:'InVA',above_va:'AboveVA',rej_hi:'REJ↑'};
-
-  // Best/worst signal
-  const sigStats = SIG_ORDER.map(k => ({
-    k, d:stats.bySig[k],
-    wr: stats.bySig[k]?.total>=10
-      ? Math.round(stats.bySig[k].wins/stats.bySig[k].total*100) : null
-  })).filter(x=>x.wr!==null);
-
-  if (sigStats.length) {
-    const best  = sigStats.reduce((a,b)=>a.wr>b.wr?a:b);
-    const worst = sigStats.reduce((a,b)=>a.wr<b.wr?a:b);
-    insights.push(`Best signal: <span class="insight-good">${best.k} (${best.wr}% win rate, n=${best.d.total})</span>`);
-    if (worst.wr < 50) insights.push(`Weakest: <span class="insight-bad">${worst.k} (${worst.wr}%)</span> — reduce sizing`);
-  }
-
-  // Best zone
-  const zoneStats = ZONE_ORDER.map(k=>({
-    k, d:stats.byZone[k],
-    wr:stats.byZone[k]?.total>=10
-      ?Math.round(stats.byZone[k].wins/stats.byZone[k].total*100):null
-  })).filter(x=>x.wr!==null);
-
-  if (zoneStats.length) {
-    const bestZ = zoneStats.reduce((a,b)=>a.wr>b.wr?a:b);
-    insights.push(`Best zone: <span class="insight-good">${ZONE_LABELS[bestZ.k]} (${bestZ.wr}%, n=${bestZ.d.total})</span>`);
-  }
-
-  // EV calculation
-  const overallWR = Math.round(winsCount/resolvedCount*100);
-  const tpPct = parseFloat(document.getElementById('lrnTP')?.value||'1.5');
-  const slPct = parseFloat(document.getElementById('lrnSL')?.value||'3.0');
-  const ev = ((overallWR/100)*tpPct - ((100-overallWR)/100)*slPct).toFixed(2);
-  const evClass = parseFloat(ev)>0?'insight-good':parseFloat(ev)<0?'insight-bad':'insight-warn';
-  insights.push(`EV: <span class="${evClass}">${ev>0?'+':''}${ev}% per trade</span> (${resolvedCount} trades, ${tradingDays} days)`);
-
-  if (resolvedCount < 100) insights.push(`<span class="insight-warn">⚠️ Need 200+ resolved trades for statistical reliability</span>`);
-
-  el.innerHTML = '<strong>📊 Key Insights:</strong> ' + insights.join(' &nbsp;·&nbsp; ');
-}
-
-/* ═══════════════════════════════════════════════════════
-   CORRELATION ANALYSIS — Returns vs Triggers
-   Computes per-signal, per-zone, per-sector edge
-   and cross-sector correlations from learning data
-═══════════════════════════════════════════════════════ */
-async function lrnComputeCorrelations() {
-  const db = await lrnOpenDB();
-  const all = await new Promise(res => {
-    const req = db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
-    req.onsuccess = e => res(e.target.result||[]);
-    req.onerror   = () => res([]);
-  });
-  const resolved = all.filter(r => r.outcome !== null && r.outcomePrice && r.entryPrice);
-  if (resolved.length < 20) return null;
-
-  // Compute actual return for each resolved trade
-  const trades = resolved.map(r => ({
-    ...r,
-    actualRet: ((r.outcomePrice - r.entryPrice)/r.entryPrice*100)
-  }));
-
-  // ── 1. Signal × Zone combinations ──
-  const combos = {};
-  trades.forEach(t => {
-    const key = `${t.signal}|${t.zone}`;
-    if (!combos[key]) combos[key] = {wins:0,losses:0,total:0,retSum:0,daysSum:0};
-    const c = combos[key];
-    c.total++;
-    c.retSum += t.actualRet;
-    c.daysSum += (t.daysHeld||0);
-    if (t.outcome==='tp') c.wins++;
-    if (t.outcome==='sl') c.losses++;
-  });
-  const comboStats = Object.entries(combos)
-    .map(([k,v]) => ({
-      key:k, signal:k.split('|')[0], zone:k.split('|')[1],
-      wr: Math.round(v.wins/v.total*100),
-      avgRet: +(v.retSum/v.total).toFixed(2),
-      avgDays: +(v.daysSum/v.total).toFixed(1),
-      n: v.total
-    }))
-    .filter(x => x.n >= 5)
-    .sort((a,b) => b.wr - a.wr);
-
-  // ── 2. Per-sector win rates ──
-  const bySector = {};
-  trades.forEach(t => {
-    const s = t.sector||'N/A';
-    if (!bySector[s]) bySector[s] = {wins:0,total:0,retSum:0};
-    bySector[s].total++;
-    bySector[s].retSum += t.actualRet;
-    if (t.outcome==='tp') bySector[s].wins++;
-  });
-  const sectorStats = Object.entries(bySector)
-    .map(([k,v]) => ({sector:k, wr:Math.round(v.wins/v.total*100), avgRet:+(v.retSum/v.total).toFixed(2), n:v.total}))
-    .filter(x=>x.n>=5).sort((a,b)=>b.wr-a.wr);
-
-  // ── 3. Per-stock optimal TP/SL ──
-  const byStock = {};
-  trades.forEach(t => {
-    if (!byStock[t.symbol]) byStock[t.symbol] = {wins:0,losses:0,total:0,retSum:0,maxRets:[]};
-    const s = byStock[t.symbol];
-    s.total++;
-    s.retSum += t.actualRet;
-    s.maxRets.push(t.actualRet);
-    if (t.outcome==='tp') s.wins++;
-    if (t.outcome==='sl') s.losses++;
-  });
-  const stockStats = Object.entries(byStock)
-    .map(([sym,v]) => {
-      const sortedRets = [...v.maxRets].sort((a,b)=>a-b);
-      const p25 = sortedRets[Math.floor(sortedRets.length*0.25)];
-      const p75 = sortedRets[Math.floor(sortedRets.length*0.75)];
-      return {
-        symbol:sym,
-        wr: Math.round(v.wins/v.total*100),
-        avgRet: +(v.retSum/v.total).toFixed(2),
-        suggestedTP: Math.max(1.0, +(p75*0.8).toFixed(1)),  // 80th pct of positive moves
-        suggestedSL: Math.min(-1.5, +(p25*0.8).toFixed(1)), // 80th pct of negative moves
-        n: v.total
-      };
-    })
-    .filter(x=>x.n>=5)
-    .sort((a,b)=>b.wr-a.wr);
-
-  return { comboStats, sectorStats, stockStats, totalTrades: resolved.length };
-}
-
-async function lrnShowCorrelations() {
-  const btn = document.getElementById('lrnCorrBtn');
-  if (btn) { btn.disabled=true; btn.textContent='Computing...'; }
-
-  const result = await lrnComputeCorrelations();
-
-  if (btn) { btn.disabled=false; btn.textContent='Refresh Correlations'; }
-
-  if (!result) {
-    toast('Need 20+ resolved trades for correlation analysis','warn');
-    return;
-  }
-
-  const el = document.getElementById('lrnCorrPanel');
-  if (!el) return;
-
-  const ZONE_LABELS = {rej_lo:'REJ↓',below_va:'BelVA',va:'InVA',above_va:'AbvVA',rej_hi:'REJ↑'};
-
-  // Best signal×zone combos
-  const topCombos = result.comboStats.slice(0,8);
-  const comboHtml = topCombos.map(c => {
-    const wrCol = c.wr>=65?'var(--bull)':c.wr>=50?'var(--amber)':'var(--bear)';
-    const retCol = c.avgRet>0?'var(--bull)':c.avgRet<0?'var(--bear)':'var(--wait)';
-    return `<tr>
-      <td><strong style="color:${c.signal.startsWith('B')?'var(--bull)':'var(--bear)'}">${c.signal}</strong></td>
-      <td style="font-size:10px;color:var(--text2)">${ZONE_LABELS[c.zone]||c.zone}</td>
-      <td style="color:${wrCol};font-weight:700">${c.wr}%</td>
-      <td style="color:${retCol};font-weight:700">${c.avgRet>0?'+':''}${c.avgRet}%</td>
-      <td style="color:var(--text2)">${c.avgDays}d</td>
-      <td style="color:var(--text3);font-size:10px">n=${c.n}</td>
-    </tr>`;
-  }).join('');
-
-  // Per-sector
-  const sectorHtml = result.sectorStats.slice(0,8).map(s => {
-    const wrCol = s.wr>=65?'var(--bull)':s.wr>=50?'var(--amber)':'var(--bear)';
-    return `<tr>
-      <td style="font-size:10px">${s.sector}</td>
-      <td style="color:${wrCol};font-weight:700">${s.wr}%</td>
-      <td style="color:${s.avgRet>0?'var(--bull)':'var(--bear)'}">${s.avgRet>0?'+':''}${s.avgRet}%</td>
-      <td style="color:var(--text3);font-size:10px">n=${s.n}</td>
-    </tr>`;
-  }).join('');
-
-  // Per-stock optimal TP/SL
-  const stockHtml = result.stockStats.slice(0,10).map(s => `<tr>
-    <td><strong>${s.symbol}</strong></td>
-    <td style="color:${s.wr>=65?'var(--bull)':s.wr>=50?'var(--amber)':'var(--bear)'};font-weight:700">${s.wr}%</td>
-    <td style="color:${s.suggestedTP>0?'var(--bull)':'var(--text3)'};font-size:10px">+${s.suggestedTP}%</td>
-    <td style="color:var(--bear);font-size:10px">${s.suggestedSL}%</td>
-    <td style="color:var(--text3);font-size:10px">n=${s.n}</td>
-  </tr>`).join('');
-
-  el.style.display='block';
-  el.innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:12px 16px;">
-      <div>
-        <div style="font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;
-                    text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">
-          🔗 Signal × Zone Edge (n≥5)
-        </div>
-        <table class="wr-live-table">
-          <thead><tr><th>Signal</th><th>Zone</th><th>Win%</th><th>Avg Ret</th><th>Days</th><th>N</th></tr></thead>
-          <tbody>${comboHtml||'<tr><td colspan="6" style="color:var(--text3)">Need more data</td></tr>'}</tbody>
-        </table>
-      </div>
-      <div>
-        <div style="font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;
-                    text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">
-          🏭 Sector Edge
-        </div>
-        <table class="wr-live-table">
-          <thead><tr><th>Sector</th><th>Win%</th><th>Avg Ret</th><th>N</th></tr></thead>
-          <tbody>${sectorHtml||'<tr><td colspan="4" style="color:var(--text3)">Need more data</td></tr>'}</tbody>
-        </table>
-      </div>
-      <div>
-        <div style="font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;
-                    text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px">
-          📌 Per-Stock Optimal TP/SL (n≥5)
-        </div>
-        <table class="wr-live-table">
-          <thead><tr><th>Stock</th><th>Win%</th><th>Sugg TP</th><th>Sugg SL</th><th>N</th></tr></thead>
-          <tbody>${stockHtml||'<tr><td colspan="5" style="color:var(--text3)">Need more data</td></tr>'}</tbody>
-        </table>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:6px;padding:4px 0">
-          TP/SL suggestions based on actual trade outcomes. Use as guide, not absolute rule.
-        </div>
-      </div>
-    </div>
-    <div style="padding:8px 16px;font-family:var(--mono);font-size:10px;
-                color:var(--text3);border-top:1px solid var(--border)">
-      Based on ${result.totalTrades} resolved trades. Refresh daily for updated correlations.
-    </div>`;
-}
-
-// ── Public entry point: called after every Generate Signals ──
-async function lrnRunDaily() {
-  try {
-    await lrnTrackOutcomes(); // first check outcomes of previous signals
-    await lrnLogSignals();    // then log today's fresh signals
-    await lrnRenderDashboard();
-  } catch (e) {
-    console.warn('LRN: error in daily run:', e);
-  }
-}
-
-// ── Export learning data as CSV ──
-async function lrnExportCSV() {
-  const db = await lrnOpenDB();
-  const all = await new Promise(res => {
-    const req = db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
-    req.onsuccess = e => res(e.target.result||[]);
-    req.onerror   = () => res([]);
-  });
-  if (!all.length) { toast('No learning data to export','warn'); return; }
-  const rows = ['id,date,symbol,signal,zone,score,sector,index,regime,smi,weeklyTrend,entryPrice,outcome,outcomePrice,daysHeld,resolvedDate'];
-  all.forEach(r => rows.push([
-    r.id,r.date,r.symbol,r.signal,r.zone,r.score,
-    r.sector,r.index,r.regime,r.smi,r.weeklyTrend,
-    r.entryPrice,r.outcome||'',r.outcomePrice||'',r.daysHeld||'',r.resolvedDate||''
-  ].join(',')));
-  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `iravat_learning_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  toast(`Exported ${all.length} signal records to CSV`,'ok');
-}
-
-// ── Clear ONLY learning data — separate from portfolio reset ──
-async function lrnClearAll() {
-  if (!confirm('Clear ALL learning data?\n\nThis will delete your accumulated signal log and win rates.\nThis CANNOT be undone.\n\nPortfolio data is NOT affected.')) return;
-  const req = indexedDB.deleteDatabase(LRN_DB_NAME);
-  req.onsuccess = () => {
-    lrnDB = null;
-    toast('Learning data cleared. Will rebuild from next upload.','ok');
-    lrnRenderDashboard();
-  };
-}
-
-// ── Init on page load ──
-document.addEventListener('DOMContentLoaded', () => {
-  lrnOpenDB()
-    .then(() => lrnRenderDashboard())
-    .catch(e => console.warn('LRN init (non-critical):', e));
-});
-
-/* ═══════════════════════════════════════════════════════
-   TOP 20 TRADES ENGINE
-   Ranks all buy signals by composite score using
-   252-day historical win rates per stock per signal
-═══════════════════════════════════════════════════════ */
-
-let top20Data    = [];
-let top20SortKey = 'rank';
-let top20SortAsc = true;
-
-function top20CompositeScore(s) {
-  let score = 0;
-  // 1. Base signal score (35%)
-  const sigW = {'B1-OS':100,'B1-MOM':88,'B2':95,'B3':40};
-  score += (sigW[s.signal]||0) * 0.35;
-  // 2. Historical win rate (35%)
-  if (s.wr !== null) score += s.wr * 0.35;
-  else score += 50 * 0.20; // neutral if no history
-  // 3. Zone quality (15%)
-  const zoneW = {'rej_lo':100,'below_va':65,'va':35,'above_va':20,'rej_hi':0};
-  score += (zoneW[s.bandZone]||0) * 0.15;
-  // 4. Expected value (10%)
-  if (s.ev !== null) score += Math.max(0, s.ev) * 10;
-  // 5. Weekly alignment (5%)
-  if (s.weeklyTrend === 'bull' && s.type === 'buy') score += 5;
-  return Math.round(score * 10) / 10;
-}
-
-function top20Build() {
-  if (!allSignals || !allSignals.length) return;
-
-  const tpPct = parseFloat(document.getElementById('t20TP')?.value || '2.0') / 100;
-  const slPct = parseFloat(document.getElementById('t20SL')?.value || '3.5') / 100;
-  const sigFilter = document.getElementById('t20SigFilter')?.value || 'all';
-
-  // Filter buy signals
-  let candidates = allSignals.filter(s =>
-    s.type === 'buy' &&
-    !s.isIndex &&
-    (s.barsAgo || 99) <= 1  // today and yesterday's fresh signals
-  );
-
-  if (sigFilter === 'premium')
-    candidates = candidates.filter(s => s.signal==='B1-OS' || s.signal==='B2');
-  else if (sigFilter !== 'all')
-    candidates = candidates.filter(s => s.signal === sigFilter);
-
-  // Compute per-stock historical win rate from signal analytics data
-  // Pull from the live learning engine if available, else from signal history
-  top20Data = candidates.map(s => {
-    // Try to get win rate from Signal Analytics (existing backtest data)
-    let wr = null, n = 0, avgDays = null;
-    if (s.history) {
-      const stats = s.history.buyStats;
-      if (stats && stats.resolved >= 5) {
-        wr = Math.round(stats.winRate || 0);
-        n  = stats.resolved;
-        avgDays = stats.avgDays || null;
-      }
-    }
-
-    const ev = wr !== null
-      ? +((wr/100 * tpPct*100) - ((100-wr)/100 * slPct*100)).toFixed(2)
-      : null;
-
-    return {
-      symbol:   s.symbol,
-      signal:   s.signal,
-      zone:     s.bandZone,
-      score:    s.score,
-      sector:   s.sector,
-      index:    s.index,
-      price:    s.price,
-      tp:       +(s.price * (1+tpPct)).toFixed(2),
-      sl:       +(s.price * (1-slPct)).toFixed(2),
-      tpPct:    tpPct*100,
-      slPct:    slPct*100,
-      wr, n, ev, avgDays,
-      weeklyTrend: s.weeklyTrend,
-      smi:      s.smi,
-      type:     s.type,
-      bandZone: s.bandZone,
-      history:  s.history,
-    };
-  });
-
-  // Compute composite score and rank
-  top20Data.forEach(s => { s.compScore = top20CompositeScore(s); });
-  top20Data.sort((a,b) => b.compScore - a.compScore);
-  top20Data.forEach((s,i) => { s.rank = i+1; });
-}
-
-function top20Render() {
-  const count  = parseInt(document.getElementById('t20Count')?.value || '20');
-  const panel  = document.getElementById('top20Panel');
-  const tbody  = document.getElementById('top20Body');
-  const sumEl  = document.getElementById('top20Summary');
-  const dateEl = document.getElementById('top20Date');
-  if (!panel || !tbody) return;
-
-  panel.style.display = 'block';
-  if (dateEl) {
-    const d = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
-    dateEl.textContent = `· ${d}`;
-  }
-
-  if (!top20Data.length) {
-    tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;padding:20px;color:var(--text3);font-family:var(--mono)">No signals found</td></tr>';
-    return;
-  }
-
-  // Sort
-  const sorted = [...top20Data];
-  const sortFns = {
-    rank:   (a,b)=>a.rank-b.rank,
-    sym:    (a,b)=>a.symbol.localeCompare(b.symbol),
-    sig:    (a,b)=>a.signal.localeCompare(b.signal),
-    zone:   (a,b)=>a.zone.localeCompare(b.zone),
-    score:  (a,b)=>b.score-a.score,
-    price:  (a,b)=>a.price-b.price,
-    tp:     (a,b)=>a.tp-b.tp,
-    sl:     (a,b)=>b.sl-a.sl,
-    wr:     (a,b)=>(b.wr||0)-(a.wr||0),
-    ev:     (a,b)=>(b.ev||0)-(a.ev||0),
-    days:   (a,b)=>(a.avgDays||99)-(b.avgDays||99),
-    n:      (a,b)=>b.n-a.n,
-    sector: (a,b)=>(a.sector||'').localeCompare(b.sector||''),
-  };
-  if (sortFns[top20SortKey]) sorted.sort(sortFns[top20SortKey]);
-  if (!top20SortAsc) sorted.reverse();
-
-  const display = sorted.slice(0, count);
-
-  tbody.innerHTML = display.map((s,i) => {
-    const rankCls = i===0?'gold':i===1?'silver':i===2?'bronze':'';
-    const sigCol  = s.signal.startsWith('B')?'var(--bull)':'var(--bear)';
-    const zoneShort = {rej_lo:'REJ↓',below_va:'BelVA',va:'InVA',above_va:'AbvVA',rej_hi:'REJ↑'}[s.zone]||s.zone;
-
-    // Confidence badge
-    let confCls='conf-na', confTxt='NEW';
-    if (s.wr !== null) {
-      if (s.wr>=65&&s.n>=10)      { confCls='conf-h'; confTxt='HIGH'; }
-      else if (s.wr>=55&&s.n>=5)  { confCls='conf-m'; confTxt='MOD'; }
-      else                         { confCls='conf-l'; confTxt='LOW'; }
-    }
-
-    const wrDisp  = s.wr  !== null ? `<strong style="color:${s.wr>=60?'var(--bull)':s.wr>=50?'var(--amber)':'var(--bear)'}">${s.wr}%</strong>` : '<span style="color:var(--text3)">—</span>';
-    const evDisp  = s.ev  !== null ? `<span style="color:${s.ev>0?'var(--bull)':s.ev<0?'var(--bear)':'var(--wait)'};font-weight:700">${s.ev>0?'+':''}${s.ev}%</span>` : '<span style="color:var(--text3)">—</span>';
-    const daysDisp= s.avgDays!==null ? `${s.avgDays}d` : '—';
-
-    return `<tr>
-      <td class="t20-rank ${rankCls}">${i+1}</td>
-      <td class="t20-sym">${s.symbol}</td>
-      <td><span style="font-weight:700;color:${sigCol}">${s.signal}</span></td>
-      <td style="font-size:10px;color:var(--text2)">${zoneShort}</td>
-      <td style="color:var(--amber);font-weight:700">${s.score}</td>
-      <td style="font-weight:700;color:var(--bright)">₹${s.price}</td>
-      <td style="color:var(--bull);font-weight:700">₹${s.tp} <span style="font-size:9px;opacity:0.7">(+${s.tpPct}%)</span></td>
-      <td style="color:var(--bear);font-weight:700">₹${s.sl} <span style="font-size:9px;opacity:0.7">(-${s.slPct}%)</span></td>
-      <td>${wrDisp} <span style="font-size:9px;color:var(--text3)">${s.n>=5?'n='+s.n:s.n>0?'n='+s.n:''}</span></td>
-      <td>${evDisp}</td>
-      <td style="color:var(--text2)">${daysDisp}</td>
-      <td style="color:var(--text3);font-size:10px">${s.n>=5?s.n+' trades':s.n>0?s.n+' (thin)':'No data'}</td>
-      <td><span class="t20-conf ${confCls}">${confTxt}</span></td>
-      <td style="font-size:10px;color:var(--text2)">${(s.sector||'').slice(0,16)}</td>
-    </tr>`;
-  }).join('');
-
-  // Summary bar
-  const withWR  = top20Data.filter(s=>s.wr!==null);
-  const highConf= withWR.filter(s=>s.wr>=65&&s.n>=10);
-  const posEV   = withWR.filter(s=>s.ev!==null&&s.ev>0);
-  const avgWR   = withWR.length ? Math.round(withWR.reduce((s,x)=>s+(x.wr||0),0)/withWR.length) : 0;
-  const premium = top20Data.filter(s=>s.signal==='B1-OS'||s.signal==='B2');
-
-  if (sumEl) {
-    sumEl.innerHTML = `
-      <div class="t20-sum-item"><div class="t20-sum-val">${top20Data.length}</div>Total signals</div>
-      <div class="t20-sum-item"><div class="t20-sum-val" style="color:var(--bull)">${highConf.length}</div>High confidence</div>
-      <div class="t20-sum-item"><div class="t20-sum-val" style="color:var(--amber)">${premium.length}</div>Premium (B1-OS+B2)</div>
-      <div class="t20-sum-item"><div class="t20-sum-val">${avgWR}%</div>Avg win rate</div>
-      <div class="t20-sum-item"><div class="t20-sum-val" style="color:var(--bull)">${posEV.length}</div>Positive EV signals</div>
-      <div class="t20-sum-item" style="color:var(--text3);font-size:9px;align-self:center">
-        TP +${display[0]?.tpPct||2}% · SL -${display[0]?.slPct||3.5}% · Max hold 5 days
-      </div>`;
-  }
-}
-
-function top20Sort(key) {
-  if (top20SortKey === key) top20SortAsc = !top20SortAsc;
-  else { top20SortKey = key; top20SortAsc = key==='rank'; }
-  top20Render();
-}
-
-function top20Refresh() {
-  top20Build();
-  top20Render();
-}
-
-function top20ExportCSV() {
-  if (!top20Data.length) { toast('No data to export','warn'); return; }
-  const tpPct = parseFloat(document.getElementById('t20TP')?.value||'2.0');
-  const slPct = parseFloat(document.getElementById('t20SL')?.value||'3.5');
-  const rows = ['Rank,Symbol,Signal,Zone,Score,Price,TP,SL,TP_pct,SL_pct,WinRate,EV_pct,AvgDays,N_history,Confidence,Sector,Index,CompScore'];
-  top20Data.forEach(s => {
-    const conf = s.wr===null?'NEW':s.wr>=65&&s.n>=10?'HIGH':s.wr>=55&&s.n>=5?'MODERATE':'LOW';
-    rows.push([s.rank,s.symbol,s.signal,s.zone,s.score,s.price,s.tp,s.sl,
-               tpPct,slPct,s.wr??'',s.ev??'',s.avgDays??'',s.n,conf,
-               s.sector,s.index,s.compScore].join(','));
-  });
-  const blob = new Blob([rows.join('\n')],{type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `iravat_top20_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  toast(`Exported ${top20Data.length} signals → CSV`,'ok');
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   DAILY PORTFOLIO ENGINE — v1
-   Buy + Sell portfolios every weekday 3:00-3:30pm IST
-   Dissolves after 4 trading days or TP/SL hit
-   Sell side uses option spreads
-═══════════════════════════════════════════════════════ */
-
-const DPE_STORE_KEY = 'iravat_dpe_v1';
-const DPE_ARCH_KEY  = 'iravat_dpe_arch_v1';
-const DPE_HOLD_DAYS = 4;
-
-let dpePortfolios = [];
-let dpeArchive    = [];
-
-function dpeSave() {
-  try {
-    localStorage.setItem(DPE_STORE_KEY, JSON.stringify(dpePortfolios));
-    localStorage.setItem(DPE_ARCH_KEY,  JSON.stringify(dpeArchive));
-  } catch(e) { console.warn('DPE save:', e); }
-}
-function dpeLoad() {
-  try {
-    const p=localStorage.getItem(DPE_STORE_KEY);
-    const a=localStorage.getItem(DPE_ARCH_KEY);
-    if(p) dpePortfolios=JSON.parse(p);
-    if(a) dpeArchive=JSON.parse(a);
-  } catch(e) { dpePortfolios=[]; dpeArchive=[]; }
-}
-
-function dpeIsWindow() {
-  const ist=getIST(), h=ist.getUTCHours(), m=ist.getUTCMinutes(), mins=h*60+m;
-  return mins>=570 && mins<=600; // 3:00-3:30pm IST
-}
-function dpeIsWeekday() { const d=getIST().getUTCDay(); return d>=1&&d<=5; }
-function dpeGetDayName() { return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][getIST().getUTCDay()]; }
-
-function dpeGetDissolveDate(genDate) {
-  const d=new Date(genDate+'T00:00:00Z'); let added=0;
-  while(added<DPE_HOLD_DAYS){ d.setDate(d.getDate()+1); if(d.getUTCDay()!==0&&d.getUTCDay()!==6) added++; }
-  return d.toISOString().slice(0,10);
-}
-
-function dpeScore(s) {
-  let sc=s.score*0.30;
-  const sigW={'B1-OS':100,'B1-MOM':88,'B2':95,'B3':40,'S1-OB':100,'S1-MOM':88,'S2':95,'S3':40};
-  sc+=(sigW[s.signal]||0)*0.25;
-  const zoneW={'rej_lo':100,'below_va':65,'va':35,'above_va':65,'rej_hi':100};
-  sc+=(zoneW[s.bandZone]||0)*0.20;
-  const hist=s.type==='buy'?s.history?.buyStats:s.history?.sellStats;
-  if(hist?.resolved>=3) sc+=hist.winRate*0.25;
-  if(s.weeklyTrend==='bull'&&s.type==='buy') sc+=10;
-  if(s.weeklyTrend==='bear'&&s.type==='sell') sc+=10;
-  return Math.round(sc*10)/10;
-}
-
-function dpeBuildPortfolio(direction, size, tpPct, slPct, capital) {
-  const isBuy=direction==='buy';
-  const sectorCount={};
-  const candidates=allSignals
-    .filter(s=>s.type===direction&&!s.isIndex&&(s.barsAgo||99)===0)
-    .map(s=>({...s,dpeScore:dpeScore(s)}))
-    .sort((a,b)=>b.dpeScore-a.dpeScore)
-    .filter(s=>{ const sec=s.sector||'N/A'; sectorCount[sec]=(sectorCount[sec]||0)+1; return sectorCount[sec]<=3; })
-    .slice(0,size);
-
-  if(candidates.length<3) return null;
-  const perStock=Math.round(capital/candidates.length/100)*100;
-  const today=getIST().toISOString().slice(0,10);
-
-  const stocks=candidates.map(s=>{
-    const tp=isBuy?+(s.price*(1+tpPct/100)).toFixed(2):+(s.price*(1-tpPct/100)).toFixed(2);
-    const sl=isBuy?+(s.price*(1-slPct/100)).toFixed(2):+(s.price*(1+slPct/100)).toFixed(2);
-    const spreads=getOptionSpreads?getOptionSpreads(s.signal,s.bandZone):['—','—'];
-    const hist=isBuy?s.history?.buyStats:s.history?.sellStats;
-    const wr=hist?.resolved>=3?Math.round(hist.winRate||0):null;
-    const ev=wr!==null?+((wr/100*tpPct)-((100-wr)/100*slPct)).toFixed(2):null;
-    return {
-      symbol:s.symbol,signal:s.signal,zone:s.bandZone,score:s.score,
-      dpeScore:s.dpeScore,sector:s.sector||'N/A',index:s.index||'N/A',
-      entryPrice:s.price,currentPrice:s.price,tp,sl,tpPct,slPct,
-      allocation:perStock,status:'open',wr,ev,
-      spread1:spreads[0]||'—',spread2:spreads[1]||'—',
-      weeklyTrend:s.weeklyTrend,entryDate:today,exitPrice:null,exitDate:null,
-    };
-  });
-
-  return {
-    direction,stocks,
-    totalCapital:stocks.reduce((s,x)=>s+x.allocation,0),
-    currentReturn:0,status:'active',
-  };
-}
-
-function dpeGenerate() {
-  if(!allSignals.length){ toast('Run Generate Signals first','warn'); return; }
-  if(!dpeIsWindow()){ toast('Generate between 3:00–3:30pm IST only','warn'); return; }
-  if(!dpeIsWeekday()){ toast('Weekdays only','warn'); return; }
-  const today=getIST().toISOString().slice(0,10);
-  if(dpePortfolios.find(p=>p.genDate===today&&p.status==='active')){
-    toast('Portfolio already generated today','info'); return;
-  }
-  const tpPct=parseFloat(document.getElementById('dpe_tp')?.value||'2.0');
-  const slPct=parseFloat(document.getElementById('dpe_sl')?.value||'3.5');
-  const size=parseInt(document.getElementById('dpe_size')?.value||'15');
-  const capital=parseInt(document.getElementById('dpe_capital')?.value||'300000');
-  const regime=getPortfolioRegimeStatus();
-
-  const buyPf =dpeBuildPortfolio('buy', size, tpPct, slPct, capital/2);
-  const sellPf=dpeBuildPortfolio('sell',size, tpPct, slPct, capital/2);
-  if(!buyPf&&!sellPf){ toast('No qualifying signals today','warn'); return; }
-
-  const entry={
-    id:'DPE-'+today,genDate:today,dayName:dpeGetDayName(),
-    dissolveDate:dpeGetDissolveDate(today),
-    regime:regime.status,regimeKelly:regime.kelly,
-    day:1,status:'active',
-    buyPf:buyPf||null,sellPf:sellPf||null,
-    dayReturns:[null,null,null,null],
-    lastUpdated:today,
-  };
-  dpePortfolios.push(entry);
-  dpeSave(); dpeUpdateBadges(); dpeRenderPage(); switchPage('p2');
-  const bc=buyPf?.stocks?.length||0, sc2=sellPf?.stocks?.length||0;
-  toast('✅ '+dpeGetDayName()+' Portfolio: '+bc+' buy + '+sc2+' sell · Dissolves '+entry.dissolveDate,'ok');
-  dpeLogToLearning(entry);
-}
-
-function dpeUpdatePrices() {
-  if(!dpePortfolios.length||!uploadedParsed) return;
-  const today=getIST().toISOString().slice(0,10);
-  let updated=0;
-  dpePortfolios.filter(p=>p.status==='active').forEach(entry=>{
-    if(entry.lastUpdated===today) return;
-    ['buyPf','sellPf'].forEach(side=>{
-      const pf=entry[side]; if(!pf) return;
-      const isBuy=side==='buyPf';
-      pf.stocks.forEach(st=>{
-        if(st.status==='tp'||st.status==='sl') return;
-        const info=uploadedParsed[st.symbol];
-        if(!info?.rows?.length) return;
-        const last=info.rows[info.rows.length-1];
-        st.currentPrice=last.cl;
-        const hi=last.hi, lo=last.lo;
-        if(isBuy){
-          if(hi>=st.tp){st.status='tp';st.exitPrice=st.tp;st.exitDate=today;}
-          else if(lo<=st.sl){st.status='sl';st.exitPrice=st.sl;st.exitDate=today;}
-          else{ const r=(st.currentPrice-st.entryPrice)/st.entryPrice*100; st.status=r>=st.tpPct*0.75?'near_tp':r<=-st.slPct*0.75?'near_sl':'open'; }
-        } else {
-          if(lo<=st.tp){st.status='tp';st.exitPrice=st.tp;st.exitDate=today;}
-          else if(hi>=st.sl){st.status='sl';st.exitPrice=st.sl;st.exitDate=today;}
-          else{ const r=(st.entryPrice-st.currentPrice)/st.entryPrice*100; st.status=r>=st.tpPct*0.75?'near_tp':r<=-st.slPct*0.75?'near_sl':'open'; }
-        }
-      });
-      let inv=0,cur=0;
-      pf.stocks.forEach(st=>{
-        inv+=st.allocation;
-        const ep=st.status==='tp'?st.tp:st.status==='sl'?st.sl:st.currentPrice;
-        const ret=(ep-st.entryPrice)/st.entryPrice;
-        cur+=st.allocation*(1+(isBuy?ret:-ret));
-      });
-      pf.currentReturn=inv>0?+((cur-inv)/inv*100).toFixed(2):0;
-    });
-    const avgRet=[entry.buyPf,entry.sellPf].filter(Boolean).map(p=>p.currentReturn);
-    const dayIdx=Math.min(entry.day-1,DPE_HOLD_DAYS-1);
-    if(dayIdx>=0&&avgRet.length) entry.dayReturns[dayIdx]=+(avgRet.reduce((a,b)=>a+b,0)/avgRet.length).toFixed(2);
-    entry.day=Math.min(entry.day+1,DPE_HOLD_DAYS+1);
-    entry.lastUpdated=today; updated++;
-    if(entry.day>DPE_HOLD_DAYS||today>=entry.dissolveDate) dpeDissolve(entry);
-  });
-  if(updated>0){dpeSave();dpeUpdateBadges();toast('DPE prices updated for '+updated+' portfolio(s)','ok');}
-}
-
-function dpeDissolve(entry) {
-  entry.status='dissolved';
-  const pfList=[entry.buyPf,entry.sellPf].filter(Boolean);
-  entry.finalReturn=pfList.length?+(pfList.reduce((s,p)=>s+p.currentReturn,0)/pfList.length).toFixed(2):0;
-  entry.dissolvedDate=getIST().toISOString().slice(0,10);
-  if(!dpeArchive.find(a=>a.id===entry.id)) dpeArchive.unshift({...entry});
-  dpeSave();
-}
-
-function dpeClearAll(){
-  if(!confirm('Clear all active daily portfolios?')) return;
-  dpePortfolios=[]; dpeSave(); dpeUpdateBadges(); dpeRenderPage();
-  toast('Daily portfolios cleared','info');
-}
-
-function dpeExportCSV(){
-  const all=[...dpePortfolios,...dpeArchive];
-  if(!all.length){toast('No data to export','warn');return;}
-  const rows=['Date,Day,Status,Side,Symbol,Signal,Zone,Score,Entry,Current,TP,SL,Alloc,WR%,EV%,PfRet,Spread,Sector'];
-  all.forEach(entry=>{
-    ['buyPf','sellPf'].forEach(side=>{
-      const pf=entry[side]; if(!pf) return;
-      pf.stocks.forEach(st=>{
-        rows.push([entry.genDate,entry.dayName,entry.status,side.replace('Pf',''),
-          st.symbol,st.signal,st.zone,st.score,st.entryPrice,st.currentPrice,
-          st.tp,st.sl,st.allocation,st.wr??'',st.ev??'',pf.currentReturn,
-          '"'+st.spread1+'"',st.sector].join(','));
-      });
-    });
-  });
-  const blob=new Blob([rows.join('\n')],{type:'text/csv'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='iravat_dpe_'+new Date().toISOString().slice(0,10)+'.csv';
-  a.click();
-  toast('Exported daily portfolio data','ok');
-}
-
-function dpeUpdateTimeGate(){
-  const btn=document.getElementById('dpeGenBtn');
-  const msg=document.getElementById('dpeTimeGate');
-  if(!btn||!msg) return;
-  if(!allSignals.length){btn.disabled=true;msg.textContent='Run Generate Signals first';msg.className='dpe-gate-msg';return;}
-  if(!dpeIsWeekday()){btn.disabled=true;msg.textContent='Weekend — no portfolio today';msg.className='dpe-gate-msg warn';return;}
-  const today=getIST().toISOString().slice(0,10);
-  if(dpePortfolios.find(p=>p.genDate===today&&p.status==='active')){
-    btn.disabled=true;
-    msg.textContent='✓ '+dpeGetDayName()+' portfolio active · Dissolves '+(dpePortfolios.find(p=>p.genDate===today)?.dissolveDate||'');
-    msg.className='dpe-gate-msg ready'; return;
-  }
-  if(dpeIsWindow()){
-    btn.disabled=false; btn.style.background='var(--bull)';
-    msg.textContent='✅ '+dpeGetDayName()+' 3:00–3:30pm · GENERATE NOW';
-    msg.className='dpe-gate-msg ready';
-  } else {
-    const ist=getIST(),h=ist.getUTCHours(),m=ist.getUTCMinutes(),mins=h*60+m;
-    const until=Math.max(0,570-mins);
-    btn.disabled=true; btn.style.background='';
-    if(mins<570){msg.textContent='🕐 Opens at 3:00pm IST ('+Math.floor(until/60)+'h '+until%60+'m)';msg.className='dpe-gate-msg warn';}
-    else{msg.textContent='🔒 Window closed. Retry tomorrow 3:00pm.';msg.className='dpe-gate-msg locked';}
-  }
-}
-setInterval(dpeUpdateTimeGate,30000);
-
-function dpeRenderPage(){
-  dpeCheckDissolutions();
-  const active=dpePortfolios.filter(p=>p.status==='active');
-  const winning=active.filter(p=>[p.buyPf,p.sellPf].filter(Boolean).reduce((s,x)=>s+x.currentReturn,0)>0);
-  const losing =active.filter(p=>[p.buyPf,p.sellPf].filter(Boolean).reduce((s,x)=>s+x.currentReturn,0)<0);
-  const setEl=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  setEl('dpeActiveCount',active.length); setEl('dpeWinCount',winning.length);
-  setEl('dpeLoseCount',losing.length);   setEl('dpeArchCount',dpeArchive.length);
-
-  // Regime banner
-  const banner=document.getElementById('dpeRegimeBanner');
-  if(banner){
-    const reg=getPortfolioRegimeStatus();
-    banner.style.display='block';
-    banner.style.background=reg.bg||'var(--bg3)';
-    banner.style.borderColor=reg.border||'var(--border)';
-    banner.style.color=reg.color||'var(--text)';
-    banner.innerHTML='<i class="fas fa-satellite-dish" style="margin-right:8px"></i><strong>REGIME:</strong> '+reg.label+
-      '<span style="margin-left:12px;padding:2px 8px;border-radius:8px;background:'+reg.bg+';border:1px solid '+reg.border+';font-weight:700">Kelly '+Math.round((reg.kelly||1)*100)+'%</span>';
-  }
-
-  dpeUpdateTimeGate();
-  const grid=document.getElementById('dpeGrid');
-  const empty=document.getElementById('dpeEmpty');
-  if(!active.length){
-    grid.innerHTML='';
-    if(empty){empty.style.display='flex';grid.appendChild(empty);}
-    return;
-  }
-  if(empty) empty.style.display='none';
-  grid.innerHTML=[...active].sort((a,b)=>b.genDate.localeCompare(a.genDate)).map(e=>dpeRenderEntry(e)).join('');
-}
-
-function dpeRenderEntry(entry){
-  const pfList=[entry.buyPf,entry.sellPf].filter(Boolean);
-  const avgRet=pfList.length?+(pfList.reduce((s,p)=>s+p.currentReturn,0)/pfList.length).toFixed(2):0;
-  const retCls=avgRet>0?'pos':avgRet<0?'neg':'neu';
-  const dots=[1,2,3,4].map((d,i)=>{
-    const pnl=entry.dayReturns[i];
-    const cls=d>entry.day?'future':d===entry.day?'today':pnl>0?'win':pnl<0?'loss':'';
-    const lbl=pnl!==null?(pnl>=0?'+':'')+pnl+'%':'D'+d;
-    return '<div class="dpe-dot '+cls+'" title="Day '+d+'">'+lbl+'</div>';
-  }).join('');
-  const regBadge=entry.regime==='bear'?'<span style="font-size:9px;color:var(--bear)">🔴 BEAR</span>':
-    entry.regime==='bull'?'<span style="font-size:9px;color:var(--bull)">✅ BULL</span>':'';
-  return '<div class="dpe-day-group">'+
-    '<div class="dpe-day-header">'+
-      '<div class="dpe-day-label"><i class="fas fa-calendar-day" style="color:var(--amber)"></i>'+
-        entry.dayName+' '+entry.genDate+
-        '<span style="font-size:10px;padding:2px 7px;border-radius:8px;background:rgba(5,150,105,0.10);color:var(--bull);border:1px solid rgba(5,150,105,0.25)">Day '+entry.day+'/'+DPE_HOLD_DAYS+'</span>'+
-        regBadge+'</div>'+
-      '<div style="display:flex;align-items:center;gap:12px">'+
-        '<div class="dpe-day-dots">'+dots+'</div>'+
-        '<div><div class="dpe-day-ret '+retCls+'">'+(avgRet>=0?'+':'')+avgRet+'%</div>'+
-        '<div class="dpe-day-meta">Avg return · Dissolves '+entry.dissolveDate+'</div></div>'+
-      '</div>'+
-    '</div>'+
-    '<div class="dpe-pf-grid">'+
-      (entry.buyPf ?dpeRenderPf(entry.buyPf, 'buy') :'<div class="dpe-pf" style="padding:20px;color:var(--text3);font-family:var(--mono);font-size:11px">No buy signals</div>')+
-      (entry.sellPf?dpeRenderPf(entry.sellPf,'sell'):'<div class="dpe-pf" style="padding:20px;color:var(--text3);font-family:var(--mono);font-size:11px">No sell signals</div>')+
-    '</div>'+
-  '</div>';
-}
-
-function dpeRenderPf(pf,side){
-  const isBuy=side==='buy';
-  const retCls=pf.currentReturn>0?'pos':pf.currentReturn<0?'neg':'neu';
-  const tpHit=pf.stocks.filter(s=>s.status==='tp').length;
-  const slHit=pf.stocks.filter(s=>s.status==='sl').length;
-  const open =pf.stocks.filter(s=>['open','near_tp','near_sl'].includes(s.status)).length;
-  const rows=pf.stocks.map(st=>{
-    const stsCls={tp:'ss-tp',sl:'ss-sl',open:'ss-open',near_tp:'ss-near-tp',near_sl:'ss-near-sl'}[st.status]||'ss-open';
-    const stsLbl={tp:'✓ TP',sl:'✗ SL',open:'◉',near_tp:'↑~TP',near_sl:'↓~SL'}[st.status]||'◉';
-    const zs={rej_lo:'REJ↓',below_va:'BelVA',va:'InVA',above_va:'AbvVA',rej_hi:'REJ↑'}[st.zone]||st.zone;
-    const ret=isBuy?((st.currentPrice-st.entryPrice)/st.entryPrice*100).toFixed(1):((st.entryPrice-st.currentPrice)/st.entryPrice*100).toFixed(1);
-    const retCl=parseFloat(ret)>0?'psr-ret-pos':parseFloat(ret)<0?'psr-ret-neg':'psr-ret-neu';
-    const wrD=st.wr!==null?st.wr+'%':'—';
-    const evD=st.ev!==null?(st.ev>0?'+':'')+st.ev+'%':'—';
-    return '<tr>'+
-      '<td style="font-weight:700;color:var(--bright);font-size:12px">'+st.symbol+'</td>'+
-      '<td style="font-weight:700;color:'+(isBuy?'var(--bull)':'var(--bear)')+';font-size:10px">'+st.signal+'</td>'+
-      '<td style="font-size:9px;color:var(--text2)">'+zs+'</td>'+
-      '<td style="color:var(--amber);font-weight:700;font-size:10px">'+st.score+'</td>'+
-      '<td style="font-size:10px;color:var(--text2)">₹'+st.entryPrice+'</td>'+
-      '<td style="font-size:10px;color:var(--bull)">₹'+st.tp+'</td>'+
-      '<td style="font-size:10px;color:var(--bear)">₹'+st.sl+'</td>'+
-      '<td class="'+retCl+'" style="font-weight:700">'+(parseFloat(ret)>0?'+':'')+ret+'%</td>'+
-      '<td style="font-size:10px;color:'+(st.wr>=60?'var(--bull)':st.wr>=50?'var(--amber)':'var(--bear)')+'">'+wrD+'</td>'+
-      '<td style="font-size:10px;color:var(--text2);font-style:italic">'+evD+'</td>'+
-      '<td><span class="dpe-spread-tag" title="'+st.spread2+'">'+st.spread1+'</span></td>'+
-      '<td><span class="psr-status '+stsCls+'" style="font-size:9px">'+stsLbl+'</span></td>'+
-    '</tr>';
-  }).join('');
-  return '<div class="dpe-pf">'+
-    '<div class="dpe-pf-header '+side+'">'+
-      '<div class="dpe-pf-name">'+
-        '<i class="fas fa-'+(isBuy?'arrow-trend-up':'arrow-trend-down')+'" style="color:'+(isBuy?'var(--bull)':'var(--bear)')+'"></i>'+
-        (isBuy?'BUY PORTFOLIO':'SELL PORTFOLIO — Option Spreads')+
-        '<span style="font-size:10px;font-weight:400;color:var(--text3)"> '+pf.stocks.length+' stocks</span>'+
-      '</div>'+
-      '<div style="text-align:right">'+
-        '<div class="dpe-pf-ret '+retCls+'">'+(pf.currentReturn>=0?'+':'')+pf.currentReturn+'%</div>'+
-        '<div class="dpe-pf-sub">₹'+(pf.totalCapital/100000).toFixed(1)+'L · '+tpHit+'✓ '+slHit+'✗ '+open+'◉</div>'+
-      '</div>'+
-    '</div>'+
-    '<div style="overflow-x:auto">'+
-      '<table class="dpe-stock-table">'+
-        '<thead><tr><th>Symbol</th><th>Signal</th><th>Zone</th><th>Score</th><th>Entry</th><th>TP</th><th>SL</th><th>Ret%</th><th>WR%</th><th>EV%</th><th>Spread</th><th>Status</th></tr></thead>'+
-        '<tbody>'+rows+'</tbody>'+
-      '</table>'+
-    '</div>'+
-    '<div class="dpe-pf-footer">'+
-      '<span>TP +'+( pf.stocks[0]?.tpPct||2)+'% / SL -'+(pf.stocks[0]?.slPct||3.5)+'%</span>'+
-      '<span style="color:var(--text3)">'+pf.stocks.slice(0,3).map(s=>s.symbol).join(' · ')+(pf.stocks.length>3?' +'+(pf.stocks.length-3)+' more':'')+'</span>'+
-    '</div>'+
-  '</div>';
-}
-
-function dpeCheckDissolutions(){
-  const today=getIST().toISOString().slice(0,10);
-  dpePortfolios.filter(p=>p.status==='active').forEach(p=>{
-    if(p.day>DPE_HOLD_DAYS||today>=p.dissolveDate) dpeDissolve(p);
-  });
-  dpePortfolios=dpePortfolios.filter(p=>p.status==='active');
-}
-
-async function dpeLogToLearning(entry){
-  try{
-    const db=await lrnOpenDB();
-    const tx=db.transaction('daily_log','readwrite');
-    tx.objectStore('daily_log').put({
-      date:entry.genDate,regime:entry.regime,
-      dpeBuyCount:entry.buyPf?.stocks?.length||0,
-      dpeSellCount:entry.sellPf?.stocks?.length||0,
-      dpeDissolve:entry.dissolveDate,
-    });
-  }catch(e){}
-}
-
-function dpeRenderArchive(){
-  const grid=document.getElementById('dpeArchiveGrid');
-  if(!grid) return;
-  const setEl=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  setEl('dpeArchTotal',dpeArchive.length);
-  setEl('dpeArchWins',dpeArchive.filter(p=>p.finalReturn>0).length);
-  const avgRet=dpeArchive.length?+(dpeArchive.reduce((s,p)=>s+(p.finalReturn||0),0)/dpeArchive.length).toFixed(2):null;
-  setEl('dpeArchAvgRet',avgRet!==null?(avgRet>=0?'+':'')+avgRet+'%':'—');
-
-  if(!dpeArchive.length){
-    grid.innerHTML='<div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;padding:20px">No dissolved portfolios yet.</div>';
-    return;
-  }
-  grid.innerHTML=dpeArchive.slice(0,10).map(entry=>{
-    const retCls=entry.finalReturn>0?'var(--bull)':entry.finalReturn<0?'var(--bear)':'var(--wait)';
-    const bc=entry.buyPf?.stocks?.length||0, sc2=entry.sellPf?.stocks?.length||0;
-    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px">'+
-      '<div><strong style="color:var(--bright)">'+entry.dayName+' '+entry.genDate+'</strong>'+
-        '<span style="font-size:9px;color:var(--text3);margin-left:8px">'+bc+' buy · '+sc2+' sell · '+DPE_HOLD_DAYS+' days</span></div>'+
-      '<div style="display:flex;gap:16px;align-items:center">'+
-        '<span style="font-size:10px;color:var(--text3)">Dissolved '+entry.dissolvedDate+'</span>'+
-        '<span style="font-weight:700;color:'+retCls+';font-size:14px">'+(entry.finalReturn>=0?'+':'')+entry.finalReturn+'%</span>'+
-      '</div>'+
-    '</div>';
-  }).join('');
-}
-
-
-
-document.addEventListener('DOMContentLoaded',()=>{
-  dpeLoad(); dpeCheckDissolutions(); dpeUpdateBadges();
-});
-
-let zdInstruments = {};
-let zdAutoHistInterval = null;
-
-async function zdFetchInstruments() {
-  const cached = localStorage.getItem('zd_instruments');
-  if (cached) { try { zdInstruments=JSON.parse(cached); return true; } catch(e){} }
-  zdSetStatus('Fetching instrument list...','fetch');
-  try {
-    const res = await fetch(`${ZD_WORKER}/kite/instruments/NSE`,{
-      headers:{'X-Kite-Version':'3','Authorization':`token ${zdApiKey}:${zdToken}`}
-    });
-    if (!res.ok) return false;
-    const text = await res.text();
-    const lines = text.trim().split('\n');
-    const hdr = lines[0].split(',');
-    const si=hdr.indexOf('tradingsymbol'), ti=hdr.indexOf('instrument_token'), gi=hdr.indexOf('segment');
-    zdInstruments={};
-    lines.slice(1).forEach(l=>{const c=l.split(','); if(c[gi]==='NSE') zdInstruments[c[si]]=c[ti];});
-    localStorage.setItem('zd_instruments',JSON.stringify(zdInstruments));
-    console.log(`ZD: Cached ${Object.keys(zdInstruments).length} NSE instruments`);
-    return true;
-  } catch(e) { return false; }
-}
-
-async function zdFetchHistorical(days=5) {
-  if (!zdLiveMode) return;
-  const symbols = zdBuildSymbolList().map(s=>s.replace('NSE:',''));
-  if (!symbols.length) { zdSetStatus('No stocks loaded yet','fetch'); return; }
-  if (!Object.keys(zdInstruments).length) {
-    if (!await zdFetchInstruments()) { zdSetStatus('Failed to fetch instrument list','err'); return; }
-  }
-  const to = new Date(), from = new Date();
-  from.setDate(from.getDate()-days-5);
-  const fromStr=from.toISOString().slice(0,10), toStr=to.toISOString().slice(0,10);
-  zdSetStatus(`Fetching ${days}d OHLC for ${symbols.length} stocks...`,'fetch'); zdSetDot('fetching');
-  let updated=0;
-  const BATCH=20;
-  for (let i=0;i<symbols.length;i+=BATCH) {
-    const batch=symbols.slice(i,i+BATCH);
-    await Promise.allSettled(batch.map(async sym=>{
-      const token=zdInstruments[sym]; if(!token) return;
-      try {
-        const url=`${ZD_WORKER}/kite/instruments/historical/${token}/day?from=${fromStr}&to=${toStr}`;
-        const res=await fetch(url,{headers:{'X-Kite-Version':'3','Authorization':`token ${zdApiKey}:${zdToken}`}});
-        if (!res.ok) return;
-        const data=await res.json();
-        if (data.data?.candles?.length) {
-          if (!uploadedParsed) uploadedParsed={};
-          if (!uploadedParsed[sym]) uploadedParsed[sym]={rows:[]};
-          const existing=new Set(uploadedParsed[sym].rows.map(r=>String(r.date).slice(0,10)));
-          data.data.candles.forEach(([dt,o,h,l,cl])=>{
-            const d=dt.slice(0,10);
-            if(!existing.has(d)) uploadedParsed[sym].rows.push({date:d,op:o,hi:h,lo:l,cl});
-          });
-          uploadedParsed[sym].rows.sort((a,b)=>String(a.date)<String(b.date)?-1:1);
-          zdPrices[sym]=data.data.candles[data.data.candles.length-1][4];
-          updated++;
-        }
-      } catch(e){}
-    }));
-    zdSetStatus(`Fetching OHLC... ${Math.min(i+BATCH,symbols.length)}/${symbols.length}`,'fetch');
-  }
-  zdSetDot('live');
-  zdSetStatus(`✅ ${updated} stocks historical data updated · ${new Date().toLocaleTimeString('en-IN')}`,'ok');
-  zdUpdatePortfolios();
-}
-
-function zdScheduleDailyFetch() {
-  setInterval(()=>{
-    const ist=getIST(), h=ist.getUTCHours(), m=ist.getUTCMinutes();
-    if (h===16&&m<=5&&zdLiveMode) {
-      const today=ist.toISOString().slice(0,10);
-      if (localStorage.getItem('zd_last_hist')!==today) {
-        localStorage.setItem('zd_last_hist',today);
-        zdFetchHistorical(2).then(()=>toast('📊 Daily OHLC auto-fetched','ok'));
-      }
-    }
-  },60000);
-}
-
-/* ═══════════════════════════════════════════════════════
-   MULTIBAGGER IDENTIFICATION
-═══════════════════════════════════════════════════════ */
-async function lrnFindMultibaggers() {
-  const db=await lrnOpenDB();
-  const all=await new Promise(res=>{
-    const req=db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
-    req.onsuccess=e=>res(e.target.result||[]); req.onerror=()=>res([]);
-  });
-  const resolved=all.filter(r=>r.outcome!==null&&r.outcomePrice&&r.entryPrice);
-  if (resolved.length<20){toast('Need 20+ resolved trades for multibagger analysis','warn');return;}
-
-  const stockScores={};
-  resolved.forEach(r=>{
-    if(!stockScores[r.symbol]) stockScores[r.symbol]={sym:r.symbol,sector:r.sector,wins:0,losses:0,n:0,retSum:0,maxStreak:0,cur:0,premSigs:0,rejZone:0};
-    const s=stockScores[r.symbol]; s.n++;
-    const ret=(r.outcomePrice-r.entryPrice)/r.entryPrice*100; s.retSum+=ret;
-    if(r.outcome==='tp'){s.wins++;s.cur++;s.maxStreak=Math.max(s.maxStreak,s.cur);}
-    else{s.losses++;s.cur=0;}
-    if(r.signal==='B1-OS'||r.signal==='B2'||r.signal==='B1-MOM') s.premSigs++;
-    if(r.zone==='rej_lo') s.rejZone++;
-  });
-
-  const candidates=Object.values(stockScores)
-    .filter(s=>s.n>=3)
-    .map(s=>{
-      const wr=s.wins/s.n; const avgRet=s.retSum/s.n;
-      const mbScore=Math.round(wr*40+Math.min(avgRet/1.5,1)*20+(s.premSigs/s.n)*20+(s.rejZone/s.n)*10+(s.maxStreak/s.n)*10);
-      return {...s,wr:Math.round(wr*100),avgRet:+avgRet.toFixed(2),mbScore};
-    })
-    .sort((a,b)=>b.mbScore-a.mbScore).slice(0,20);
-
-  const panel=document.getElementById('lrnMultibaggerPanel');
-  if (!panel) return;
-  panel.style.display='block';
-  const rows=candidates.map((s,i)=>`<tr>
-    <td><strong>${['🥇','🥈','🥉'][i]||''} ${s.sym}</strong></td>
-    <td style="font-size:10px;color:var(--text2)">${(s.sector||'').slice(0,15)}</td>
-    <td style="color:${s.wr>=65?'var(--bull)':s.wr>=50?'var(--amber)':'var(--bear)'};font-weight:700">${s.wr}%</td>
-    <td style="color:${s.avgRet>0?'var(--bull)':'var(--bear)'}">${s.avgRet>0?'+':''}${s.avgRet}%</td>
-    <td style="color:var(--text2)">${s.n}</td>
-    <td style="color:var(--amber);font-weight:700">${s.maxStreak}</td>
-    <td><span style="padding:2px 8px;border-radius:8px;background:${s.mbScore>=70?'rgba(5,150,105,0.12)':'rgba(217,119,6,0.10)'};
-              color:${s.mbScore>=70?'var(--bull)':'var(--amber)'};font-weight:700;font-family:var(--mono);font-size:10px">
-      ${s.mbScore}/100</span></td>
-  </tr>`).join('');
-  panel.innerHTML=`
-    <div style="padding:10px 16px;font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.8px;border-top:1px solid var(--border)">
-      🚀 Multibagger Candidates — Ranked by Composite Score
-    </div>
-    <div style="overflow-x:auto">
-      <table class="wr-live-table">
-        <thead><tr><th>Stock</th><th>Sector</th><th>Win%</th><th>Avg Ret</th><th>Trades</th><th>Best Streak</th><th>MB Score</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-    <div style="padding:8px 16px;font-family:var(--mono);font-size:9px;color:var(--text3);border-top:1px solid var(--border)">
-      MB Score = Win rate(40%) + Return quality(20%) + Premium signals B1/B2(20%) + REJ zone(10%) + Win streak(10%). Score≥70 = strong candidate. Needs 250-day data for reliability.
-    </div>`;
-}
-
-/* ═══════════════════════════════════════════════════════
-   INDICATOR COMPARISON — HMA+SMI vs alternatives
-═══════════════════════════════════════════════════════ */
-async function lrnCompareIndicators() {
-  const db=await lrnOpenDB();
-  const all=await new Promise(res=>{
-    const req=db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
-    req.onsuccess=e=>res(e.target.result||[]); req.onerror=()=>res([]);
-  });
-  const resolved=all.filter(r=>r.outcome!==null);
-  if (resolved.length<20) { toast('Need 20+ resolved trades','warn'); return null; }
-  const tpPct=1.5, slPct=3.0;
-  const setups={
-    'HMA+SMI B1-OS':     resolved.filter(r=>r.signal==='B1-OS'),
-    'HMA+SMI B2':        resolved.filter(r=>r.signal==='B2'),
-    'HMA+SMI B3':        resolved.filter(r=>r.signal==='B3'),
-    'SMI < -40 (deep)':  resolved.filter(r=>r.smi<-40),
-    'SMI < -20':         resolved.filter(r=>r.smi<-20),
-    'REJ zone only':     resolved.filter(r=>r.zone==='rej_lo'),
-    'BelVA zone only':   resolved.filter(r=>r.zone==='below_va'),
-    'B1-OS + REJ':       resolved.filter(r=>r.signal==='B1-OS'&&r.zone==='rej_lo'),
-    'B2 + REJ':          resolved.filter(r=>r.signal==='B2'&&r.zone==='rej_lo'),
-    'Weekly aligned':    resolved.filter(r=>r.weeklyAligned),
-    'Bull regime only':  resolved.filter(r=>r.regime==='bull'),
-    'B1-OS + Bull':      resolved.filter(r=>r.signal==='B1-OS'&&r.regime==='bull'),
-  };
-  return Object.entries(setups).map(([name,trades])=>{
-    if(!trades.length) return null;
-    const wins=trades.filter(t=>t.outcome==='tp').length;
-    const wr=Math.round(wins/trades.length*100);
-    const ev=+((wr/100*tpPct)-((100-wr)/100*slPct)).toFixed(2);
-    return {name,n:trades.length,wr,ev};
-  }).filter(Boolean).sort((a,b)=>b.ev-a.ev);
-}
-
-/* ═══════════════════════════════════════════════════════
-   CROSS-SECTOR LAGGED CORRELATION
-═══════════════════════════════════════════════════════ */
-async function lrnComputeLagCorr() {
-  const db=await lrnOpenDB();
-  const all=await new Promise(res=>{
-    const req=db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
-    req.onsuccess=e=>res(e.target.result||[]); req.onerror=()=>res([]);
-  });
-  const resolved=all.filter(r=>r.outcome!==null);
-  if (resolved.length<30) { toast('Need 30+ resolved trades for lag correlation','warn'); return null; }
-  const dates=[...new Set(resolved.map(r=>r.date))].sort();
-  const sectors=[...new Set(resolved.map(r=>r.sector).filter(Boolean))];
-  const swr={};
-  sectors.forEach(s=>{ swr[s]={}; });
-  resolved.forEach(r=>{ const s=r.sector; if(!s) return; if(!swr[s][r.date]) swr[s][r.date]={w:0,n:0}; swr[s][r.date].n++; if(r.outcome==='tp') swr[s][r.date].w++; });
-  const results=[];
-  const goodSecs=sectors.filter(s=>Object.keys(swr[s]).length>=15);
-  for(let i=0;i<goodSecs.length;i++) for(let j=0;j<goodSecs.length;j++) {
-    if(i===j) continue;
-    for(let lag=1;lag<=3;lag++){
-      const pA=[],pB=[];
-      dates.forEach((d,idx)=>{ if(idx+lag>=dates.length) return; const dl=dates[idx+lag]; const a=swr[goodSecs[i]][d], b=swr[goodSecs[j]][dl]; if(a?.n>=2&&b?.n>=2){pA.push(a.w/a.n);pB.push(b.w/b.n);} });
-      if(pA.length<10) continue;
-      const n=pA.length; const mA=pA.reduce((s,v)=>s+v,0)/n, mB=pB.reduce((s,v)=>s+v,0)/n;
-      const num=pA.reduce((s,v,i)=>s+(v-mA)*(pB[i]-mB),0);
-      const dA=Math.sqrt(pA.reduce((s,v)=>s+(v-mA)**2,0)), dB=Math.sqrt(pB.reduce((s,v)=>s+(v-mB)**2,0));
-      if(dA<0.001||dB<0.001) continue;
-      const corr=num/(dA*dB);
-      if(Math.abs(corr)>=0.4) results.push({secA:goodSecs[i],secB:goodSecs[j],lag,corr:+corr.toFixed(2),n});
-    }
-  }
-  return results.sort((a,b)=>Math.abs(b.corr)-Math.abs(a.corr)).slice(0,12);
-}
-
-/* ═══════════════════════════════════════════════════════
-   LEARNING-BASED PORTFOLIO GENERATION
-═══════════════════════════════════════════════════════ */
-async function lrnGenerateLearningPortfolios() {
-  const db=await lrnOpenDB();
-  const all=await new Promise(res=>{
-    const req=db.transaction('signal_log','readonly').objectStore('signal_log').getAll();
-    req.onsuccess=e=>res(e.target.result||[]); req.onerror=()=>res([]);
-  });
-  const resolved=all.filter(r=>r.outcome!==null);
-  if(resolved.length<20){toast('Need 20+ resolved trades to generate learning portfolios','warn');return;}
-  if(!allSignals.length){toast('Run Signal Scanner first','warn');return;}
-  const combos={};
-  resolved.forEach(r=>{
-    const k=`${r.signal}|${r.zone}`;
-    if(!combos[k]) combos[k]={wins:0,total:0,signal:r.signal,zone:r.zone};
-    combos[k].total++; if(r.outcome==='tp') combos[k].wins++;
-  });
-  const best=Object.values(combos).filter(c=>c.total>=5).map(c=>({...c,wr:Math.round(c.wins/c.total*100)})).sort((a,b)=>b.wr-a.wr).slice(0,3);
-  if(!best.length){toast('Not enough data per combo yet','warn');return;}
-  const sectorRank=rankSectors();
-  const capitalPF=parseInt(document.getElementById('pe_capital')?.value||'60000');
-  let built=0;
-  best.forEach((combo,i)=>{
-    const theme={
-      id:`LRN0${i+1}`, name:`LEARN ${combo.signal} ${combo.zone==='rej_lo'?'REJ↓':combo.zone}`,
-      icon:'fas fa-brain', iconBg:'rgba(99,102,241,0.12)', iconCol:'#6366f1',
-      desc:`Learning: ${combo.wr}% win rate · n=${combo.total} from your data`,
-      maxStocks:8, minStocks:3,
-      filter:s=>s.type==='buy'&&s.signal===combo.signal&&s.bandZone===combo.zone,
-      sort:(a,b)=>b.score-a.score
-    };
-    const pf=buildPortfolio(theme,30,capitalPF,sectorRank);
-    if(pf){ pf.cycleLabel='LEARN'; pf.isLearningBased=true; pf.historicalWR=combo.wr; pePortfolios.push(pf); built++; }
-  });
-  if(built>0){ peSave(); updateTabBadges(); renderPortfolioPage(); switchPage('p2'); toast(`✅ ${built} learning portfolios generated from your historical data`,'ok'); }
-  else toast('No qualifying stocks for learning combos today','warn');
-}
-
-/* ═══════════════════════════════════════════════════════
-   FULL ANALYSIS RUNNER
-═══════════════════════════════════════════════════════ */
-async function lrnShowFullAnalysis() {
-  const btn=document.getElementById('lrnFullAnalysisBtn');
-  if(btn){btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Analysing...';}
-  try {
-    lrnShowCorrelations();
-    await lrnFindMultibaggers();
-    const [indResult,lagResult]=await Promise.all([lrnCompareIndicators(),lrnComputeLagCorr()]);
-
-    // Indicator panel
-    const indPanel=document.getElementById('lrnIndicatorPanel');
-    if(indPanel&&indResult?.length){
-      indPanel.style.display='block';
-      const rows=indResult.map(r=>`<tr>
-        <td style="font-size:10px"><strong>${r.name}</strong></td>
-        <td style="color:${r.wr>=65?'var(--bull)':r.wr>=50?'var(--amber)':'var(--bear)'};font-weight:700">${r.wr}%</td>
-        <td style="color:${r.ev>0?'var(--bull)':r.ev<0?'var(--bear)':'var(--wait)'};font-weight:700">${r.ev>0?'+':''}${r.ev}%</td>
-        <td style="color:var(--text3);font-size:10px">${r.n}</td>
-      </tr>`).join('');
-      indPanel.innerHTML=`<div style="padding:10px 16px;font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.8px;border-top:1px solid var(--border)">
-        ⚡ Indicator Comparison — EV per trade at +1.5%/-3%</div>
-        <div style="overflow-x:auto"><table class="wr-live-table">
-          <thead><tr><th>Setup</th><th>Win%</th><th>EV/Trade</th><th>N</th></tr></thead>
-          <tbody>${rows}</tbody></table></div>
-        <div style="padding:8px 16px;font-family:var(--mono);font-size:9px;color:var(--text3);border-top:1px solid var(--border)">
-          Positive EV = profitable setup at these TP/SL levels. Based on YOUR actual trade outcomes.</div>`;
-    }
-
-    // Lag correlation panel
-    const lagPanel=document.getElementById('lrnLagPanel');
-    if(lagPanel&&lagResult?.length){
-      lagPanel.style.display='block';
-      const rows=lagResult.map(r=>`<tr>
-        <td style="font-size:10px"><strong>${r.secA}</strong></td>
-        <td style="font-size:9px;color:var(--amber);text-align:center">→ ${r.lag}d →</td>
-        <td style="font-size:10px"><strong>${r.secB}</strong></td>
-        <td style="color:${r.corr>0?'var(--bull)':'var(--bear)'};font-weight:700">${r.corr>0?'+':''}${r.corr}</td>
-        <td style="color:var(--text3);font-size:9px">n=${r.n}</td>
-      </tr>`).join('');
-      lagPanel.innerHTML=`<div style="padding:10px 16px;font-family:var(--mono);font-size:10px;font-weight:700;color:#6366f1;text-transform:uppercase;letter-spacing:0.8px;border-top:1px solid var(--border)">
-        🔗 Cross-Sector Lagged Correlation (|r|≥0.4)</div>
-        <div style="overflow-x:auto"><table class="wr-live-table">
-          <thead><tr><th>Sector A leads...</th><th>Lag</th><th>...Sector B follows</th><th>r</th><th>N</th></tr></thead>
-          <tbody>${rows}</tbody></table></div>
-        <div style="padding:8px 16px;font-family:var(--mono);font-size:9px;color:var(--text3);border-top:1px solid var(--border)">
-          When Sector A signals are strong, Sector B tends to follow N days later. Needs 250-day data for reliability.</div>`;
-    } else if (lagPanel) {
-      lagPanel.style.display='block';
-      lagPanel.innerHTML='<div style="padding:12px 16px;font-family:var(--mono);font-size:10px;color:var(--text3);border-top:1px solid var(--border)">No significant lagged correlations found yet. Need more data across different market phases.</div>';
-    }
-  } catch(e){ console.error('Full analysis:',e); toast('Analysis error: '+e.message,'err'); }
-  if(btn){btn.disabled=false;btn.innerHTML='<i class="fas fa-brain"></i> Full Analysis';}
-}
-
 function updateTabBadges() {
-  const a = dpePortfolios.filter(p=>p.status==='active').length || pePortfolios.filter(p=>p.status==='active').length;
-  const b = peArchive.length;
-  const e1 = document.getElementById('tabBadgeActive');
-  const e2 = document.getElementById('tabBadgeArchive');
-  if (e1) e1.textContent = a;
-  if (e2) e2.textContent = b;
+  const a=pePortfolios.filter(p=>p.status==='active').length;
+  const b=peArchive.length;
+  const e1=document.getElementById('tabBadgeActive');
+  const e2=document.getElementById('tabBadgeArchive');
+  if(e1)e1.textContent=a;
+  if(e2)e2.textContent=b;
 }
-function dpeUpdateBadges() { updateTabBadges(); }
 
 document.addEventListener('DOMContentLoaded', ()=>{
   // PWA manifest path fixed for /DOT-POINTS/
@@ -10157,4 +7864,267 @@ if ('serviceWorker' in navigator && location.hostname === 'sundeep1080.github.io
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/DOT-POINTS/sw.js', { scope: '/DOT-POINTS/' })
       .then(r => {
-     
+        console.log('IRAVAT SW:', r.scope);
+        // Check for updates
+        r.addEventListener('updatefound', () => {
+          const newWorker = r.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              toast('App updated — reload to get latest version', 'info');
+            }
+          });
+        });
+      })
+      .catch(e => console.log('SW skip:', e.message));
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TOP 25 SMART SIGNAL RANKER — v9.1
+   Scores every signal on 5 EV-weighted dimensions, surfaces top 25.
+   TP/SL pulled from 250-day backtest optimal per sector.
+   Run automatically after Generate Signals.
+═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Sector-optimal TP/SL from 250d backtest ── */
+const T25_SEC_TPSL = {
+  'Automobile and Auto Components': {tp:1.5,sl:2.0},
+  'Capital Goods':                  {tp:1.5,sl:2.0},
+  'Chemicals':                      {tp:3.0,sl:3.5},
+  'Construction':                   {tp:1.5,sl:2.0},
+  'Construction Materials':         {tp:3.5,sl:5.0},
+  'Consumer Durables':              {tp:4.0,sl:5.0},
+  'Consumer Services':              {tp:2.0,sl:2.5},
+  'Diversified':                    {tp:2.5,sl:3.0},
+  'Fast Moving Consumer Goods':     {tp:4.0,sl:5.0},
+  'Financial Services':             {tp:4.0,sl:5.0},
+  'Forest Materials':               {tp:2.5,sl:3.0},
+  'Healthcare':                     {tp:3.5,sl:4.0},
+  'Information Technology':         {tp:2.5,sl:3.0},
+  'Media Entertainment & Publication':{tp:3.5,sl:4.0},
+  'Metals & Mining':                {tp:3.0,sl:3.5},
+  'Oil Gas & Consumable Fuels':     {tp:4.0,sl:5.0},
+  'Power':                          {tp:3.5,sl:5.0},
+  'Realty':                         {tp:3.0,sl:4.0},
+  'Services':                       {tp:2.5,sl:5.0},
+  'Telecommunication':              {tp:2.5,sl:3.0},
+  'Textiles':                       {tp:4.0,sl:5.0},
+  'Utilities':                      {tp:3.0,sl:3.5},
+  'default':                        {tp:2.5,sl:4.0},
+};
+
+/* ── Sector historical EV at their optimal TP/SL ── */
+const T25_SEC_EV = {
+  'Utilities':0.624,'Diversified':0.512,'Construction Materials':0.324,
+  'Consumer Durables':0.188,'Healthcare':0.005,'Oil Gas & Consumable Fuels':0.214,
+  'Realty':0.125,'Fast Moving Consumer Goods':0.028,'Metals & Mining':-0.091,
+  'Financial Services':-0.064,'Power':-0.074,'Telecommunication':-0.056,
+  'Chemicals':-0.057,'Media Entertainment & Publication':0.134,
+  'Textiles':-0.012,'Services':-0.125,'Information Technology':-0.207,
+  'Consumer Services':-0.298,'Capital Goods':-0.256,
+  'Automobile and Auto Components':-0.276,'Construction':-0.383,
+  'Forest Materials':0.119,'default':0
+};
+
+/* ── Historical sector win rates at optimal TP/SL (buy+sell blended) ── */
+const T25_SEC_WR = {
+  'Utilities':63.4,'Diversified':63.9,'Construction Materials':62.6,
+  'Consumer Durables':57.6,'Healthcare':53.4,'Oil Gas & Consumable Fuels':57.9,
+  'Realty':58.9,'Fast Moving Consumer Goods':55.9,'Metals & Mining':52.4,
+  'Financial Services':54.8,'Power':58.0,'Telecommunication':53.5,
+  'Chemicals':52.8,'Media Entertainment & Publication':55.1,
+  'Textiles':55.4,'Services':65.0,'Information Technology':50.8,
+  'Consumer Services':48.9,'Capital Goods':49.8,
+  'Automobile and Auto Components':49.2,'Construction':46.2,
+  'Forest Materials':56.7,'default':55
+};
+
+/* ── Zone EV multiplier (how good is this zone for this trigger direction) ── */
+const T25_ZONE_SCORE = {
+  buy:  {rej_lo:22, rej_hi:25, above_va:20, va:12, below_va:5},
+  sell: {below_va:25, rej_lo:22, va:15, rej_hi:8, above_va:5},
+  // B1-MOM is a momentum signal — above_va and rej_hi are BEST zones for it
+  b1mom:{rej_hi:25, above_va:22, va:15, rej_lo:10, below_va:5},
+  s1mom:{rej_lo:25, below_va:22, va:15, rej_hi:10, above_va:5},
+};
+
+/* ── Trigger base scores — B1-MOM elevated per user request ── */
+const T25_TRIG_SCORE = {
+  'B1-OS':32,'B2':34,'B3':28,'B1-MOM':33,
+  'S1-OB':32,'S2':34,'S3':24,'S1-MOM':30,
+};
+
+let t25TypeFilter = 'all';
+
+function t25SetType(type, el) {
+  t25TypeFilter = type;
+  document.querySelectorAll('.t25-fbtn').forEach(b => b.classList.remove('t25-active'));
+  el.classList.add('t25-active');
+  renderTop25();
+}
+
+/* ── Main scorer ── */
+function scoreSignal(s) {
+  const isBuy  = s.type === 'buy';
+  const isSell = s.type === 'sell';
+  if (!isBuy && !isSell) return null;
+
+  const sig     = s.signal;
+  const zone    = s.bandZone || 'va';
+  const sector  = s.sector   || 'default';
+  const weekly  = s.weeklyTrend || 'neut';
+  const barsAgo = s.barsAgo ?? 99;
+  const dir     = isBuy ? 'buy' : 'sell';
+
+  // 1. Trigger EV base (35 pts)
+  const trigPts = Math.min(35, (T25_TRIG_SCORE[sig] || 20));
+
+  // 2. Zone fit (25 pts) — B1-MOM and S1-MOM use momentum-specific zone weights
+  const zoneKey = sig==='B1-MOM' ? 'b1mom' : sig==='S1-MOM' ? 's1mom' : dir;
+  const zonePts = T25_ZONE_SCORE[zoneKey][zone] || 0;
+
+  // 3. Weekly alignment (15 pts)
+  const weeklyPts = (isBuy && weekly==='bull') || (isSell && weekly==='bear') ? 15
+                  : weekly==='neut' ? 5 : 0;
+
+  // 4. Freshness — bars since signal fired (15 pts)
+  const freshPts = barsAgo===0 ? 15 : barsAgo===1 ? 11 : barsAgo===2 ? 7 : barsAgo<=4 ? 3 : 0;
+
+  // 5. Sector health at optimal TP/SL (10 pts)
+  const secEV  = T25_SEC_EV[sector]  ?? T25_SEC_EV['default'];
+  const secPts = secEV > 0.3 ? 10 : secEV > 0.1 ? 8 : secEV > 0 ? 6 : secEV > -0.1 ? 4 : secEV > -0.2 ? 2 : 0;
+
+  const total = trigPts + zonePts + weeklyPts + freshPts + secPts;
+
+  // Sector TP/SL
+  const tpsl   = T25_SEC_TPSL[sector] || T25_SEC_TPSL['default'];
+  const secWR  = T25_SEC_WR[sector]   || T25_SEC_WR['default'];
+  const secEVv = T25_SEC_EV[sector]   ?? 0;
+
+  return { ...s, t25Score: Math.min(100, total), tpsl, secWR, secEVv,
+           pts: {trig:trigPts, zone:zonePts, weekly:weeklyPts, fresh:freshPts, sec:secPts} };
+}
+
+function renderTop25() {
+  const panel = document.getElementById('top25Panel');
+  const grid  = document.getElementById('top25Grid');
+  const footer= document.getElementById('top25Footer');
+
+  if (!allSignals || allSignals.length === 0) return;
+
+  // populate index filter
+  const idxSel = document.getElementById('t25IndexFilter');
+  if (idxSel.options.length <= 1) {
+    const idxSet = new Set(allSignals.map(s => s.index).filter(Boolean));
+    idxSet.forEach(idx => {
+      const o = document.createElement('option');
+      o.value = idx; o.textContent = idx;
+      idxSel.appendChild(o);
+    });
+  }
+  const idxFilter = idxSel.value;
+
+  // Score all eligible signals
+  let candidates = allSignals
+    .filter(s => {
+      if (t25TypeFilter !== 'all' && s.type !== t25TypeFilter) return false;
+      if (idxFilter !== 'all' && s.index !== idxFilter) return false;
+      if (!['buy','sell'].includes(s.type)) return false;
+      // Only B1-OS, B2, B3, B1-MOM, S1-OB, S2, S3, S1-MOM
+      if (!['B1-OS','B2','B3','B1-MOM','S1-OB','S2','S3','S1-MOM'].includes(s.signal)) return false;
+      return true;
+    })
+    .map(scoreSignal)
+    .filter(Boolean)
+    .sort((a,b) => b.t25Score - a.t25Score)
+    .slice(0, 25);
+
+  if (candidates.length === 0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;font-family:var(--mono);font-size:11px;color:var(--text3);">No qualifying signals for current filter</div>';
+    return;
+  }
+
+  const ZONE_LBL = {rej_lo:'REJ LO',va:'VA',above_va:'ABV VA',below_va:'BLW VA',rej_hi:'REJ HI'};
+  const ZONE_COL = {
+    rej_lo:'rgba(5,150,105,.15)',va:'rgba(217,119,6,.12)',above_va:'rgba(234,88,12,.12)',
+    below_va:'rgba(107,114,128,.12)',rej_hi:'rgba(220,38,38,.12)'
+  };
+  const ZONE_TC = {
+    rej_lo:'#059669',va:'#d97706',above_va:'#ea580c',below_va:'#6b7280',rej_hi:'#dc2626'
+  };
+
+  let html = '';
+  candidates.forEach((s, i) => {
+    const rank = i + 1;
+    const rankCls = rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
+    const rankLabel = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+    const isBuy = s.type === 'buy';
+    const sc = Math.round(s.t25Score);
+    const barW = sc;
+    const barCol = sc >= 75 ? '#10b981' : sc >= 55 ? '#f59e0b' : '#ef4444';
+    const evCls = s.secEVv > 0 ? 'pos' : s.secEVv > -0.1 ? 'neu' : 'neg';
+    const evLabel = `EV ${s.secEVv >= 0 ? '+' : ''}${s.secEVv.toFixed(2)}%`;
+    const price = s.price ? '₹' + s.price.toLocaleString('en-IN') : '';
+    const weekly = s.weeklyTrend === 'bull' ? '▲W' : s.weeklyTrend === 'bear' ? '▼W' : '~W';
+    const wCol = s.weeklyTrend==='bull'?'var(--bull)':s.weeklyTrend==='bear'?'var(--bear)':'var(--text3)';
+    const fresh = s.barsAgo === 0 ? '🔥 TODAY' : s.barsAgo === 1 ? '1d ago' : `${s.barsAgo}d ago`;
+    const freshCol = s.barsAgo === 0 ? 'var(--amber)' : 'var(--text3)';
+    const zone = s.bandZone || 'va';
+
+    html += `<div class="t25-card ${isBuy?'buy':'sell'}" onclick="openHistModal('${s.symbol}')" title="Click for signal history">
+      <span class="t25-rank ${rankCls}">${rankLabel}</span>
+      <div class="t25-sym">${s.symbol}</div>
+      <div class="t25-sig ${isBuy?'buy':'sell'}">${s.signal}</div>
+      <span class="t25-zone-tag" style="background:${ZONE_COL[zone]||'rgba(107,114,128,.12)'};color:${ZONE_TC[zone]||'#6b7280'}">${ZONE_LBL[zone]||zone}</span>
+      <div class="t25-score-bar">
+        <div class="t25-score-fill" style="width:${barW}%;background:${barCol}"></div>
+      </div>
+      <div class="t25-score-num" style="color:${barCol}">${sc}</div>
+      <div class="t25-meta">
+        <span style="color:${freshCol}">${fresh}</span>
+        <span style="color:${wCol}">${weekly}</span>
+        <span>${price}</span>
+      </div>
+      <div class="t25-tpsl">
+        <div class="t25-tp">TP ${s.tpsl.tp}%</div>
+        <div class="t25-sl">SL ${s.tpsl.sl}%</div>
+      </div>
+      <div class="t25-ev ${evCls}">${evLabel} · WR ${s.secWR}%</div>
+    </div>`;
+  });
+
+  grid.innerHTML = html;
+  panel.style.display = 'block';
+
+  // footer summary
+  const buyC  = candidates.filter(s => s.type==='buy').length;
+  const sellC = candidates.filter(s => s.type==='sell').length;
+  const avgSc = Math.round(candidates.reduce((a,s)=>a+s.t25Score,0)/candidates.length);
+  const fresh = candidates.filter(s => s.barsAgo===0).length;
+  const top   = candidates[0];
+  footer.style.display = 'flex';
+  footer.innerHTML = `
+    <span style="color:var(--bull)">▲ ${buyC} buys</span>
+    <span style="color:var(--bear)">▼ ${sellC} sells</span>
+    <span style="color:var(--text2)">Avg score: <strong style="color:var(--amber)">${avgSc}/100</strong></span>
+    <span style="color:var(--text2)">Fresh today: <strong style="color:var(--bull)">${fresh}</strong></span>
+    <span style="margin-left:auto;color:var(--text2)">
+      Top pick: <strong style="color:var(--bright)">${top.symbol}</strong>
+      <span style="color:${top.type==='buy'?'var(--bull)':'var(--bear)'}">${top.signal}</span>
+      · Score <strong style="color:var(--amber)">${Math.round(top.t25Score)}</strong>
+      · TP <strong>${top.tpsl.tp}%</strong> SL <strong>${top.tpsl.sl}%</strong>
+    </span>`;
+}
+
+/* ── Hook into runProcessing: auto-render after generate ── */
+const _origUpdateStats = updateStats;
+function updateStats(elapsed) {
+  _origUpdateStats(elapsed);
+  // show panel if hidden, render rankings
+  setTimeout(() => { renderTop25(); }, 100);
+}
+
+</script>
+
+</body>
+</html>
