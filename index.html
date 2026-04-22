@@ -790,7 +790,7 @@ body::before {
   line-height: 1.9;
 }
 .hma9  { color: var(--amber); font-weight: 600; }
-.hma10 { color: #818cf8; font-weight: 600; }
+.hma18 { color: #818cf8; font-weight: 600; }
 .hma-cross-bull { color: var(--bull); font-size: 9px; font-weight: 700; letter-spacing: 1px; margin-top: 2px; }
 .hma-cross-bear { color: var(--bear); font-size: 9px; font-weight: 700; letter-spacing: 1px; margin-top: 2px; }
 
@@ -2746,31 +2746,29 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
 .live-pnl-neg { color: var(--bear) !important; font-weight:700; }
 
 /* ── TOP 25 SMART RANKER ── */
-.t25-fbtn{padding:3px 9px;border:1px solid var(--border2);border-radius:3px;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--text2);background:var(--bg3);cursor:pointer;letter-spacing:.5px;transition:all .2s;}
-.t25-active{background:rgba(217,119,6,.12);color:var(--amber);border-color:rgba(217,119,6,.3);}
-.t25-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:9px 10px;position:relative;cursor:pointer;transition:all .2s;overflow:hidden;}
-.t25-card:hover{border-color:var(--amber);background:var(--bg2);transform:translateY(-1px);box-shadow:var(--shadow-md);}
-.t25-card.buy{border-top:2px solid var(--bull);}
-.t25-card.sell{border-top:2px solid var(--bear);}
-.t25-rank{position:absolute;top:6px;right:7px;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text3);}
-.t25-rank.gold{color:#f59e0b;}.t25-rank.silver{color:#94a3b8;}.t25-rank.bronze{color:#b45309;}
-.t25-sym{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--bright);letter-spacing:.5px;}
-.t25-sig{font-family:var(--mono);font-size:10px;font-weight:700;margin-top:1px;}
+.t25-type-btn{padding:3px 10px;border:1px solid var(--border2);border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--text2);background:var(--bg3);cursor:pointer;letter-spacing:.5px;transition:all .15s;}
+.t25-type-btn.t25-active{background:rgba(217,119,6,.12);color:var(--amber);border-color:rgba(217,119,6,.3);}
+.t25-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 11px;cursor:pointer;transition:border-color .15s,transform .15s;position:relative;overflow:hidden;}
+.t25-card:hover{border-color:var(--amber);transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.t25-card.t25-buy{border-top:2px solid var(--bull);}
+.t25-card.t25-sell{border-top:2px solid var(--bear);}
+.t25-card-rank{position:absolute;top:6px;right:8px;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text3);}
+.t25-sym{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--bright);margin-bottom:1px;}
+.t25-sig{font-family:var(--mono);font-size:10px;font-weight:700;}
 .t25-sig.buy{color:var(--bull);}.t25-sig.sell{color:var(--bear);}
-.t25-zone-tag{display:inline-block;padding:1px 5px;border-radius:2px;font-family:var(--mono);font-size:8px;font-weight:600;margin-top:3px;letter-spacing:.3px;}
-.t25-score-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin:6px 0 4px;}
-.t25-score-fill{height:100%;border-radius:2px;transition:width .5s ease;}
-.t25-meta{display:flex;justify-content:space-between;margin-top:4px;}
-.t25-meta span{font-family:var(--mono);font-size:9px;color:var(--text3);}
-.t25-tpsl{display:flex;gap:4px;margin-top:5px;}
-.t25-tp,.t25-sl{flex:1;text-align:center;padding:3px 4px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:700;}
-.t25-tp{background:rgba(5,150,105,.1);color:var(--bull);border:1px solid rgba(5,150,105,.2);}
-.t25-sl{background:rgba(220,38,38,.08);color:var(--bear);border:1px solid rgba(220,38,38,.18);}
+.t25-score-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin:7px 0 3px;}
+.t25-score-fill{height:100%;border-radius:2px;}
+.t25-score-val{font-family:var(--mono);font-size:20px;font-weight:700;line-height:1;}
+.t25-row{display:flex;justify-content:space-between;margin-top:4px;}
+.t25-row span{font-family:var(--mono);font-size:9px;color:var(--text3);}
+.t25-tpsl{display:flex;gap:4px;margin-top:6px;}
+.t25-tp{flex:1;text-align:center;padding:3px 0;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:700;background:rgba(5,150,105,.1);color:var(--bull);border:1px solid rgba(5,150,105,.2);}
+.t25-sl{flex:1;text-align:center;padding:3px 0;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:700;background:rgba(220,38,38,.08);color:var(--bear);border:1px solid rgba(220,38,38,.18);}
 .t25-ev{margin-top:4px;text-align:center;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;}
 .t25-ev.pos{background:rgba(5,150,105,.1);color:var(--bull);}
 .t25-ev.neg{background:rgba(220,38,38,.07);color:#f87171;}
 .t25-ev.neu{background:rgba(217,119,6,.1);color:var(--amber);}
-.t25-score-num{font-family:var(--mono);font-size:19px;font-weight:700;line-height:1;margin-top:2px;}
+
 </style>
 </head>
 <body>
@@ -2788,7 +2786,7 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
       </div>
     </div>
     <div class="masthead-pills">
-      <span class="pill pill-amber">HMA 9/10</span>
+      <span class="pill pill-amber">HMA 9/18</span>
       <span class="pill pill-amber">SMI 10,3,3</span>
       <span class="pill pill-green">B1/B2/B3 · S1/S2/S3</span>
       <span class="pill pill-green">SCORE · FRESHNESS · WEEKLY</span>
@@ -2920,11 +2918,11 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
         </div>
         <div class="param-item">
           <label>HMA Slow</label>
-          <input type="number" id="p_hmaSlow" value="10" min="3" max="50">
+          <input type="number" id="p_hmaSlow" value="18" min="3" max="50">
         </div>
         <div class="param-item">
           <label>SMI K</label>
-          <input type="number" id="p_smiK" value="10" min="3" max="30">
+          <input type="number" id="p_smiK" value="14" min="3" max="30">
         </div>
         <div class="param-item">
           <label>SMI Bull%</label>
@@ -3156,6 +3154,52 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
 
   </div><!-- end row 2 -->
 
+  <!-- ═══════════════════════════════════════════════════════
+       TOP 25 SMART SIGNAL RANKER  ·  IRAVAT v9.1
+  ════════════════════════════════════════════════════════ -->
+  <div class="collapsible-panel" id="top25Panel" style="display:none;" onclick="togglePanel('top25Panel')">
+    <div class="collapsible-header">
+      <div class="collapsible-title">
+        <i class="fas fa-ranking-star" style="color:var(--amber)"></i> TOP 25 — NEXT DAY WATCHLIST
+      </div>
+      <div class="collapsible-summary" id="t25Summary" style="font-family:var(--mono);font-size:10px;color:var(--text2);"></div>
+      <i class="fas fa-chevron-down collapsible-chevron"></i>
+    </div>
+    <div class="collapsible-body" onclick="event.stopPropagation()">
+
+      <!-- filters row -->
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 0 10px;flex-wrap:wrap;">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:1px;">FILTER:</span>
+        <button class="t25-type-btn t25-active" onclick="t25Filter('all',this)">ALL</button>
+        <button class="t25-type-btn" onclick="t25Filter('buy',this)">▲ BUY</button>
+        <button class="t25-type-btn" onclick="t25Filter('sell',this)">▼ SELL</button>
+        <div style="width:1px;height:18px;background:var(--border2);"></div>
+        <select id="t25IdxSel" onchange="renderTop25()"
+          style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+                 font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;outline:none;">
+          <option value="all">All Indices</option>
+        </select>
+        <span style="margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--text3);">
+          Score = Trigger(35) + Zone(25) + Weekly(15) + Freshness(15) + Sector EV(10) &nbsp;·&nbsp;
+          TP/SL from 250d backtest &nbsp;·&nbsp; click card → signal history
+        </span>
+      </div>
+
+      <!-- 5×5 cards grid -->
+      <div id="t25Grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding-bottom:6px;">
+        <div style="grid-column:1/-1;text-align:center;padding:20px;
+             font-family:var(--mono);font-size:11px;color:var(--text3);">
+          <i class="fas fa-bolt" style="color:var(--amber);margin-right:6px;"></i>
+          Generate Signals to see today's top 25 recommendations
+        </div>
+      </div>
+
+      <!-- footer summary -->
+      <div id="t25Footer" style="display:none;padding:6px 0 2px;border-top:1px solid var(--border);
+           display:flex;gap:14px;align-items:center;flex-wrap:wrap;"></div>
+    </div>
+  </div>
+
   <!-- Progress bar stays for processing feedback -->
   <div class="progress-bar-wrap" id="progWrap">
     <div class="prog-header">
@@ -3165,73 +3209,6 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
     <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
   </div>
 
-
-  <!-- ══════════════════════════════════════════════════════════
-       TOP 25 SMART SIGNAL RANKER — injected v9.1
-  ══════════════════════════════════════════════════════════ -->
-  <div id="top25Panel" style="display:none;background:var(--bg2);border:1px solid var(--border2);
-       border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:2px;">
-
-    <!-- header row -->
-    <div style="display:flex;align-items:center;justify-content:space-between;
-         padding:10px 16px;background:linear-gradient(90deg,rgba(217,119,6,.08),transparent);
-         border-bottom:1px solid var(--border2);">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:28px;height:28px;background:var(--amber);border-radius:5px;
-             display:grid;place-items:center;font-size:14px;">🏹</div>
-        <div>
-          <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--bright);letter-spacing:1px;">
-            TOP 25 SMART SIGNALS
-          </div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--text2);letter-spacing:.5px;margin-top:1px;">
-            EV-ranked · sector-weighted TP/SL · B1-OS · B2 · B3 priority
-          </div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <!-- filter pills -->
-        <div style="display:flex;gap:4px;" id="t25TypeFilter">
-          <button onclick="t25SetType('all',this)"   class="t25-fbtn t25-active">ALL</button>
-          <button onclick="t25SetType('buy',this)"   class="t25-fbtn">BUY</button>
-          <button onclick="t25SetType('sell',this)"  class="t25-fbtn">SELL</button>
-        </div>
-        <div style="width:1px;height:20px;background:var(--border2);"></div>
-        <select id="t25IndexFilter" onchange="renderTop25()"
-          style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);
-                 font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;outline:none;">
-          <option value="all">All Indices</option>
-        </select>
-        <button onclick="renderTop25()" title="Refresh ranking"
-          style="padding:4px 10px;background:var(--amber);border:none;border-radius:4px;
-                 font-family:var(--mono);font-size:10px;font-weight:700;color:#000;cursor:pointer;">
-          ↻ RANK
-        </button>
-      </div>
-    </div>
-
-    <!-- score legend -->
-    <div style="display:flex;gap:0;padding:6px 16px;background:var(--bg3);border-bottom:1px solid var(--border);
-         font-family:var(--mono);font-size:9px;color:var(--text3);flex-wrap:wrap;gap:14px;align-items:center;">
-      <span style="color:var(--text2);font-weight:700;letter-spacing:1px;">SCORE COMPONENTS:</span>
-      <span>Trigger EV <span style="color:var(--amber)">(35pts)</span></span>
-      <span>Zone fit <span style="color:var(--amber)">(25pts)</span></span>
-      <span>Weekly align <span style="color:var(--amber)">(15pts)</span></span>
-      <span>Freshness <span style="color:var(--amber)">(15pts)</span></span>
-      <span>Sector health <span style="color:var(--amber)">(10pts)</span></span>
-      <span style="margin-left:auto;color:var(--text3)">TP/SL = sector-optimal from 250d backtest</span>
-    </div>
-
-    <!-- cards grid -->
-    <div id="top25Grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px 12px;">
-      <div style="grid-column:1/-1;text-align:center;padding:20px;font-family:var(--mono);
-           font-size:11px;color:var(--text3);">Generate signals first to see rankings</div>
-    </div>
-
-    <!-- footer summary -->
-    <div id="top25Footer" style="display:none;padding:7px 16px;border-top:1px solid var(--border);
-         background:var(--bg3);display:flex;gap:16px;align-items:center;font-family:var(--mono);font-size:10px;">
-    </div>
-  </div>
 
   <!-- ── TRADE INTELLIGENCE (collapsible) ── -->
   <div class="collapsible-panel" id="tradeIntelPanel" onclick="togglePanel('tradeIntelPanel')">
@@ -3523,7 +3500,7 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
             <th onclick="sortBy('symbol')">Symbol</th>
             <th>Signal History</th>
             <th onclick="sortBy('signal')">Signal</th>
-            <th>HMA 9/10 · Weekly</th>
+            <th>HMA 9/18 · Weekly</th>
             <th>SMI 10,3,3</th>
             <th onclick="sortBy('bandZone')">Band Position</th>
             <th id="thBandChart">Band Chart</th>
@@ -3549,7 +3526,7 @@ body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
   </div>
 
   <div class="footer">
-    IRAVAT · SALT ENGINE v8.0 — MEDALLION EDITION &nbsp;·&nbsp; HMA 9/10 &nbsp;·&nbsp; SMI 10,3,3 &nbsp;·&nbsp;
+    IRAVAT · SALT ENGINE v8.0 — MEDALLION EDITION &nbsp;·&nbsp; HMA 9/18 &nbsp;·&nbsp; SMI 10,3,3 &nbsp;·&nbsp;
     10-BAND ENGINE (60d) &nbsp;·&nbsp; SCORE &nbsp;·&nbsp; FRESHNESS &nbsp;·&nbsp; WEEKLY TREND &nbsp;·&nbsp;
     MARKET REGIME &nbsp;·&nbsp; TRIGGER BREADTH &nbsp;·&nbsp; PORTFOLIO HEAT &nbsp;·&nbsp; KELLY &nbsp;·&nbsp; GTT ORDERS &nbsp;·&nbsp; COMPOUNDING &nbsp;·&nbsp; 750 Stocks
   </div>
@@ -3923,85 +3900,93 @@ function calcBands(closes, lookback = 60) {
 }
 
 /* ───────────────────────────────────────────────
-   SALT SIGNAL DETECTION — uses band zone
-   bandZone: 'rej_lo'|'below_va'|'va'|'above_va'|'rej_hi'
+   SALT SIGNAL DETECTION — Pine-accurate v9.1
+   Matches SALT 46OS Pine exactly:
+   HMA9 vs HMA18, SMI len=14, correct thresholds
 ─────────────────────────────────────────────── */
-function detectSALT(hma9arr, hma10arr, smiArr, smiSigArr, bandZone, p) {
-  // Collect last 3 valid HMA9 values + their indices
+function detectSALT(hma9arr, hma18arr, smiArr, smiSigArr, bandZone, p) {
   const v9 = [], vi = [];
   for (let i = hma9arr.length - 1; i >= 0 && v9.length < 3; i--) {
     if (hma9arr[i] !== null && !isNaN(hma9arr[i])) { v9.unshift(hma9arr[i]); vi.unshift(i); }
   }
   if (v9.length < 3) return 'WAIT';
-
   const [pp9, p9, c9] = v9;
   const [ppI, pI, cI] = vi;
-  const p10 = hma10arr[pI], c10 = hma10arr[cI];
-  if (p10 === null || c10 === null) return 'WAIT';
-
+  const p18 = hma18arr[pI], c18 = hma18arr[cI];
+  if (p18 === null || c18 === null) return 'WAIT';
   const cSMI = smiArr[cI] ?? 0;
   const cSIG = smiSigArr[cI] ?? 0;
-
-  const d9  = c9 - p9;
-  const pd9 = p9 - pp9;
-  const d10 = c10 - p10;
-  const xUp = c9 > c10 && p9 <= p10;
-  const xDn = c9 < c10 && p9 >= p10;
-
-  const isBuyZone  = bandZone === 'rej_lo' || bandZone === 'below_va';
-  const isSellZone = bandZone === 'rej_hi' || bandZone === 'above_va';
-  const notSellZone = !isSellZone;
-  const notBuyZone  = !isBuyZone;
-
-  // B1-OS: HMA9 turn up + SMI deeply oversold — only in buy zones (confirmed reversal)
-  if (d9 > 0 && pd9 < 0 && cSMI < -20 && cSIG < -20 && isBuyZone)  return 'B1-OS';
-  // B1-MOM: HMA9 turn up + SMI > 25 (momentum/trending) — fires in ANY zone (momentum has no zone restriction)
-  if (d9 > 0 && pd9 < 0 && cSMI > 25 && cSIG > 25)                  return 'B1-MOM';
-  if (xUp && d10 > 0 && cSMI < -20 && cSIG < -20 && notSellZone)    return 'B2';
-  if (d9 > 0 && d10 > 0 && cSMI > -10 && cSIG > -10 && notSellZone) return 'B3';
-  // S1-OB: HMA9 turn down + SMI deeply overbought — only in sell zones (confirmed reversal)
-  if (d9 < 0 && pd9 > 0 && cSMI >  20 && cSIG >  20 && isSellZone) return 'S1-OB';
-  // S1-MOM: HMA9 turn down + SMI < -25 (bearish momentum) — fires in ANY zone
-  if (d9 < 0 && pd9 > 0 && cSMI < -25 && cSIG < -25)               return 'S1-MOM';
-  if (xDn && d10 < 0 && cSMI > 20 && cSIG > 20 && !isBuyZone)      return 'S2';
-  if (d9 < 0 && d10 < 0 && cSMI < 10 && cSIG < 10 && !isBuyZone)   return 'S3';
-  if (d9 > 0 && pd9 < 0 && d10 > 0)                                 return 'HSE';
-  if (d9 > 0.5 && d10 > 0.5 && (cSMI > 25 || cSIG > 25))           return 'SE';
-  if (d9 < 0 && pd9 > 0 && d10 < 0)                                 return 'HLE';
-  if (d9 < -0.5 && d10 < -0.5 && (cSMI < -25 || cSIG < -25))       return 'LE';
+  // Raw close for close>hma9 / close<hma9 checks (Pine exact)
+  const cl  = p._closes ? p._closes[cI]   : c9;
+  const pcl = p._closes ? (p._closes[cI > 0 ? cI-1 : 0] ?? cl) : c9;
+  const d9=c9-p9, pd9=p9-pp9, d18=c18-p18;
+  const xUp=c9>c18&&p9<=p18, xDn=c9<c18&&p9>=p18;
+  const isBuyZone  = bandZone==='rej_lo'||bandZone==='below_va';
+  const isSellZone = bandZone==='rej_hi'||bandZone==='above_va';
+  // Pine SMI thresholds (exact from SALT 46OS)
+  const smiL =cSMI<20&&cSIG<20;   // smi_ok_long
+  const smiS =cSMI>-20&&cSIG>-20; // smi_ok_short
+  const smiB3=cSMI>10&&cSIG>10;   // smi_ok_b3
+  const smiS3=cSMI<-10&&cSIG<-10; // smi_ok_s3
+  const smiM =cSMI>25&&cSIG>25;   // smi_ok_momentum (B1-MOM)
+  const smiSM=cSMI<-25&&cSIG<-25; // smi_ok_short_momentum (S1-MOM)
+  // B1: hma9_dir>0 AND hma9_prev_dir<0 AND close>hma9 AND (smi_ok_long OR smi_ok_momentum)
+  if (d9>0&&pd9<0&&cl>c9) {
+    if (smiM)        return 'B1-MOM'; // momentum takes priority over OS
+    if (smiL)        return 'B1-OS';
+  }
+  // B2: HMA9 crosses above HMA18 AND smi_ok_long
+  if (xUp&&d18>0&&smiL) return 'B2';
+  // B3: close>hma9 AND hma9>hma9[1] AND hma18>hma18[1] AND close>close[1] AND smi_ok_b3
+  if (d9>0&&d18>0&&cl>c9&&cl>pcl&&smiB3&&!isSellZone) return 'B3';
+  // S1: hma9_dir<0 AND hma9_prev_dir>0 AND close<hma9 AND (smi_ok_short OR smi_ok_short_momentum)
+  if (d9<0&&pd9>0&&cl<c9) {
+    if (smiSM)       return 'S1-MOM';
+    if (smiS)        return 'S1-OB';
+  }
+  // S2: HMA9 crosses below HMA18 AND smi_ok_short
+  if (xDn&&d18<0&&smiS) return 'S2';
+  // S3: close<hma9[1] AND hma9<hma9[1] AND hma18<hma18[1] AND close<close[1] AND smi_ok_s3
+  if (d9<0&&d18<0&&cl<p9&&cl<pcl&&smiS3&&!isBuyZone) return 'S3';
+  // HLE / HSE (Pine: direction flip on HMA9 only)
+  if (d9<0&&pd9>=0) return 'HLE';
+  if (d9>0&&pd9<=0) return 'HSE';
+  // LE / SE (momentum exits)
+  if (d9<-0.5&&d18<-0.5&&(cSMI<-25||cSIG<-25)) return 'LE';
+  if (d9>0.5&&d18>0.5&&(cSMI>25||cSIG>25))      return 'SE';
   return 'WAIT';
 }
 
-/* detectSALT_at — same logic but evaluated at a specific bar index */
-function detectSALT_at(h9, h10, smi, smiSig, bandZone, p, atBar) {
-  // Collect 3 valid HMA9 values ending at atBar
-  const v9 = [], vi = [];
-  for (let i = atBar; i >= 0 && v9.length < 3; i--) {
-    if (h9[i] !== null && !isNaN(h9[i])) { v9.unshift(h9[i]); vi.unshift(i); }
+/* detectSALT_at — same Pine-accurate logic at a specific bar index */
+function detectSALT_at(h9, h18, smi, smiSig, bandZone, p, atBar) {
+  const v9=[],vi=[];
+  for (let i=atBar;i>=0&&v9.length<3;i--) {
+    if (h9[i]!==null&&!isNaN(h9[i])) { v9.unshift(h9[i]); vi.unshift(i); }
   }
-  if (v9.length < 3) return 'WAIT';
-  const [pp9, p9, c9] = v9;
-  const [ppI, pI, cI] = vi;
-  const p10 = h10[pI], c10 = h10[cI];
-  if (p10 === null || c10 === null) return 'WAIT';
-  const cSMI = smi[cI] ?? 0;
-  const cSIG = smiSig[cI] ?? 0;
-  const d9 = c9-p9, pd9 = p9-pp9, d10 = c10-p10;
-  const xUp = c9>c10 && p9<=p10, xDn = c9<c10 && p9>=p10;
-  const isBZ = bandZone==='rej_lo'||bandZone==='below_va';
-  const isSZ = bandZone==='rej_hi'||bandZone==='above_va';
-  if (d9>0&&pd9<0&&cSMI<-20&&cSIG<-20&&isBZ)  return 'B1-OS';
-  if (d9>0&&pd9<0&&cSMI>25&&cSIG>25)           return 'B1-MOM';
-  if (xUp&&d10>0&&cSMI<-20&&cSIG<-20&&!isSZ)  return 'B2';
-  if (d9>0&&d10>0&&cSMI>-10&&cSIG>-10&&!isSZ) return 'B3';
-  if (d9<0&&pd9>0&&cSMI>20&&cSIG>20&&isSZ)    return 'S1-OB';
-  if (d9<0&&pd9>0&&cSMI<-25&&cSIG<-25)        return 'S1-MOM';
-  if (xDn&&d10<0&&cSMI>20&&cSIG>20&&!isBZ)   return 'S2';
-  if (d9<0&&d10<0&&cSMI<10&&cSIG<10&&!isBZ)  return 'S3';
-  if (d9>0&&pd9<0&&d10>0)                     return 'HSE';
-  if (d9>0.5&&d10>0.5&&(cSMI>25||cSIG>25))   return 'SE';
-  if (d9<0&&pd9>0&&d10<0)                     return 'HLE';
-  if (d9<-0.5&&d10<-0.5&&(cSMI<-25||cSIG<-25)) return 'LE';
+  if (v9.length<3) return 'WAIT';
+  const [pp9,p9,c9]=v9; const [ppI,pI,cI]=vi;
+  const p18=h18[pI],c18=h18[cI];
+  if (p18===null||c18===null) return 'WAIT';
+  const cSMI=smi[cI]??0, cSIG=smiSig[cI]??0;
+  const cl  = p._closes ? p._closes[cI]   : c9;
+  const pcl = p._closes ? (p._closes[cI>0?cI-1:0]??cl) : c9;
+  const d9=c9-p9,pd9=p9-pp9,d18=c18-p18;
+  const xUp=c9>c18&&p9<=p18,xDn=c9<c18&&p9>=p18;
+  const isBZ=bandZone==='rej_lo'||bandZone==='below_va';
+  const isSZ=bandZone==='rej_hi'||bandZone==='above_va';
+  const smiL=cSMI<20&&cSIG<20, smiS=cSMI>-20&&cSIG>-20;
+  const smiB3=cSMI>10&&cSIG>10, smiS3=cSMI<-10&&cSIG<-10;
+  const smiM=cSMI>25&&cSIG>25, smiSM=cSMI<-25&&cSIG<-25;
+  if (d9>0&&pd9<0&&cl>c9) { if (smiM) return 'B1-MOM'; if (smiL) return 'B1-OS'; }
+  if (xUp&&d18>0&&smiL)  return 'B2';
+  if (d9>0&&d18>0&&cl>c9&&cl>pcl&&smiB3&&!isSZ) return 'B3';
+  if (d9<0&&pd9>0&&cl<c9) { if (smiSM) return 'S1-MOM'; if (smiS) return 'S1-OB'; }
+  if (xDn&&d18<0&&smiS)  return 'S2';
+  if (d9<0&&d18<0&&cl<p9&&cl<pcl&&smiS3&&!isBZ) return 'S3';
+  if (d9<0&&pd9>=0) return 'HLE';
+  if (d9>0&&pd9<=0) return 'HSE';
+  if (d9<-0.5&&d18<-0.5&&(cSMI<-25||cSIG<-25)) return 'LE';
+  if (d9>0.5&&d18>0.5&&(cSMI>25||cSIG>25))      return 'SE';
   return 'WAIT';
 }
 
@@ -4082,7 +4067,7 @@ function getOptionSpreads(sig, bandZone) {
 /* ───────────────────────────────────────────────
    WEEKLY TREND — HMA on weekly bars
    Groups daily closes into weekly buckets,
-   runs HMA 9/10 on those weekly closes.
+   runs HMA 9/18 on those weekly closes.
 ─────────────────────────────────────────────── */
 function calcWeeklyTrend(rows) {
   if (rows.length < 30) return 'neut';
@@ -4109,8 +4094,8 @@ function calcWeeklyTrend(rows) {
    MARKET REGIME ENGINE
    Reads NIFTY50 / NIFTY500 / NIFTYTMC rows
    from the uploaded CSV and calculates:
-   - Daily HMA 9/10 trend
-   - Weekly HMA 9/10 trend
+   - Daily HMA 9/18 trend
+   - Weekly HMA 9/18 trend
    - Price vs 20-week HMA (medium term)
    - Price vs 40-week HMA (long term)
    - Overall regime: BULL / CAUTION / BEAR
@@ -4303,9 +4288,9 @@ function calcBarsAgo(h9arr, h10arr, smiArr, smiSigArr, bandZone, p, currentSig) 
 function calcScore(sig, bandZone, barsAgo, weeklyTrend, rr) {
   let score = 0;
 
-  // 1. Signal type (0-30) — B1-MOM raised: SMI>25 momentum turns have strong backtest EV
+  // 1. Signal type (0-30)
   const sigScore = { 'B1-OS':28,'B1-MOM':30,'B2':30,'B3':10,
-                     'S1-OB':28,'S1-MOM':28,'S2':30,'S3':10,
+                     'S1-OB':28,'S1-MOM':25,'S2':30,'S3':10,
                      'HSE':5,'HLE':5,'SE':8,'LE':8,'WAIT':0 };
   score += sigScore[sig] ?? 0;
 
@@ -4357,6 +4342,7 @@ function calcSignalHistory(sym, info, p, currentSig) {
 
   const h9  = calcHMA(closes, p.hmaFast);
   const h10 = calcHMA(closes, p.hmaSlow);
+  p._closes = closes;
   const smd = calcSMI(highs, lows, closes, p.smiK, 3, 3);
   const bd  = calcBands(closes, p.zoneLB);
   if (!bd) return null;
@@ -4600,6 +4586,7 @@ function processStock(sym, info, p) {
 
     const h9  = calcHMA(closes, p.hmaFast);
     const h10 = calcHMA(closes, p.hmaSlow);
+    p._closes = closes; // Pine close>hma9 checks
     const smd = calcSMI(highs, lows, closes, p.smiK, 3, 3);
     const bd  = calcBands(closes, p.zoneLB);
 
@@ -7879,249 +7866,215 @@ if ('serviceWorker' in navigator && location.hostname === 'sundeep1080.github.io
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   TOP 25 SMART SIGNAL RANKER — v9.1
-   Scores every signal on 5 EV-weighted dimensions, surfaces top 25.
-   TP/SL pulled from 250-day backtest optimal per sector.
-   Run automatically after Generate Signals.
-═══════════════════════════════════════════════════════════════════════ */
 
-/* ── Sector-optimal TP/SL from 250d backtest ── */
-const T25_SEC_TPSL = {
-  'Automobile and Auto Components': {tp:1.5,sl:2.0},
-  'Capital Goods':                  {tp:1.5,sl:2.0},
-  'Chemicals':                      {tp:3.0,sl:3.5},
-  'Construction':                   {tp:1.5,sl:2.0},
-  'Construction Materials':         {tp:3.5,sl:5.0},
-  'Consumer Durables':              {tp:4.0,sl:5.0},
-  'Consumer Services':              {tp:2.0,sl:2.5},
-  'Diversified':                    {tp:2.5,sl:3.0},
-  'Fast Moving Consumer Goods':     {tp:4.0,sl:5.0},
-  'Financial Services':             {tp:4.0,sl:5.0},
-  'Forest Materials':               {tp:2.5,sl:3.0},
-  'Healthcare':                     {tp:3.5,sl:4.0},
-  'Information Technology':         {tp:2.5,sl:3.0},
-  'Media Entertainment & Publication':{tp:3.5,sl:4.0},
-  'Metals & Mining':                {tp:3.0,sl:3.5},
-  'Oil Gas & Consumable Fuels':     {tp:4.0,sl:5.0},
-  'Power':                          {tp:3.5,sl:5.0},
-  'Realty':                         {tp:3.0,sl:4.0},
-  'Services':                       {tp:2.5,sl:5.0},
-  'Telecommunication':              {tp:2.5,sl:3.0},
-  'Textiles':                       {tp:4.0,sl:5.0},
-  'Utilities':                      {tp:3.0,sl:3.5},
-  'default':                        {tp:2.5,sl:4.0},
+/* ═══════════════════════════════════════════════════════════
+   TOP 25 SMART SIGNAL RANKER  ·  IRAVAT v9.1
+   Hooks into updateStats. Collapsed by default.
+   Shows historical win rate on each card.
+   TP/SL = sector-optimal from 250d backtest.
+═══════════════════════════════════════════════════════════ */
+
+const T25_TPSL = {
+  'Automobile and Auto Components':{tp:2.5,sl:4.0},'Capital Goods':{tp:2.0,sl:4.0},
+  'Chemicals':{tp:3.0,sl:3.5},'Construction':{tp:2.0,sl:4.0},
+  'Construction Materials':{tp:3.5,sl:5.0},'Consumer Durables':{tp:4.0,sl:5.0},
+  'Consumer Services':{tp:2.5,sl:4.0},'Diversified':{tp:2.5,sl:3.0},
+  'Fast Moving Consumer Goods':{tp:4.0,sl:5.0},'Financial Services':{tp:4.0,sl:5.0},
+  'Forest Materials':{tp:2.5,sl:3.0},'Healthcare':{tp:3.5,sl:4.0},
+  'Information Technology':{tp:2.5,sl:3.0},'Media Entertainment & Publication':{tp:3.5,sl:4.0},
+  'Metals & Mining':{tp:3.0,sl:3.5},'Oil Gas & Consumable Fuels':{tp:4.0,sl:5.0},
+  'Power':{tp:3.5,sl:5.0},'Realty':{tp:3.0,sl:4.0},'Services':{tp:2.5,sl:4.0},
+  'Telecommunication':{tp:2.5,sl:3.0},'Textiles':{tp:4.0,sl:5.0},'Utilities':{tp:3.0,sl:3.5},
 };
+const T25_TPSL_DEF = {tp:2.5,sl:4.0};
 
-/* ── Sector historical EV at their optimal TP/SL ── */
 const T25_SEC_EV = {
   'Utilities':0.624,'Diversified':0.512,'Construction Materials':0.324,
   'Consumer Durables':0.188,'Healthcare':0.005,'Oil Gas & Consumable Fuels':0.214,
-  'Realty':0.125,'Fast Moving Consumer Goods':0.028,'Metals & Mining':-0.091,
+  'Realty':0.125,'Fast Moving Consumer Goods':0.028,'Media Entertainment & Publication':0.134,
   'Financial Services':-0.064,'Power':-0.074,'Telecommunication':-0.056,
-  'Chemicals':-0.057,'Media Entertainment & Publication':0.134,
-  'Textiles':-0.012,'Services':-0.125,'Information Technology':-0.207,
-  'Consumer Services':-0.298,'Capital Goods':-0.256,
-  'Automobile and Auto Components':-0.276,'Construction':-0.383,
-  'Forest Materials':0.119,'default':0
+  'Chemicals':-0.057,'Metals & Mining':-0.091,'Textiles':-0.012,'Services':-0.125,
+  'Information Technology':-0.207,'Consumer Services':-0.298,'Capital Goods':-0.256,
+  'Automobile and Auto Components':-0.276,'Construction':-0.383,'Forest Materials':0.119,
 };
 
-/* ── Historical sector win rates at optimal TP/SL (buy+sell blended) ── */
-const T25_SEC_WR = {
-  'Utilities':63.4,'Diversified':63.9,'Construction Materials':62.6,
-  'Consumer Durables':57.6,'Healthcare':53.4,'Oil Gas & Consumable Fuels':57.9,
-  'Realty':58.9,'Fast Moving Consumer Goods':55.9,'Metals & Mining':52.4,
-  'Financial Services':54.8,'Power':58.0,'Telecommunication':53.5,
-  'Chemicals':52.8,'Media Entertainment & Publication':55.1,
-  'Textiles':55.4,'Services':65.0,'Information Technology':50.8,
-  'Consumer Services':48.9,'Capital Goods':49.8,
-  'Automobile and Auto Components':49.2,'Construction':46.2,
-  'Forest Materials':56.7,'default':55
+// Trigger points (35 max)
+const T25_TPTS = {'B1-OS':32,'B1-MOM':33,'B2':35,'B3':27,'S1-OB':32,'S1-MOM':30,'S2':35,'S3':24};
+
+// Zone points per signal (25 max) — B1-MOM best at rej_hi/above_va (momentum zones)
+const T25_ZPTS = {
+  'B1-OS'  :{rej_lo:25,below_va:18,va:10,above_va:8,rej_hi:5},
+  'B1-MOM' :{rej_hi:25,above_va:22,va:15,rej_lo:10,below_va:5},
+  'B2'     :{rej_lo:25,below_va:20,va:12,above_va:8,rej_hi:5},
+  'B3'     :{va:25,above_va:20,rej_hi:18,rej_lo:8,below_va:5},
+  'S1-OB'  :{rej_hi:25,above_va:18,va:10,below_va:8,rej_lo:5},
+  'S1-MOM' :{rej_lo:25,below_va:22,va:15,rej_hi:10,above_va:5},
+  'S2'     :{rej_hi:25,above_va:20,va:12,below_va:8,rej_lo:5},
+  'S3'     :{va:25,below_va:20,rej_lo:18,rej_hi:8,above_va:5},
 };
 
-/* ── Zone EV multiplier (how good is this zone for this trigger direction) ── */
-const T25_ZONE_SCORE = {
-  buy:  {rej_lo:22, rej_hi:25, above_va:20, va:12, below_va:5},
-  sell: {below_va:25, rej_lo:22, va:15, rej_hi:8, above_va:5},
-  // B1-MOM is a momentum signal — above_va and rej_hi are BEST zones for it
-  b1mom:{rej_hi:25, above_va:22, va:15, rej_lo:10, below_va:5},
-  s1mom:{rej_lo:25, below_va:22, va:15, rej_hi:10, above_va:5},
-};
+const T25_ZL = {rej_lo:'REJ LO',va:'VALUE AREA',above_va:'ABOVE VA',below_va:'BELOW VA',rej_hi:'REJ HI'};
+const T25_ZC = {rej_lo:'rgba(16,185,129,.15)',va:'rgba(217,119,6,.12)',above_va:'rgba(249,115,22,.12)',below_va:'rgba(107,114,128,.12)',rej_hi:'rgba(220,38,38,.12)'};
+const T25_ZT = {rej_lo:'#059669',va:'#d97706',above_va:'#ea580c',below_va:'#6b7280',rej_hi:'#dc2626'};
 
-/* ── Trigger base scores — B1-MOM elevated per user request ── */
-const T25_TRIG_SCORE = {
-  'B1-OS':32,'B2':34,'B3':28,'B1-MOM':33,
-  'S1-OB':32,'S2':34,'S3':24,'S1-MOM':30,
-};
+let t25Type = 'all';
 
-let t25TypeFilter = 'all';
-
-function t25SetType(type, el) {
-  t25TypeFilter = type;
-  document.querySelectorAll('.t25-fbtn').forEach(b => b.classList.remove('t25-active'));
-  el.classList.add('t25-active');
+function t25Filter(type, btn) {
+  t25Type = type;
+  document.querySelectorAll('.t25-type-btn').forEach(b => b.classList.remove('t25-active'));
+  btn.classList.add('t25-active');
   renderTop25();
 }
 
-/* ── Main scorer ── */
-function scoreSignal(s) {
-  const isBuy  = s.type === 'buy';
-  const isSell = s.type === 'sell';
-  if (!isBuy && !isSell) return null;
-
-  const sig     = s.signal;
-  const zone    = s.bandZone || 'va';
-  const sector  = s.sector   || 'default';
-  const weekly  = s.weeklyTrend || 'neut';
-  const barsAgo = s.barsAgo ?? 99;
-  const dir     = isBuy ? 'buy' : 'sell';
-
-  // 1. Trigger EV base (35 pts)
-  const trigPts = Math.min(35, (T25_TRIG_SCORE[sig] || 20));
-
-  // 2. Zone fit (25 pts) — B1-MOM and S1-MOM use momentum-specific zone weights
-  const zoneKey = sig==='B1-MOM' ? 'b1mom' : sig==='S1-MOM' ? 's1mom' : dir;
-  const zonePts = T25_ZONE_SCORE[zoneKey][zone] || 0;
-
-  // 3. Weekly alignment (15 pts)
-  const weeklyPts = (isBuy && weekly==='bull') || (isSell && weekly==='bear') ? 15
-                  : weekly==='neut' ? 5 : 0;
-
-  // 4. Freshness — bars since signal fired (15 pts)
-  const freshPts = barsAgo===0 ? 15 : barsAgo===1 ? 11 : barsAgo===2 ? 7 : barsAgo<=4 ? 3 : 0;
-
-  // 5. Sector health at optimal TP/SL (10 pts)
-  const secEV  = T25_SEC_EV[sector]  ?? T25_SEC_EV['default'];
-  const secPts = secEV > 0.3 ? 10 : secEV > 0.1 ? 8 : secEV > 0 ? 6 : secEV > -0.1 ? 4 : secEV > -0.2 ? 2 : 0;
-
-  const total = trigPts + zonePts + weeklyPts + freshPts + secPts;
-
-  // Sector TP/SL
-  const tpsl   = T25_SEC_TPSL[sector] || T25_SEC_TPSL['default'];
-  const secWR  = T25_SEC_WR[sector]   || T25_SEC_WR['default'];
-  const secEVv = T25_SEC_EV[sector]   ?? 0;
-
-  return { ...s, t25Score: Math.min(100, total), tpsl, secWR, secEVv,
-           pts: {trig:trigPts, zone:zonePts, weekly:weeklyPts, fresh:freshPts, sec:secPts} };
+function t25Score(s) {
+  const isBuy = s.type === 'buy';
+  const sig = s.signal, zone = s.bandZone || 'va', sec = s.sector || '';
+  const weekly = s.weeklyTrend || 'neut', ago = typeof s.barsAgo === 'number' ? s.barsAgo : 99;
+  const tPts = T25_TPTS[sig]  || 0;
+  const zPts = (T25_ZPTS[sig] || {})[zone] || 0;
+  const wPts = ((isBuy&&weekly==='bull')||(!isBuy&&weekly==='bear')) ? 15 : weekly==='neut' ? 5 : 0;
+  const fPts = ago===0?15 : ago===1?11 : ago===2?7 : ago<=4?3 : 0;
+  const ev   = T25_SEC_EV[sec] ?? 0;
+  const sPts = ev>0.3?10 : ev>0.1?8 : ev>0?6 : ev>-0.1?4 : ev>-0.2?2 : 0;
+  return Math.min(100, tPts + zPts + wPts + fPts + sPts);
 }
 
 function renderTop25() {
-  const panel = document.getElementById('top25Panel');
-  const grid  = document.getElementById('top25Grid');
-  const footer= document.getElementById('top25Footer');
+  if (!allSignals || !allSignals.length) return;
 
-  if (!allSignals || allSignals.length === 0) return;
-
-  // populate index filter
-  const idxSel = document.getElementById('t25IndexFilter');
-  if (idxSel.options.length <= 1) {
-    const idxSet = new Set(allSignals.map(s => s.index).filter(Boolean));
-    idxSet.forEach(idx => {
-      const o = document.createElement('option');
-      o.value = idx; o.textContent = idx;
+  // Populate index dropdown once
+  const idxSel = document.getElementById('t25IdxSel');
+  if (idxSel && idxSel.options.length <= 1) {
+    [...new Set(allSignals.map(s=>s.index).filter(Boolean))].sort().forEach(idx => {
+      const o = document.createElement('option'); o.value = idx; o.textContent = idx;
       idxSel.appendChild(o);
     });
   }
-  const idxFilter = idxSel.value;
+  const idxF = idxSel ? idxSel.value : 'all';
 
-  // Score all eligible signals
-  let candidates = allSignals
+  const ranked = allSignals
     .filter(s => {
-      if (t25TypeFilter !== 'all' && s.type !== t25TypeFilter) return false;
-      if (idxFilter !== 'all' && s.index !== idxFilter) return false;
       if (!['buy','sell'].includes(s.type)) return false;
-      // Only B1-OS, B2, B3, B1-MOM, S1-OB, S2, S3, S1-MOM
-      if (!['B1-OS','B2','B3','B1-MOM','S1-OB','S2','S3','S1-MOM'].includes(s.signal)) return false;
+      if (!['B1-OS','B1-MOM','B2','B3','S1-OB','S1-MOM','S2','S3'].includes(s.signal)) return false;
+      if (t25Type !== 'all' && s.type !== t25Type) return false;
+      if (idxF !== 'all' && s.index !== idxF) return false;
       return true;
     })
-    .map(scoreSignal)
-    .filter(Boolean)
-    .sort((a,b) => b.t25Score - a.t25Score)
+    .map(s => ({...s, _sc: t25Score(s)}))
+    .sort((a,b) => b._sc - a._sc)
     .slice(0, 25);
 
-  if (candidates.length === 0) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;font-family:var(--mono);font-size:11px;color:var(--text3);">No qualifying signals for current filter</div>';
+  const grid = document.getElementById('t25Grid');
+  if (!grid) return;
+
+  if (!ranked.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;font-family:var(--mono);font-size:11px;color:var(--text3);">No qualifying signals for selected filter</div>';
+    updateT25Summary([]);
     return;
   }
 
-  const ZONE_LBL = {rej_lo:'REJ LO',va:'VA',above_va:'ABV VA',below_va:'BLW VA',rej_hi:'REJ HI'};
-  const ZONE_COL = {
-    rej_lo:'rgba(5,150,105,.15)',va:'rgba(217,119,6,.12)',above_va:'rgba(234,88,12,.12)',
-    below_va:'rgba(107,114,128,.12)',rej_hi:'rgba(220,38,38,.12)'
-  };
-  const ZONE_TC = {
-    rej_lo:'#059669',va:'#d97706',above_va:'#ea580c',below_va:'#6b7280',rej_hi:'#dc2626'
-  };
-
   let html = '';
-  candidates.forEach((s, i) => {
-    const rank = i + 1;
-    const rankCls = rank===1?'gold':rank===2?'silver':rank===3?'bronze':'';
-    const rankLabel = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+  ranked.forEach((s, i) => {
+    const rank  = i + 1;
+    const sc    = Math.round(s._sc);
     const isBuy = s.type === 'buy';
-    const sc = Math.round(s.t25Score);
-    const barW = sc;
-    const barCol = sc >= 75 ? '#10b981' : sc >= 55 ? '#f59e0b' : '#ef4444';
-    const evCls = s.secEVv > 0 ? 'pos' : s.secEVv > -0.1 ? 'neu' : 'neg';
-    const evLabel = `EV ${s.secEVv >= 0 ? '+' : ''}${s.secEVv.toFixed(2)}%`;
-    const price = s.price ? '₹' + s.price.toLocaleString('en-IN') : '';
-    const weekly = s.weeklyTrend === 'bull' ? '▲W' : s.weeklyTrend === 'bear' ? '▼W' : '~W';
-    const wCol = s.weeklyTrend==='bull'?'var(--bull)':s.weeklyTrend==='bear'?'var(--bear)':'var(--text3)';
-    const fresh = s.barsAgo === 0 ? '🔥 TODAY' : s.barsAgo === 1 ? '1d ago' : `${s.barsAgo}d ago`;
-    const freshCol = s.barsAgo === 0 ? 'var(--amber)' : 'var(--text3)';
-    const zone = s.bandZone || 'va';
+    const tpsl  = T25_TPSL[s.sector] || T25_TPSL_DEF;
+    const ev    = T25_SEC_EV[s.sector] ?? 0;
+    const evCls = ev>0.05?'pos' : ev>-0.1?'neu' : 'neg';
+    const zone  = s.bandZone || 'va';
+    const scCol = sc>=75?'var(--bull)':sc>=55?'var(--amber)':'var(--bear)';
+    const rnk   = rank===1?'🥇 #1':rank===2?'🥈 #2':rank===3?'🥉 #3':'#'+rank;
+    const ago   = typeof s.barsAgo==='number' ? s.barsAgo : 99;
+    const frTxt = ago===0?'🔥 TODAY':ago===1?'1d ago':ago+'d ago';
+    const frCol = ago===0?'var(--amber)':'var(--text3)';
+    const wkTxt = s.weeklyTrend==='bull'?'▲W':s.weeklyTrend==='bear'?'▼W':'~W';
+    const wkCol = s.weeklyTrend==='bull'?'var(--bull)':s.weeklyTrend==='bear'?'var(--bear)':'var(--text3)';
+    const price = s.price ? '₹'+s.price.toLocaleString('en-IN') : '';
 
-    html += `<div class="t25-card ${isBuy?'buy':'sell'}" onclick="openHistModal('${s.symbol}')" title="Click for signal history">
-      <span class="t25-rank ${rankCls}">${rankLabel}</span>
+    // Historical win rate from signal history scan
+    const wr    = s.history?.winRate;
+    const wrTxt = wr != null ? wr+'%WR' : '';
+    const wrCol = wr==null?'var(--text3)':wr>=65?'var(--bull)':wr>=50?'var(--amber)':'var(--bear)';
+
+    // EV line shows sector EV + historical win rate
+    const evLine = `EV ${(ev>=0?'+':'')+ev.toFixed(2)}%${wrTxt?' · '+wrTxt:''}`;
+
+    html += `<div class="t25-card t25-${isBuy?'buy':'sell'}"
+      onclick="openHistModal('${s.symbol}')"
+      title="${s.symbol} · ${s.signal} · Score ${sc} · Click for full history">
+      <span class="t25-card-rank">${rnk}</span>
       <div class="t25-sym">${s.symbol}</div>
-      <div class="t25-sig ${isBuy?'buy':'sell'}">${s.signal}</div>
-      <span class="t25-zone-tag" style="background:${ZONE_COL[zone]||'rgba(107,114,128,.12)'};color:${ZONE_TC[zone]||'#6b7280'}">${ZONE_LBL[zone]||zone}</span>
-      <div class="t25-score-bar">
-        <div class="t25-score-fill" style="width:${barW}%;background:${barCol}"></div>
+      <div class="t25-sig ${isBuy?'buy':'sell'}">${s.signal}
+        <span style="font-family:var(--mono);font-size:8px;color:var(--text3);margin-left:2px;">${s.index||''}</span>
       </div>
-      <div class="t25-score-num" style="color:${barCol}">${sc}</div>
-      <div class="t25-meta">
-        <span style="color:${freshCol}">${fresh}</span>
-        <span style="color:${wCol}">${weekly}</span>
+      <span style="display:inline-block;padding:1px 5px;border-radius:2px;margin-top:3px;
+            font-family:var(--mono);font-size:8px;font-weight:600;
+            background:${T25_ZC[zone]||'rgba(107,114,128,.12)'};color:${T25_ZT[zone]||'#6b7280'}">
+        ${T25_ZL[zone]||zone}
+      </span>
+      <div class="t25-score-bar"><div class="t25-score-fill" style="width:${sc}%;background:${scCol};"></div></div>
+      <div class="t25-score-val" style="color:${scCol};">${sc}<span style="font-size:10px;color:var(--text3);margin-left:1px;">/100</span></div>
+      <div class="t25-row">
+        <span style="color:${frCol}">${frTxt}</span>
+        <span style="color:${wkCol}">${wkTxt}</span>
         <span>${price}</span>
       </div>
       <div class="t25-tpsl">
-        <div class="t25-tp">TP ${s.tpsl.tp}%</div>
-        <div class="t25-sl">SL ${s.tpsl.sl}%</div>
+        <div class="t25-tp">TP ${tpsl.tp}%</div>
+        <div class="t25-sl">SL ${tpsl.sl}%</div>
       </div>
-      <div class="t25-ev ${evCls}">${evLabel} · WR ${s.secWR}%</div>
+      <div class="t25-ev ${evCls}" style="color:${wrCol}">${evLine}</div>
     </div>`;
   });
 
   grid.innerHTML = html;
-  panel.style.display = 'block';
-
-  // footer summary
-  const buyC  = candidates.filter(s => s.type==='buy').length;
-  const sellC = candidates.filter(s => s.type==='sell').length;
-  const avgSc = Math.round(candidates.reduce((a,s)=>a+s.t25Score,0)/candidates.length);
-  const fresh = candidates.filter(s => s.barsAgo===0).length;
-  const top   = candidates[0];
-  footer.style.display = 'flex';
-  footer.innerHTML = `
-    <span style="color:var(--bull)">▲ ${buyC} buys</span>
-    <span style="color:var(--bear)">▼ ${sellC} sells</span>
-    <span style="color:var(--text2)">Avg score: <strong style="color:var(--amber)">${avgSc}/100</strong></span>
-    <span style="color:var(--text2)">Fresh today: <strong style="color:var(--bull)">${fresh}</strong></span>
-    <span style="margin-left:auto;color:var(--text2)">
-      Top pick: <strong style="color:var(--bright)">${top.symbol}</strong>
-      <span style="color:${top.type==='buy'?'var(--bull)':'var(--bear)'}">${top.signal}</span>
-      · Score <strong style="color:var(--amber)">${Math.round(top.t25Score)}</strong>
-      · TP <strong>${top.tpsl.tp}%</strong> SL <strong>${top.tpsl.sl}%</strong>
-    </span>`;
+  updateT25Summary(ranked);
+  document.getElementById('top25Panel').style.display = 'block';
 }
 
-/* ── Hook into runProcessing: auto-render after generate ── */
-const _origUpdateStats = updateStats;
+function updateT25Summary(ranked) {
+  const sumEl = document.getElementById('t25Summary');
+  const footEl= document.getElementById('t25Footer');
+  if (!ranked.length) { if(sumEl) sumEl.textContent=''; return; }
+
+  const buyCnt  = ranked.filter(s=>s.type==='buy').length;
+  const sellCnt = ranked.filter(s=>s.type==='sell').length;
+  const fresh   = ranked.filter(s=>s.barsAgo===0).length;
+  const avgSc   = Math.round(ranked.reduce((a,s)=>a+s._sc,0)/ranked.length);
+  const top     = ranked[0];
+  const topTS   = T25_TPSL[top.sector]||T25_TPSL_DEF;
+
+  if (sumEl) {
+    sumEl.innerHTML = `<span style="color:var(--bull)">▲${buyCnt}</span>&nbsp;
+      <span style="color:var(--bear)">▼${sellCnt}</span>&nbsp;·&nbsp;
+      <span style="color:var(--amber)">Avg ${avgSc}/100</span>&nbsp;·&nbsp;
+      <span style="color:var(--bull)">${fresh} fresh</span>&nbsp;·&nbsp;
+      🏆 <strong style="color:var(--bright)">${top.symbol}</strong>&nbsp;
+      <span style="color:${top.type==='buy'?'var(--bull)':'var(--bear)'}">${top.signal}</span>`;
+  }
+
+  if (footEl) {
+    footEl.style.display = 'flex';
+    footEl.innerHTML = `
+      <span style="font-family:var(--mono);font-size:10px;color:var(--bull)">▲ ${buyCnt} buys</span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--bear)">▼ ${sellCnt} sells</span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text2)">Avg score <strong style="color:var(--amber)">${avgSc}/100</strong></span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text2)">Fresh today <strong style="color:var(--bull)">${fresh}</strong></span>
+      <span style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text2)">
+        🏆 <strong style="color:var(--bright)">${top.symbol}</strong>
+        <span style="color:${top.type==='buy'?'var(--bull)':'var(--bear)'}">${top.signal}</span>
+        &nbsp;Score <strong style="color:var(--amber)">${Math.round(top._sc)}</strong>
+        &nbsp;·&nbsp; TP <strong>${topTS.tp}%</strong> / SL <strong>${topTS.sl}%</strong>
+        &nbsp;·&nbsp; ${top.sector}
+      </span>`;
+  }
+}
+
+// Auto-render after Generate Signals (hook into updateStats)
+const _t25_origUpdateStats = updateStats;
 function updateStats(elapsed) {
-  _origUpdateStats(elapsed);
-  // show panel if hidden, render rankings
-  setTimeout(() => { renderTop25(); }, 100);
+  _t25_origUpdateStats(elapsed);
+  setTimeout(renderTop25, 150);
 }
 
 </script>
