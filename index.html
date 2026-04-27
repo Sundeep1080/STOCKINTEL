@@ -2147,13 +2147,31 @@ function zdConnect() {
   zdSetDot('fetching');zdSetStatus('Testing connection…','fetch');
   zdFetchLTP(['NSE:RELIANCE']).then(r=>{
     if(r){
-      zdLiveMode=true;zdSetDot('ok');zdSetStatus('Connected','ok');
+      zdLiveMode=true;zdSetDot('ok');zdSetStatus('Connected · Auto 30s ON','ok');
       document.getElementById('zdHistBtn').disabled=false;
       document.getElementById('zdLTPBtn').disabled=false;
       document.getElementById('zdAutoBtn').disabled=false;
       document.getElementById('pill-kite').style.display='inline-block';
       zdLog('Connected via jade-kite.sundeep1080.workers.dev');
       toast('Zerodha Kite connected','kite');
+      // Auto-start 30s live refresh immediately on connect
+      if(!zdInterval){
+        const now=new Date(),close=new Date();close.setHours(15,30,0,0);
+        if(now<=close){
+          const btn=document.getElementById('zdAutoBtn');
+          zdInterval=setInterval(()=>{
+            const n=new Date(),c=new Date();c.setHours(15,30,0,0);
+            if(n>c){clearInterval(zdInterval);zdInterval=null;if(btn)btn.innerHTML='<i class="fas fa-sync"></i> Auto OFF';zdLog('Auto stopped — market closed');return}
+            zdFetchNow();
+          },30000);
+          if(btn)btn.innerHTML='<i class="fas fa-sync fa-spin"></i> Auto ON';
+          zdLog('Auto refresh started (30s) — runs until 15:30');
+          toast('Auto refresh ON — every 30s','kite');
+          zdFetchNow();
+        } else {
+          zdLog('Market closed — auto refresh not started');
+        }
+      }
     } else {
       zdSetDot('err');zdSetStatus('Connection failed','err');
       toast('Kite connection failed — check credentials','err');
@@ -2259,6 +2277,7 @@ function zdToggleAuto() {
 }
 function zdUpdateSignalTable(){
   allSignals.forEach(s=>{const lp=zdPrices[s.symbol]||zdPrices['NSE:'+s.symbol];if(lp)s.cmp=lp});
+  renderTop25();
   renderSigTable();
 }
 function zdSetDot(st){const el=document.getElementById('zdDot');if(el)el.className='zd-dot'+(st?' '+st:'')}
