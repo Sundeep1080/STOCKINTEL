@@ -233,9 +233,127 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 @media(max-width:700px){.top25-grid,.pf-grid,.grid2,.grid3{grid-template-columns:1fr}.m6-grid{grid-template-columns:1fr}}
+
+/* ORDER MODAL */
+#orderModal{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:10000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.om-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r-lg);padding:24px 26px;width:480px;max-width:96vw;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.om-title{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--bright);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.om-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.om-label{font-family:var(--mono);font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.om-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--bright)}
+.om-inp{background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--bright);padding:8px 11px;font-family:var(--mono);font-size:14px;font-weight:700;width:100%;outline:none;margin-top:4px}
+.om-inp:focus{border-color:var(--amber)}
+.om-sel{background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--bright);padding:8px 11px;font-family:var(--mono);font-size:12px;outline:none;cursor:pointer}
+.om-sel:focus{border-color:var(--amber)}
+.om-divider{height:1px;background:var(--border);margin:12px 0}
+.om-warn{font-family:var(--mono);font-size:8px;color:var(--amber);background:var(--amber-g);border:1px solid rgba(217,119,6,.3);border-radius:4px;padding:6px 9px;margin-bottom:12px}
+.btn-order-buy{background:var(--bull);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;flex:1}
+.btn-order-buy:hover{background:#047857}
+.btn-order-sell{background:var(--bear);color:#fff;border:none;border-radius:var(--r);padding:9px 18px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;flex:1}
+.btn-order-sell:hover{background:#b91c1c}
+.btn-order-cancel{background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-radius:var(--r);padding:9px 14px;font-family:var(--mono);font-size:11px;cursor:pointer}
+.btn-order-cancel:hover{border-color:var(--border2);color:var(--text)}
+.ob-buy{background:var(--bull-g);color:var(--bull);border:1px solid rgba(5,150,105,.3);border-radius:3px;padding:1px 6px;font-family:var(--mono);font-size:8px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ob-buy:hover{background:rgba(5,150,105,.2)}
+.ob-sell{background:var(--bear-g);color:var(--bear);border:1px solid rgba(220,38,38,.3);border-radius:3px;padding:1px 6px;font-family:var(--mono);font-size:8px;font-weight:700;cursor:pointer;white-space:nowrap}
+.ob-sell:hover{background:rgba(220,38,38,.2)}
+/* Prevent wrapping in Top25 tables */
+#top25BuyTbl td, #top25SellTbl td, #sigTbl td { white-space:nowrap }
+#top25BuyTbl th, #top25SellTbl th, #sigTbl th { white-space:nowrap }
+#top25BuyTbl td:nth-child(13), #top25SellTbl td:nth-child(13),
+#top25BuyTbl th:nth-child(13), #top25SellTbl th:nth-child(13) { max-width:52px; width:52px }
+
+/* SELF-LEARNING DASHBOARD */
+.sl-section{margin-bottom:18px}
+.sl-title{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.sl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-bottom:8px}
+.sl-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.sl-card label{font-family:var(--mono);font-size:8px;color:var(--text2);display:block;margin-bottom:2px;text-transform:uppercase}
+.sl-card .val{font-family:var(--mono);font-size:15px;font-weight:700}
+.sl-verdict{font-family:var(--mono);font-size:9px;padding:8px 12px;border-radius:6px;margin-bottom:6px;line-height:1.6}
+.sl-verdict.good{background:rgba(5,150,105,.12);border:1px solid rgba(5,150,105,.25);color:#6ee7b7}
+.sl-verdict.warn{background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.25);color:#fcd34d}
+.sl-verdict.bad{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.25);color:#fca5a5}
+/* MB card enhancements */
+.mb-sig-row{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap}
+/* NIFTY DASHBOARD */
+.nifty-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:14px}
+.nifty-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.nifty-card label{font-family:var(--mono);font-size:8px;color:var(--text2);display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+.nifty-card .nv{font-family:var(--mono);font-size:16px;font-weight:700}
+.nifty-verdict{border-radius:8px;padding:12px 16px;font-family:var(--mono);font-size:11px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.nifty-verdict.safe{background:rgba(5,150,105,.12);border:1px solid rgba(5,150,105,.3);color:#6ee7b7}
+.nifty-verdict.warn{background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.3);color:#fcd34d}
+.nifty-verdict.danger{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#fca5a5}
+.hma-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.hma-pill{font-family:var(--mono);font-size:9px;padding:4px 10px;border-radius:20px;font-weight:700}
+.hma-bull{background:rgba(5,150,105,.15);color:var(--bull);border:1px solid rgba(5,150,105,.3)}
+.hma-bear{background:rgba(220,38,38,.1);color:var(--bear);border:1px solid rgba(220,38,38,.3)}
+.hma-flat{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.entry-badge{font-family:var(--mono);font-size:7px;padding:2px 6px;border-radius:3px;font-weight:700;white-space:nowrap}
+.eb-enter{background:rgba(5,150,105,.15);color:var(--bull);border:1px solid rgba(5,150,105,.3)}
+.eb-wait{background:rgba(217,119,6,.1);color:var(--amber);border:1px solid rgba(217,119,6,.3)}
+.eb-avoid{background:rgba(220,38,38,.1);color:var(--bear);border:1px solid rgba(220,38,38,.3)}
+.pf-alert-box{position:fixed;bottom:80px;right:16px;z-index:9000;background:var(--amber);color:#000;border-radius:10px;padding:14px 18px;font-family:var(--mono);font-size:11px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:8px;max-width:260px}
+.pf-alert-box button{background:#000;color:var(--amber);border:none;border-radius:5px;padding:8px;font-family:var(--mono);font-size:10px;font-weight:700;cursor:pointer}
+
+
 </style>
 </head>
 <body>
+<!-- ORDER MODAL -->
+<div id="orderModal" style="display:none">
+  <div class="om-box">
+    <div class="om-title">
+      <span id="omDirBadge"></span>
+      <span id="omSymbol">—</span>
+      <span style="font-size:9px;color:var(--text2);font-weight:400;margin-left:auto">via Zerodha Kite</span>
+    </div>
+    <div style="display:flex;gap:16px;margin-bottom:10px">
+      <div><div class="om-label">CMP</div><div class="om-val" id="omCmp">—</div></div>
+      <div><div class="om-label">Target (TP)</div><div class="om-val c-bull" id="omTp">—</div></div>
+      <div><div class="om-label">Stop (SL)</div><div class="om-val c-bear" id="omSl">—</div></div>
+    </div>
+    <div class="om-divider"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div>
+        <div class="om-label">Quantity</div>
+        <input class="om-inp" id="omQty" type="number" min="1" value="1" oninput="updateOmTotal()">
+      </div>
+      <div>
+        <div class="om-label">Product</div><br>
+        <select class="om-sel" id="omProduct" style="width:100%">
+          <option value="CNC">CNC (Delivery)</option>
+          <option value="MIS">MIS (Intraday)</option>
+          <option value="NRML">NRML (F&amp;O)</option>
+        </select>
+      </div>
+      <div>
+        <div class="om-label">Order Type</div><br>
+        <select class="om-sel" id="omOrderType" style="width:100%" onchange="omTogglePrice()">
+          <option value="MARKET">MARKET</option>
+          <option value="LIMIT">LIMIT</option>
+          <option value="SL-M">SL-M</option>
+        </select>
+      </div>
+      <div id="omPriceWrap">
+        <div class="om-label">Price (₹)</div>
+        <input class="om-inp" id="omPrice" type="number" step="0.05" value="0" oninput="updateOmTotal()">
+      </div>
+    </div>
+    <!-- TOTAL INVESTMENT -->
+    <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text2)">Total Investment</span>
+      <span style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--amber)" id="omTotal">₹0</span>
+    </div>
+    <div class="om-warn">⚠ This places a REAL order on your Zerodha account. Verify qty before confirming.</div>
+    <div style="display:flex;gap:8px">
+      <button id="omConfirmBtn" class="btn-order-buy" onclick="confirmPlaceOrder()">Place Order</button>
+      <button class="btn-order-cancel" onclick="closeOrderModal()">Cancel</button>
+    </div>
+    <div id="omResult" style="margin-top:10px;font-family:var(--mono);font-size:9px;display:none"></div>
+  </div>
+</div>
 <div id="tc"></div>
 <div class="shell">
 
@@ -311,6 +429,7 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
 <div class="page-tabs">
   <button class="page-tab active" onclick="switchPage('scanner')"><i class="fas fa-bolt"></i> Signal Scanner <span class="badge" id="badgeBuy">0</span></button>
   <button class="page-tab" onclick="switchPage('portfolio')"><i class="fas fa-layer-group"></i> Daily Portfolios <span class="badge" id="badgePF">0</span></button>
+  <button class="page-tab" onclick="switchPage('nifty')"><i class="fas fa-chart-line"></i> Nifty Entry Radar</button>
   <button class="page-tab" onclick="switchPage('intel')"><i class="fas fa-brain"></i> Intelligence Lab</button>
 </div>
 
@@ -319,25 +438,25 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
   <div class="top25-grid" id="top25Grid" style="display:none">
     <div class="top25-panel">
       <div class="top25-hdr bull">
-        <div class="top25-title c-bull"><i class="fas fa-arrow-trend-up"></i> Top 25 BUY Signals Today</div>
+        <div class="top25-title c-bull"><i class="fas fa-arrow-trend-up"></i> Top 50 BUY Signals Today</div>
         <div style="margin-left:auto;display:flex;gap:5px">
           <button class="btn btn-d" style="font-size:8px;padding:2px 7px" onclick="sortTop25('buy','score')">Score</button>
           <button class="btn btn-d" style="font-size:8px;padding:2px 7px" onclick="sortTop25('buy','kelly')">Kelly</button>
           <button class="btn btn-d" style="font-size:8px;padding:2px 7px" onclick="sortTop25('buy','rr')">R:R</button>
         </div>
       </div>
-      <div class="tw"><table id="top25BuyTbl"><thead><tr><th>#</th><th>Symbol</th><th>Sig</th><th>Score</th><th>Concord</th><th id="thTop25BuyZone">100d Zone</th><th>HVP</th><th>CMP</th><th>TP +2.0%</th><th>SL -3.5%</th><th>R:R</th><th>HistWR%</th><th>Kelly%</th><th>250d</th></tr></thead><tbody id="top25BuyBody"></tbody></table></div>
+      <div class="tw"><table id="top25BuyTbl"><thead><tr><th>#</th><th>Symbol</th><th>Sig</th><th>Score</th><th>Concord</th><th id="thTop25BuyZone">100d Zone</th><th>HVP</th><th>CMP</th><th>TP +2.0%</th><th>SL -3.5%</th><th>R:R</th><th>HistWR%</th><th>Kelly%</th><th>250d</th><th>Order</th></tr></thead><tbody id="top25BuyBody"></tbody></table></div>
     </div>
     <div class="top25-panel">
       <div class="top25-hdr bear">
-        <div class="top25-title c-bear"><i class="fas fa-arrow-trend-down"></i> Top 25 SELL Signals Today</div>
+        <div class="top25-title c-bear"><i class="fas fa-arrow-trend-down"></i> Top 50 SELL Signals Today</div>
         <div style="margin-left:auto;display:flex;gap:5px">
           <button class="btn btn-d" style="font-size:8px;padding:2px 7px" onclick="sortTop25('sell','score')">Score</button>
           <button class="btn btn-d" style="font-size:8px;padding:2px 7px" onclick="sortTop25('sell','kelly')">Kelly</button>
           <button class="btn btn-d" style="font-size:8px;padding:2px 7px" onclick="sortTop25('sell','rr')">R:R</button>
         </div>
       </div>
-      <div class="tw"><table id="top25SellTbl"><thead><tr><th>#</th><th>Symbol</th><th>Sig</th><th>Score</th><th>Concord</th><th id="thTop25SellZone">100d Zone</th><th>HVP</th><th>CMP</th><th>TP +2.0%</th><th>SL -3.5%</th><th>R:R</th><th>HistWR%</th><th>Kelly%</th><th>250d</th></tr></thead><tbody id="top25SellBody"></tbody></table></div>
+      <div class="tw"><table id="top25SellTbl"><thead><tr><th>#</th><th>Symbol</th><th>Sig</th><th>Score</th><th>Concord</th><th id="thTop25SellZone">100d Zone</th><th>HVP</th><th>CMP</th><th>TP +2.0%</th><th>SL -3.5%</th><th>R:R</th><th>HistWR%</th><th>Kelly%</th><th>250d</th><th>Order</th></tr></thead><tbody id="top25SellBody"></tbody></table></div>
     </div>
   </div>
   <div class="insights-strip" id="insightStrip" style="display:none"></div>
@@ -352,12 +471,12 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
       <input class="fi" id="fSearch" placeholder="Search symbol…" oninput="applyFilters()" style="width:130px">
       <select class="fi" id="selMinDays" title="Minimum trading days required per stock" style="min-width:90px" onchange="updateLookbackHeaders()">
         <option value="60">Min 60d</option>
-        <option value="100" selected>Min 100d</option>
+        <option value="100" selected>Min 100d ★</option>
         <option value="150">Min 150d</option>
         <option value="250">Min 250d</option>
       </select>
-      <select class="fi" id="selLookback" title="Band lookback period — primary zone used for signal detection" style="min-width:105px" onchange="updateLookbackHeaders()">
-        <option value="100" selected>Lookback 100d</option>
+      <select class="fi" id="selLookback" title="100d lookback has 39.2% WR vs 28.5% for 250d — proven across 712 stocks" style="min-width:115px" onchange="updateLookbackHeaders()">
+        <option value="100" selected>Lookback 100d ★</option>
         <option value="250">Lookback 250d</option>
       </select>
       <button class="btn btn-d" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
@@ -383,6 +502,7 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
         <th onclick="sortSig('learnedWR')">WR</th>
         <th onclick="sortSig('mb_score')">MB</th>
         <th>Earn</th>
+        <th>Order</th>
       </tr></thead>
       <tbody id="sigBody"></tbody>
     </table></div>
@@ -437,6 +557,7 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
     <button class="i-tab" onclick="switchIntel('regimexperf')">&#x1F4CA; Regime vs Signal</button>
     <button class="i-tab" onclick="switchIntel('ledger')">Ledger</button>
     <button class="i-tab" onclick="switchIntel('retcorr')">Return Corr</button>
+    <button class="i-tab" onclick="switchIntel('slDash')" style="background:rgba(217,119,6,.15);color:var(--amber)">🧠 Learning Dashboard</button>
   </div>
 
   <!-- M6 -->
@@ -592,7 +713,7 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
       <strong class="c-bull">💡 OPTIMAL SETTING: TP=2.0% SL=3.5%</strong> — RR 1:1.75, breakeven WR=63.6%.<br>
       Best combo: B2×below_va (74% WR, +0.55% EV) and B3×below_va (72% WR, +0.47% EV).<br>
       ⚠️ AVOID buy signals in rej_lo zone — despite appearing oversold, WR drops to 51-57% (negative EV).<br>
-      700 stocks generate ~250 buy signals daily → Top 25 easily filled. Filter: only below_va and va zones.
+      700 stocks generate ~250 buy signals daily → Top 50 easily filled. Filter: only below_va and va zones.
     </div>
   </div>
 
@@ -608,7 +729,70 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
     <div id="retCorrContent" class="grid2"></div>
   </div>
 
+  <!-- SELF-LEARNING DASHBOARD -->
+  <div class="i-panel card" id="intel-slDash" style="border-radius:0 0 var(--r-lg) var(--r-lg)">
+    <div class="ct" style="background:rgba(217,119,6,.12);border-bottom:1px solid rgba(217,119,6,.2)"><i class="fas fa-brain"></i> 🧠 Self-Learning Dashboard — What Has NANDI Learnt?</div>
+    <div id="slDashContent" style="padding:4px 0"></div>
+  </div>
+
 </div><!-- end intel page -->
+
+<!-- NIFTY ENTRY RADAR PAGE -->
+<div class="page" id="page-nifty">
+  <div class="card" style="margin-bottom:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div class="ct" style="margin:0"><i class="fas fa-chart-line"></i> Nifty Entry Radar — 3:00 PM Decision Engine</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--text2)" id="niftyLastUpdate">Not refreshing — connect Kite</span>
+        <button class="btn btn-g" onclick="refreshNiftyDash()" id="niftyRefreshBtn"><i class="fas fa-sync"></i> Refresh Now</button>
+        <button class="btn btn-a" onclick="toggleNiftyAuto()" id="niftyAutoBtn"><i class="fas fa-play"></i> Start 15s Auto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NIFTY VERDICT -->
+  <div id="niftyVerdict" class="nifty-verdict warn" style="display:none">
+    <span style="font-size:20px" id="niftyVerdictIcon">⏳</span>
+    <div>
+      <div id="niftyVerdictTitle" style="font-size:12px">Loading Nifty data…</div>
+      <div id="niftyVerdictSub" style="font-size:9px;opacity:.8;margin-top:2px"></div>
+    </div>
+  </div>
+
+  <!-- NIFTY STATS GRID -->
+  <div class="nifty-grid" id="niftyStatsGrid">
+    <div class="nifty-card"><label>Nifty CMP</label><span class="nv c-bright" id="nfCmp">—</span></div>
+    <div class="nifty-card"><label>Day Change</label><span class="nv" id="nfChg">—</span></div>
+    <div class="nifty-card"><label>vs PDH</label><span class="nv" id="nfVsPDH">—</span></div>
+    <div class="nifty-card"><label>RSI (14)</label><span class="nv" id="nfRSI">—</span></div>
+    <div class="nifty-card"><label>HMA(9) Slope</label><span class="nv" id="nfHMA9">—</span></div>
+    <div class="nifty-card"><label>HMA(9) vs HMA(10)</label><span class="nv" id="nfHMACross">—</span></div>
+    <div class="nifty-card"><label>Regime</label><span class="nv" id="nfRegime">—</span></div>
+    <div class="nifty-card"><label>Candles (5min)</label><span class="nv" id="nfCandles">—</span></div>
+  </div>
+
+  <!-- HMA STATUS -->
+  <div class="card" style="margin-bottom:10px">
+    <div class="ct"><i class="fas fa-wave-square"></i> HMA(9/10) Status on 5-Min Chart</div>
+    <div class="hma-row" id="niftyHMARow">
+      <span class="hma-pill hma-flat">Connect Kite to load</span>
+    </div>
+    <div id="niftyHMADetail" style="font-family:var(--mono);font-size:9px;color:var(--text2);line-height:1.8"></div>
+  </div>
+
+  <!-- STOCK ENTRY TRACKER -->
+  <div class="card">
+    <div class="ct"><i class="fas fa-crosshairs"></i> Stock HMA Entry Tracker — Today's Top 50 Buy Signals</div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-bottom:8px">
+      Shows HMA(9) direction on 5-min chart for each BUY signal. Green = confirmed entry. Amber = wait for crossover.
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>#</th><th>Symbol</th><th>Signal</th><th>Score</th><th>CMP</th><th>TP</th><th>SL</th><th>HMA Status</th><th>Same Day?</th><th>Order</th></tr></thead>
+      <tbody id="entryTrackerBody"><tr><td colspan="10" class="empty">Load signals then connect Kite to track entries</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
 </div><!-- end shell -->
 
 <script>
@@ -1955,8 +2139,8 @@ function createDailyPortfolios() {
     }
     return result;
   }
-  const buyList=diversify(buys, 3, 25);
-  const sellList=diversify(sells, 3, 25);
+  const buyList=diversify(buys, 5, 35);
+  const sellList=diversify(sells, 5, 35);
 
   if(buyList.length===0&&sellList.length===0){
     toast('No signals above score '+minScore+' (regime: '+overallRegime+'). Lower threshold or wait for better setups.','err');
@@ -2158,13 +2342,14 @@ function zdConnect() {
       if(!zdInterval){
         const now=new Date(),close=new Date();close.setHours(15,30,0,0);
         if(now<=close){
-          const btn=document.getElementById('zdAutoBtn');
+          const autoBtn=document.getElementById('zdAutoBtn');
           zdInterval=setInterval(()=>{
             const n=new Date(),c=new Date();c.setHours(15,30,0,0);
-            if(n>c){clearInterval(zdInterval);zdInterval=null;if(btn)btn.innerHTML='<i class="fas fa-sync"></i> Auto OFF';zdLog('Auto stopped — market closed');return}
+            if(n>c){clearInterval(zdInterval);zdInterval=null;if(autoBtn)autoBtn.innerHTML='<i class="fas fa-sync"></i> Auto OFF';zdLog('Auto stopped — market closed');return}
             zdFetchNow();
+            check3PMAlert();
           },30000);
-          if(btn)btn.innerHTML='<i class="fas fa-sync fa-spin"></i> Auto ON';
+          if(autoBtn)autoBtn.innerHTML='<i class="fas fa-sync fa-spin"></i> Auto ON';
           zdLog('Auto refresh started (30s) — runs until 15:30');
           toast('Auto refresh ON — every 30s','kite');
           zdFetchNow();
@@ -2288,7 +2473,21 @@ function zdLog(msg){const el=document.getElementById('zdLog');if(!el)return;cons
 // STORAGE
 // ═══════════════════════════════════════════════════════════
 function loadLedger(){try{const r=localStorage.getItem(LEDGER_KEY);return r?JSON.parse(r):[]}catch(e){return[]}}
-function saveLedger(d){try{localStorage.setItem(LEDGER_KEY,JSON.stringify(d))}catch(e){toast('Storage full — export first','err')}}
+function saveLedger(d){
+  try{
+    const str=JSON.stringify(d);
+    // Warn if ledger getting large (>200KB)
+    if(str.length>200000) toast('⚠ Ledger large ('+Math.round(str.length/1024)+'KB) — export soon','err');
+    localStorage.setItem(LEDGER_KEY,str);
+    // Check total localStorage usage
+    let total=0;
+    for(let k in localStorage) if(k.startsWith(SCHEMA)) total+=localStorage.getItem(k).length;
+    if(total>3500000) toast('⚠ Storage 87% full — export learning data now!','err');
+  }catch(e){
+    toast('Storage full! Exporting data automatically…','err');
+    exportData(); // auto-export when full
+  }
+}
 function loadMeta(){try{const r=localStorage.getItem(META_KEY);return r?JSON.parse(r):{}}catch(e){return{}}}
 function saveMeta(d){try{localStorage.setItem(META_KEY,JSON.stringify(d))}catch(e){}}
 function loadWeights(){try{const r=localStorage.getItem(WEIGHTS_KEY);if(r){const p=JSON.parse(r);adaptiveWeights=p.weights||{};contextWRMap=p.ctx||{}}}catch(e){}}
@@ -2303,7 +2502,42 @@ function loadEarnings(){try{const r=localStorage.getItem(EARN_KEY);return r?JSON
 function saveEarnings(){try{localStorage.setItem(EARN_KEY,JSON.stringify(earningsData))}catch(e){}}
 function pfSave(){try{localStorage.setItem(PF_KEY,JSON.stringify(dailyPortfolios));localStorage.setItem(PF_ARCH_KEY,JSON.stringify(dpfArchive))}catch(e){toast('Storage full','err')}}
 function pfLoad(){try{const p=localStorage.getItem(PF_KEY),a=localStorage.getItem(PF_ARCH_KEY);if(p)dailyPortfolios=JSON.parse(p);if(a)dpfArchive=JSON.parse(a)}catch(e){dailyPortfolios=[];dpfArchive=[]}}
-function clearMemory(){if(!confirm('Clear all NANDI v8 memory?'))return;[LEDGER_KEY,WEIGHTS_KEY,TPSL_KEY,SEQ_KEY,INDPREF_KEY,META_KEY,PF_KEY,PF_ARCH_KEY,EARN_KEY].forEach(k=>localStorage.removeItem(k));adaptiveWeights={};contextWRMap={};stockTPSL={};seqWinRates={};stockIndPref={};kellyData={};toast('Memory cleared','info');updatePills()}
+function clearMemory(){
+  // Show what will be cleared and protect self-learning data
+  const ledger = loadLedger();
+  const hasLearning = ledger.length>0 || Object.keys(adaptiveWeights).length>0;
+  const msg = hasLearning
+    ? `⚠️ NANDI has ${ledger.length} learnt trades and adaptive weights.\n\nChoose what to clear:\n\nOK = Clear signals/portfolios ONLY (keep learning)\nCancel = Abort`
+    : 'Clear all NANDI v8 memory?';
+  if(!confirm(msg)) return;
+  // Always safe to clear — signals, portfolios, earnings cache
+  [PF_KEY, PF_ARCH_KEY, EARN_KEY, META_KEY].forEach(k=>localStorage.removeItem(k));
+  // Ask about self-learning data separately
+  if(hasLearning){
+    if(confirm(`Also clear self-learning data?\n(${ledger.length} trades, adaptive weights, Kelly data)\n\nThis cannot be undone. Export first if needed.`)){
+      [LEDGER_KEY, WEIGHTS_KEY, TPSL_KEY, SEQ_KEY, INDPREF_KEY].forEach(k=>localStorage.removeItem(k));
+      adaptiveWeights={};contextWRMap={};stockTPSL={};seqWinRates={};stockIndPref={};kellyData={};
+      toast('All memory cleared including learning data','info');
+    } else {
+      toast('Signals/portfolios cleared — learning data preserved ✓','ok');
+    }
+  } else {
+    [LEDGER_KEY,WEIGHTS_KEY,TPSL_KEY,SEQ_KEY,INDPREF_KEY].forEach(k=>localStorage.removeItem(k));
+    adaptiveWeights={};contextWRMap={};stockTPSL={};seqWinRates={};stockIndPref={};kellyData={};
+    toast('Memory cleared','info');
+  }
+  updatePills();
+}
+
+function exportBeforeClear(){
+  // Auto-export learning data then clear signals
+  exportData();
+  setTimeout(()=>{
+    [PF_KEY,PF_ARCH_KEY,EARN_KEY,META_KEY].forEach(k=>localStorage.removeItem(k));
+    toast('Exported + signals cleared. Learning data preserved.','ok');
+    updatePills();
+  },500);
+}
 function exportAll(){const data={ledger:loadLedger(),weights:adaptiveWeights,ctx:contextWRMap,tpsl:stockTPSL,seqWR:seqWinRates,kellyData,stockIndPref,meta:loadMeta(),schema:SCHEMA};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`nandi_v8_${new Date().toISOString().slice(0,10)}.json`;a.click();toast('Full export done','ok')}
 
 // ═══════════════════════════════════════════════════════════
@@ -2350,7 +2584,7 @@ function selectTop25(signals,type){
     return b.score-a.score;
   });
   var sec={},res=[];
-  for(var i=0;i<q.length;i++){var s=q[i],k=s.sector||'X';if(!sec[k])sec[k]=0;if(sec[k]>=3)continue;sec[k]++;res.push(s);if(res.length>=25)break;}
+  for(var i=0;i<q.length;i++){var s=q[i],k=s.sector||'X';if(!sec[k])sec[k]=0;if(sec[k]>=5)continue;sec[k]++;res.push(s);if(res.length>=50)break;}
   return res;
 }
 
@@ -2409,6 +2643,7 @@ function renderTop25() {
       <td class="${wrCls}">${histWR}</td>
       <td class="c-teal">${kStr}</td>
       <td class="${s.ret_250>0?'c-bull':'c-bear'}">${retStr}</td>
+      <td>${zdLiveMode?`<button class="${s.signal.startsWith('B')?'ob-buy':'ob-sell'}" onclick="showOrderModal('${s.symbol}','${s.signal.startsWith('B')?'BUY':'SELL'}',${s.cmp},${s.tp},${s.sl},1)">${s.signal.startsWith('B')?'▲ BUY':'▼ SELL'}</button>`:'—'}</td>
     </tr>`;
   };
   document.getElementById('top25BuyBody').innerHTML=buys.length?buys.map(row).join(''):`<tr><td colspan="14" class="empty">No buy signals today</td></tr>`;
@@ -2501,6 +2736,7 @@ function applyFilters() {
       <td>${s.learnedWR?s.learnedWR+'%':'—'}</td>
       <td class="${s.mb_score>60?'c-amb':'c-dim'}">${s.mb_score||0}</td>
       <td>${earn}</td>
+      <td>${zdLiveMode?`<button class="${s.signal.startsWith('B')?'ob-buy':'ob-sell'}" onclick="showOrderModal('${s.symbol}','${s.signal.startsWith('B')?'BUY':'SELL'}',${s.cmp},${s.tp},${s.sl},1)">${s.signal.startsWith('B')?'▲ BUY':'▼ SELL'}</button>`:'—'}</td>
     </tr>`;
   }).join('')||(sigFiltered.length===0?'<tr><td colspan="18" class="empty">No signals match filters</td></tr>':'');
 }
@@ -2551,7 +2787,8 @@ function renderPFCards() {
         <td>₹${s.current_price?s.current_price.toFixed(1):s.cmp.toFixed(1)}</td>
         <td class="${sc}">${sp>0?'+':''}${sp}%</td>
         <td class="${sc}">₹${s.pnl_amt||0}</td>
-        <td>${stBadge}</td></tr>`;
+        <td>${stBadge}</td>
+        <td>${zdLiveMode?`<button class="${pf.type==='buy'?'ob-buy':'ob-sell'}" style="margin-bottom:2px" onclick="showOrderModal('${s.symbol}','${pf.type==='buy'?'BUY':'SELL'}',${s.current_price||s.cmp},${s.tp},${s.sl},${s.qty||1})">Enter</button> <button class="${pf.type==='buy'?'ob-sell':'ob-buy'}" onclick="showOrderModal('${s.symbol}','${pf.type==='buy'?'SELL':'BUY'}',${s.current_price||s.cmp},${s.sl},${s.tp},${s.qty||1})">Exit</button>`:'—'}</td></tr>`;
     }).join('');
     return`<div class="pf-card ${pfClass}">
       <div class="pf-hdr">
@@ -2571,7 +2808,7 @@ function renderPFCards() {
           <div class="pf-stat"><label>Capital</label><span>₹${(pf.capital||0).toLocaleString('en-IN')}</span></div>
         </div>
         <div class="tw" style="max-height:220px;overflow-y:auto">
-          <table><thead><tr><th>Symbol</th><th>Sector</th><th>Signal</th><th>Price</th><th>P&L%</th><th>P&L₹</th><th>Status</th></tr></thead>
+          <table><thead><tr><th>Symbol</th><th>Sector</th><th>Signal</th><th>Price</th><th>P&L%</th><th>P&L₹</th><th>Status</th><th>Order</th></tr></thead>
           <tbody>${rows}</tbody></table>
         </div>
       </div>
@@ -2583,7 +2820,7 @@ function renderSpreads() {
   const el=document.getElementById('spreadsPanel');
   const sellPF=dailyPortfolios.find(p=>p.type==='sell'&&p.status==='active');
   if(!sellPF){el.innerHTML='<div class="empty">No active SELL portfolio</div>';return}
-  el.innerHTML=sellPF.stocks.slice(0,15).map(s=>{
+  el.innerHTML=sellPF.stocks.map(s=>{
     const hvpData=allStockData[s.symbol];
     const hvp=hvpData&&hvpData.rows.length>1?20:20;
     const atm=Math.round(s.cmp/50)*50;
@@ -2813,14 +3050,26 @@ function renderMB() { // Multibagger
   el.innerHTML=mbList.map(function(m,i){
     const gold=i<3?'border:1px solid var(--amber);box-shadow:0 2px 12px rgba(217,119,6,.2)':'';
     const symSec=(allStockData[m.sym]&&allStockData[m.sym].sector)||'';
+    const sig=allSignals.find(s=>s.symbol===m.sym);
+    const lStats=getMBLedgerStats(m.sym);
+    const cmp=sig?sig.cmp:0, tp=sig?sig.tp:0, sl=sig?sig.sl:0;
+    const orderBtn=zdLiveMode&&sig?`<button class="${sig.signal.startsWith('B')?'ob-buy':'ob-sell'}" onclick="showOrderModal('${m.sym}','${sig.signal.startsWith('B')?'BUY':'SELL'}',${cmp},${tp},${sl},1)">${sig.signal.startsWith('B')?'▲ BUY':'▼ SELL'}</button>`:'';
     return`<div class="card" style="${gold}">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
         <strong>${m.sym}</strong>${i<3?'<span class="b b-mb">★ TOP</span>':''}
       </div>
       <div style="font-family:var(--mono);font-size:8px;color:var(--text2)">${symSec}</div>
-      <div style="margin-top:6px;display:flex;gap:10px">
+      <div style="margin-top:6px;display:flex;gap:10px;flex-wrap:wrap">
         <div class="pf-stat"><label>MB Score</label><span class="c-amb">${m.score}</span></div>
         <div class="pf-stat"><label>250d Ret</label><span class="${m.ret>0?'c-bull':'c-bear'}">${m.ret>0?'+':''}${m.ret.toFixed(1)}%</span></div>
+        ${lStats?`<div class="pf-stat"><label>Ledger WR</label><span class="${lStats.wr>=60?'c-bull':lStats.wr<45?'c-bear':'c-amb'}">${lStats.wr}% (${lStats.n})</span></div>`:''}
+        ${sig?`<div class="pf-stat"><label>CMP</label><span class="c-bright">₹${cmp.toFixed(1)}</span></div>`:''}
+      </div>
+      <div class="mb-sig-row">
+        ${sig?sigBadge(sig.signal):'<span class="c-dim" style="font-size:8px">No signal today</span>'}
+        ${lStats&&lStats.wr>=60?'<span class="b b-bull" style="font-size:7px">✓ Proven</span>':''}
+        ${lStats&&lStats.wr<45&&lStats.n>=3?'<span class="b b-bear" style="font-size:7px">⚠ Weak history</span>':''}
+        ${orderBtn}
       </div>
     </div>`;
   }).join('')||'<div class="empty">Load data to see multibagger candidates</div>';
@@ -2922,7 +3171,7 @@ function buildRegimePanel() {
   const ovMap = {
     full:    ['ro-full',    'fas fa-circle-check',          '✅ FULL BULL — All indices green. Min score: 60'],
     mixed:   ['ro-caution', 'fas fa-triangle-exclamation',  '⚠️ MIXED SIGNALS — Indices disagree. Min score: 70'],
-    caution: ['ro-caution', 'fas fa-triangle-exclamation',  '⚠️ CAUTION — Weak regime. Min score: 75'],
+    caution: ['ro-caution', 'fas fa-triangle-exclamation',  '⚠️ CAUTION — Weak regime. Min score: 65'],
     bear:    ['ro-bear',    'fas fa-circle-xmark',          '🔴 BEAR REGIME — Only 85+ scores. Prefer SELL.'],
   };
   const [cls, ico, txt] = ovMap[overallRegime] || ovMap.caution;
@@ -2969,10 +3218,10 @@ function buildRegimePanel() {
 
 function getRegimeThreshold() {
   if(overallRegime==='full')    return 60;
-  if(overallRegime==='mixed')   return 70;
-  if(overallRegime==='caution') return 75;
-  if(overallRegime==='bear')    return 85;
-  return 70;
+  if(overallRegime==='mixed')   return 65;
+  if(overallRegime==='caution') return 65;
+  if(overallRegime==='bear')    return 75;
+  return 65;
 }
 
 function toggleRegimeDetail() {
@@ -3030,6 +3279,7 @@ function switchPage(name){
   document.querySelectorAll('.page-tab').forEach(t=>{if((t.getAttribute('onclick')||'').includes("'"+name+"'"))t.classList.add('active')});
   if(name==='intel')renderIntelActive();
   if(name==='portfolio')renderPage2();
+  if(name==='nifty')renderNiftyPage();
 }
 function switchIntel(name){
   document.querySelectorAll('.i-panel').forEach(p=>p.classList.remove('active'));
@@ -3040,7 +3290,7 @@ function switchIntel(name){
 }
 function renderIntelActive(){const active=document.querySelector('.i-panel.active');if(active)renderIntelTab(active.id.replace('intel-',''))}
 function renderIntelTab(name){
-  const map={m6:renderM6,m1:renderM1,m4:renderM4,m2:renderM2,m3:renderM3,m5:renderM5,m7:renderM7,tpsl:renderTPSL,mb:renderMB,sectors:renderSectors,ledger:renderLedger,retcorr:renderRetCorr, wrref:function(){},regimexperf:function(){renderRegimeCrossPerf();}};
+  const map={m6:renderM6,m1:renderM1,m4:renderM4,m2:renderM2,m3:renderM3,m5:renderM5,m7:renderM7,tpsl:renderTPSL,mb:renderMB,sectors:renderSectors,ledger:renderLedger,retcorr:renderRetCorr, wrref:function(){},regimexperf:function(){renderRegimeCrossPerf();},slDash:renderSLDash};
   if(map[name])map[name]();
 }
 
@@ -3095,6 +3345,646 @@ function toggleTheme(){
   if(btn)btn.innerHTML=isDark?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';
 }
 function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+// ═══════════════════════════════════════════════════════════
+// ORDER PLACEMENT
+// ═══════════════════════════════════════════════════════════
+let _omDirection='BUY';
+
+function showOrderModal(symbol, direction, cmp, tp, sl, qty){
+  if(!zdLiveMode){toast('Connect Zerodha Kite first','err');return}
+  _omDirection=direction;
+  document.getElementById('omSymbol').textContent=symbol;
+  document.getElementById('omCmp').textContent='₹'+cmp.toFixed(2);
+  document.getElementById('omTp').textContent=tp?'₹'+tp.toFixed(2):'—';
+  document.getElementById('omSl').textContent=sl?'₹'+sl.toFixed(2):'—';
+  document.getElementById('omQty').value=qty||1;
+  document.getElementById('omPrice').value=cmp.toFixed(2);
+  document.getElementById('omOrderType').value='MARKET';
+  document.getElementById('omProduct').value='CNC';
+  document.getElementById('omPriceWrap').style.opacity='0.3';
+  document.getElementById('omPrice').disabled=true;
+  const badge=document.getElementById('omDirBadge');
+  const btn=document.getElementById('omConfirmBtn');
+  btn.disabled=false;
+  if(direction==='BUY'){
+    badge.innerHTML='<span class="b b-bull" style="font-size:10px;padding:2px 8px">▲ BUY</span>';
+    btn.className='btn-order-buy';btn.textContent='Place BUY Order';
+  } else {
+    badge.innerHTML='<span class="b b-bear" style="font-size:10px;padding:2px 8px">▼ SELL</span>';
+    btn.className='btn-order-sell';btn.textContent='Place SELL Order';
+  }
+  const res=document.getElementById('omResult');res.style.display='none';res.innerHTML='';
+  updateOmTotal();
+  document.getElementById('orderModal').style.display='flex';
+}
+
+function updateOmTotal(){
+  const qty = parseFloat(document.getElementById('omQty').value)||0;
+  const price = parseFloat(document.getElementById('omPrice').value)||0;
+  const total = qty * price;
+  const el = document.getElementById('omTotal');
+  if(el) el.textContent = total>0 ? '₹'+total.toLocaleString('en-IN',{maximumFractionDigits:2}) : '₹0 (Market order)';
+}
+
+function omTogglePrice(){
+  const ot=document.getElementById('omOrderType').value;
+  const wrap=document.getElementById('omPriceWrap');
+  const inp=document.getElementById('omPrice');
+  const isLimit=ot==='LIMIT'||ot==='SL-M';
+  wrap.style.opacity=isLimit?'1':'0.3';
+  inp.disabled=!isLimit;
+  updateOmTotal();
+}
+
+function closeOrderModal(){
+  document.getElementById('orderModal').style.display='none';
+  const btn=document.getElementById('omConfirmBtn');
+  btn.disabled=false;
+  btn.textContent=_omDirection==='BUY'?'Place BUY Order':'Place SELL Order';
+  const el=document.getElementById('omResult');
+  el.style.display='none';el.innerHTML='';
+}
+
+async function confirmPlaceOrder(){
+  const sym=document.getElementById('omSymbol').textContent;
+  const qty=parseInt(document.getElementById('omQty').value)||0;
+  const product=document.getElementById('omProduct').value;
+  const orderType=document.getElementById('omOrderType').value;
+  const price=parseFloat(document.getElementById('omPrice').value)||0;
+  if(qty<1){toast('Qty must be ≥ 1','err');return}
+  const btn=document.getElementById('omConfirmBtn');
+  btn.disabled=true;btn.textContent='Placing…';
+  try{
+    const body=new URLSearchParams({
+      tradingsymbol:sym,
+      exchange:'NSE',
+      transaction_type:_omDirection,
+      order_type:orderType,
+      quantity:qty,
+      product:product,
+      validity:'DAY'
+    });
+    if((orderType==='LIMIT'||orderType==='SL-M')&&price>0) body.append('price',price.toFixed(2));
+    const res=await fetch(`${ZD_WORKER}/place-order`,{
+      method:'POST',
+      headers:{
+        'X-Kite-Version':'3',
+        'Authorization':`token ${zdApiKey}:${zdToken}`,
+        'Content-Type':'application/x-www-form-urlencoded'
+      },
+      body:body.toString()
+    });
+    const j=await res.json();
+    const el=document.getElementById('omResult');el.style.display='block';
+    if(j.status==='success'&&j.data&&j.data.order_id){
+      const oid=j.data.order_id;
+      el.style.color='var(--bull)';
+      el.innerHTML=`<div style="margin-bottom:8px">✓ Order placed! Order ID: <strong>${oid}</strong></div>
+        <button onclick="zdCancelOrder('${oid}')" style="background:var(--bear-g);color:var(--bear);border:1px solid rgba(220,38,38,.3);border-radius:4px;padding:6px 14px;font-family:var(--mono);font-size:10px;font-weight:700;cursor:pointer">✕ Cancel This Order</button>`;
+      toast(`${_omDirection} ${qty}× ${sym} placed ✓ #${oid}`,'ok');
+      zdLog(`ORDER ${_omDirection} ${qty}×${sym} [${orderType}/${product}] → ID ${oid}`);
+      btn.textContent='✓ Done';
+      setTimeout(()=>closeOrderModal(),8000);
+    } else {
+      const msg=(j.message||j.error_type||JSON.stringify(j));
+      el.style.color='var(--bear)';
+      el.textContent=`✗ Failed: ${msg}`;
+      toast(`Order failed: ${msg}`,'err');
+      zdLog(`ORDER FAIL ${sym}: ${msg}`);
+      btn.disabled=false;
+      btn.textContent=_omDirection==='BUY'?'Place BUY Order':'Place SELL Order';
+    }
+  } catch(e){
+    toast('Order error: '+e.message,'err');
+    btn.disabled=false;
+    btn.textContent=_omDirection==='BUY'?'Place BUY Order':'Place SELL Order';
+  }
+}
+
+async function zdCancelOrder(orderId){
+  if(!confirm(`Cancel order #${orderId}?`))return;
+  try{
+    const res=await fetch(`${ZD_WORKER}/kite/orders/regular/${orderId}`,{
+      method:'DELETE',
+      headers:{'X-Kite-Version':'3','Authorization':`token ${zdApiKey}:${zdToken}`}
+    });
+    const j=await res.json();
+    if(j.status==='success'){
+      toast(`Order #${orderId} cancelled ✓`,'ok');
+      zdLog(`CANCEL OK → #${orderId}`);
+      const el=document.getElementById('omResult');
+      if(el)el.innerHTML=`<span style="color:var(--bull)">✓ Order #${orderId} cancelled successfully</span>`;
+      setTimeout(()=>closeOrderModal(),2000);
+    } else {
+      const msg=j.message||JSON.stringify(j);
+      toast(`Cancel failed: ${msg}`,'err');
+      zdLog(`CANCEL FAIL #${orderId}: ${msg}`);
+    }
+  } catch(e){toast('Cancel error: '+e.message,'err')}
+}
+
+// ═══════════════════════════════════════════════════════════
+// MB SELF-LEARNING — connect MB outcomes to ledger
+// ═══════════════════════════════════════════════════════════
+function getMBLedgerStats(sym){
+  const ledger=loadLedger();
+  const recs=ledger.filter(r=>r.symbol===sym&&(r.outcome==='win'||r.outcome==='loss'));
+  if(!recs.length)return null;
+  const wins=recs.filter(r=>r.outcome==='win').length;
+  const wr=Math.round(wins/recs.length*100);
+  const avgPnl=recs.reduce((s,r)=>s+(r.pnl_pct||0),0)/recs.length;
+  return{n:recs.length,wins,wr,avgPnl:Math.round(avgPnl*10)/10};
+}
+
+// ═══════════════════════════════════════════════════════════
+// SELF-LEARNING DASHBOARD
+// ═══════════════════════════════════════════════════════════
+function renderSLDash(){
+  const el=document.getElementById('slDashContent');
+  if(!el)return;
+  const ledger=loadLedger();
+  const resolved=ledger.filter(r=>r.outcome==='win'||r.outcome==='loss');
+  const totalTrades=ledger.length;
+  const wins=resolved.filter(r=>r.outcome==='win').length;
+  const losses=resolved.filter(r=>r.outcome==='loss').length;
+  const wr=resolved.length?Math.round(wins/resolved.length*100):0;
+  const avgPnl=resolved.length?resolved.reduce((s,r)=>s+(r.pnl_pct||0),0)/resolved.length:0;
+  const openTrades=ledger.filter(r=>r.outcome==='open').length;
+
+  // Decision quality — is WR improving over time?
+  const recent=resolved.slice(-20);
+  const old=resolved.slice(0,Math.max(0,resolved.length-20));
+  const recentWR=recent.length?Math.round(recent.filter(r=>r.outcome==='win').length/recent.length*100):null;
+  const oldWR=old.length?Math.round(old.filter(r=>r.outcome==='win').length/old.length*100):null;
+  const improving=recentWR!==null&&oldWR!==null&&recentWR>oldWR;
+  const degrading=recentWR!==null&&oldWR!==null&&recentWR<oldWR-5;
+
+  // Signal breakdown
+  const bySig={};
+  resolved.forEach(r=>{
+    if(!bySig[r.signal])bySig[r.signal]={w:0,l:0};
+    if(r.outcome==='win')bySig[r.signal].w++;else bySig[r.signal].l++;
+  });
+
+  // Best and worst signal
+  const sigStats=Object.entries(bySig).map(([s,v])=>({sig:s,wr:Math.round(v.w/(v.w+v.l)*100),n:v.w+v.l})).filter(x=>x.n>=2).sort((a,b)=>b.wr-a.wr);
+  const bestSig=sigStats[0];
+  const worstSig=sigStats[sigStats.length-1];
+
+  // Adaptive weight drift
+  const sigOrder=['B1-OS','B1-MOM','B2','B3','S1-OB','S1-MOM','S2','S3'];
+  const weightDrifts=sigOrder.map(s=>{
+    const w=adaptiveWeights[s]||{prior_w:PRIOR_BASE[s]||20,learned_w:PRIOR_BASE[s]||20,delta:0,wr:PRIOR_WR[s]||50,n:0};
+    return{sig:s,...w};
+  }).filter(w=>w.n>0).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
+
+  // Context insights — top performing contexts
+  const ctxInsights=Object.entries(contextWRMap).filter(([_,v])=>v.n>=3&&v.wr>65).sort((a,b)=>b[1].wr-a[1].wr).slice(0,5);
+  const ctxWarn=Object.entries(contextWRMap).filter(([_,v])=>v.n>=3&&v.wr<45).sort((a,b)=>a[1].wr-b[1].wr).slice(0,5);
+
+  // Verdict
+  let verdictClass='warn', verdictText='';
+  if(resolved.length<5){
+    verdictClass='warn';
+    verdictText=`⏳ Still accumulating data — only ${resolved.length} resolved trades. Need at least 10 to make reliable judgements. Keep running sessions daily.`;
+  } else if(improving&&wr>=60){
+    verdictClass='good';
+    verdictText=`✅ System is improving. Recent 20-trade WR is ${recentWR}% vs earlier ${oldWR}%. Decision-making is getting sharper. Adaptive weights are correctly promoting high-performing signal types.`;
+  } else if(degrading){
+    verdictClass='bad';
+    verdictText=`⚠️ Recent performance has dipped — last 20-trade WR ${recentWR}% vs earlier ${oldWR}%. This may reflect a market regime shift. The system will self-correct as new data is absorbed. Consider loading fresh 250-day data.`;
+  } else {
+    verdictClass='warn';
+    verdictText=`📊 System has ${resolved.length} resolved trades with ${wr}% overall win rate. ${recentWR!==null?`Recent 20-trade WR: ${recentWR}%.`:''} Needs more sessions to show clear learning trajectory.`;
+  }
+
+  el.innerHTML=`
+  <div class="sl-section">
+    <div class="sl-verdict ${verdictClass}">${verdictText}</div>
+  </div>
+
+  <div class="sl-section">
+    <div class="sl-title">📊 Overall Learning Stats</div>
+    <div class="sl-grid">
+      <div class="sl-card"><label>Total Signals Generated</label><span class="val c-bright">${totalTrades}</span></div>
+      <div class="sl-card"><label>Resolved Trades</label><span class="val c-bright">${resolved.length}</span></div>
+      <div class="sl-card"><label>Open / Pending</label><span class="val c-amb">${openTrades}</span></div>
+      <div class="sl-card"><label>Overall Win Rate</label><span class="val ${wr>=60?'c-bull':wr>=50?'c-amb':'c-bear'}">${wr}%</span></div>
+      <div class="sl-card"><label>Wins</label><span class="val c-bull">${wins}</span></div>
+      <div class="sl-card"><label>Losses</label><span class="val c-bear">${losses}</span></div>
+      <div class="sl-card"><label>Avg P&L per Trade</label><span class="val ${avgPnl>=0?'c-bull':'c-bear'}">${avgPnl>=0?'+':''}${avgPnl.toFixed(1)}%</span></div>
+      <div class="sl-card"><label>Breakeven WR Needed</label><span class="val c-dim">63.6%</span></div>
+    </div>
+    ${recentWR!==null&&oldWR!==null?`<div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-top:4px">
+      Decision trajectory: Earlier WR <strong class="c-amb">${oldWR}%</strong> → Recent 20-trade WR <strong class="${recentWR>=oldWR?'c-bull':'c-bear'}">${recentWR}%</strong>
+      <span class="${recentWR>=oldWR?'c-bull':'c-bear'}">${recentWR>=oldWR?'▲ Improving':'▼ Degrading'}</span>
+    </div>`:''}
+  </div>
+
+  <div class="sl-section">
+    <div class="sl-title">🎯 What The System Has Learnt About Each Signal</div>
+    <div class="tw"><table><thead><tr><th>Signal</th><th>Prior Weight</th><th>Learnt Weight</th><th>Drift</th><th>Learnt WR%</th><th>Trades</th><th>Verdict</th></tr></thead>
+    <tbody>${sigOrder.map(s=>{
+      const w=adaptiveWeights[s]||{prior_w:PRIOR_BASE[s]||20,learned_w:PRIOR_BASE[s]||20,delta:0,wr:PRIOR_WR[s]||50,n:0};
+      const dc=w.delta>2?'c-bull':w.delta<-2?'c-bear':'c-dim';
+      const verdict=w.n<3?'<span class="c-dim">Accumulating…</span>':w.delta>5?'<span class="c-bull">▲ Promoted — performing well</span>':w.delta<-5?'<span class="c-bear">▼ Demoted — underperforming</span>':'<span class="c-amb">~ Stable</span>';
+      return`<tr><td>${sigBadge(s)}</td><td class="c-dim">${w.prior_w}</td><td><strong>${w.learned_w}</strong></td><td class="${dc}">${w.delta>0?'+':''}${w.delta||0}</td><td class="${w.wr>60?'c-bull':w.wr<50?'c-bear':'c-amb'}">${w.wr||PRIOR_WR[s]||50}%</td><td class="c-dim">${w.n||0}</td><td>${verdict}</td></tr>`;
+    }).join('')}</tbody></table></div>
+    ${bestSig?`<div style="font-family:var(--mono);font-size:9px;margin-top:8px">
+      🏆 Best signal: ${sigBadge(bestSig.sig)} with <strong class="c-bull">${bestSig.wr}% WR</strong> over ${bestSig.n} trades &nbsp;|&nbsp;
+      ⚠️ Weakest signal: ${sigBadge(worstSig.sig)} with <strong class="c-bear">${worstSig.wr}% WR</strong> over ${worstSig.n} trades
+    </div>`:''}
+  </div>
+
+  <div class="sl-section">
+    <div class="sl-title">🌐 Market Context Learning — When Does The System Work Best?</div>
+    ${ctxInsights.length?`
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-bottom:6px">✅ High-confidence contexts (WR > 65%, min 3 trades):</div>
+    <div class="tw"><table><thead><tr><th>Context (Signal|Regime|Breadth|HVP)</th><th>Win Rate</th><th>Trades</th></tr></thead>
+    <tbody>${ctxInsights.map(([k,v])=>`<tr><td style="font-size:8px">${k}</td><td class="c-bull">${v.wr}%</td><td class="c-dim">${v.n}</td></tr>`).join('')}</tbody></table></div>`
+    :'<div class="c-dim" style="font-family:var(--mono);font-size:9px">Accumulating context data — run more sessions daily.</div>'}
+    ${ctxWarn.length?`
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin:10px 0 6px">⚠️ Avoid these contexts (WR < 45%):</div>
+    <div class="tw"><table><thead><tr><th>Context</th><th>Win Rate</th><th>Trades</th></tr></thead>
+    <tbody>${ctxWarn.map(([k,v])=>`<tr><td style="font-size:8px">${k}</td><td class="c-bear">${v.wr}%</td><td class="c-dim">${v.n}</td></tr>`).join('')}</tbody></table></div>`:''}
+  </div>
+
+  <div class="sl-section">
+    <div class="sl-title">📈 Adaptive TP/SL Learning — Stock-Level Intelligence</div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-bottom:6px">
+      The system has learnt custom TP/SL multipliers per stock based on historical exit patterns. Stocks with more trades get more accurate multipliers.
+    </div>
+    <div style="font-family:var(--mono);font-size:9px">
+      Stocks with custom learnt TP/SL: <strong class="c-bull">${Object.values(stockTPSL).filter(v=>v.trades>=3).length}</strong> &nbsp;|&nbsp;
+      Still on defaults: <strong class="c-dim">${Object.values(stockTPSL).filter(v=>v.trades<3).length}</strong>
+    </div>
+  </div>
+
+  <div class="sl-section">
+    <div class="sl-title">⚡ Kelly Position Sizing — Capital Allocation Intelligence</div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-bottom:6px">
+      Kelly % determines how much capital to allocate per signal. Higher WR = higher Kelly = larger position.
+    </div>
+    <div class="sl-grid">
+      <div class="sl-card"><label>Stocks with Kelly Data</label><span class="val c-teal">${Object.keys(kellyData).length}</span></div>
+      <div class="sl-card"><label>Avg Kelly %</label><span class="val c-amb">${Object.keys(kellyData).length?Math.round(Object.values(kellyData).reduce((s,v)=>s+(v.kelly_pct||0),0)/Object.keys(kellyData).length*10)/10:0}%</span></div>
+    </div>
+  </div>
+
+  <div class="sl-section">
+    <div class="sl-title">🔁 Signal Sequence Learning</div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-bottom:6px">
+      System tracks whether a BUY after a SELL (or vice versa) for the same stock produces better outcomes.
+    </div>
+    ${Object.keys(seqWinRates).filter(k=>seqWinRates[k].n>=3).length?
+    `<div class="tw"><table><thead><tr><th>Sequence</th><th>WR%</th><th>Trades</th><th>Insight</th></tr></thead>
+    <tbody>${Object.entries(seqWinRates).filter(([_,v])=>v.n>=3).sort((a,b)=>b[1].wr-a[1].wr).slice(0,10).map(([k,v])=>`
+      <tr><td class="c-kite">${k}</td><td class="${v.wr>60?'c-bull':v.wr<45?'c-bear':'c-amb'}">${v.wr}%</td><td class="c-dim">${v.n}</td>
+      <td style="font-size:8px;color:var(--text2)">${v.wr>65?'Strong confirmation pattern — system boosts score':v.wr<40?'Reversal trap — system penalises score':'Neutral pattern'}</td></tr>`).join('')}
+    </tbody></table></div>`
+    :'<div class="c-dim" style="font-family:var(--mono);font-size:9px">Need more trades per stock to identify sequence patterns.</div>'}
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// NIFTY ENTRY RADAR ENGINE
+// ═══════════════════════════════════════════════════════════
+const NIFTY_TOKEN = '256265'; // NSE:NIFTY 50 instrument token
+let _niftyAutoInterval = null;
+let _niftyCandles = [];
+let _pfAlertShown = false;
+let _niftyPDH = null, _niftyPDL = null; // previous day high/low
+
+// WMA helper for Nifty intraday series (different signature from main wma)
+function nWMA(arr, period) {
+  if(arr.length < period) return null;
+  const sl = arr.slice(-period);
+  let num = 0, den = 0;
+  for(let i = 0; i < period; i++) { num += (i+1)*sl[i]; den += (i+1); }
+  return num / den;
+}
+
+// HMA series for intraday candles — returns array of values
+function calcHMASeries(closes, period) {
+  const half = Math.floor(period/2);
+  const sqrtP = Math.round(Math.sqrt(period));
+  const raw = [];
+  for(let i = period-1; i < closes.length; i++) {
+    const sl = closes.slice(0, i+1);
+    const w1 = nWMA(sl, half), w2 = nWMA(sl, period);
+    if(w1!==null && w2!==null) raw.push(2*w1 - w2);
+  }
+  const series = [];
+  for(let i = sqrtP-1; i < raw.length; i++) {
+    series.push(nWMA(raw.slice(0,i+1), sqrtP));
+  }
+  return series;
+}
+
+// RSI for intraday — returns single scalar (not array)
+function calcNiftyRSI(closes, period=14) {
+  if(closes.length < period+1) return null;
+  const sl = closes.slice(-(period+1));
+  let gains=0, losses=0;
+  for(let i=1; i<sl.length; i++) {
+    const d = sl[i]-sl[i-1];
+    if(d>0) gains+=d; else losses+=Math.abs(d);
+  }
+  const avgG=gains/period, avgL=losses/period;
+  if(avgL===0) return 100;
+  return Math.round(100 - 100/(1+avgG/avgL));
+}
+
+async function fetchNiftyCandles(intervalMins=5) {
+  if(!zdLiveMode) return null;
+  const now = new Date();
+  const from = new Date(); from.setHours(9,15,0,0);
+  const pad = n=>String(n).padStart(2,'0');
+  const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:00`;
+  const fromStr = fmt(from);
+  const toStr = fmt(now);
+  const url = `${ZD_WORKER}/kite/instruments/historical/${NIFTY_TOKEN}/5minute?from=${fromStr}&to=${toStr}&continuous=0&oi=0`;
+  zdLog('Nifty candle URL: '+url.replace(ZD_WORKER,'[worker]'));
+  try {
+    const res = await fetch(url, {
+      headers:{'X-Kite-Version':'3','Authorization':`token ${zdApiKey}:${zdToken}`}
+    });
+    const j = await res.json();
+    zdLog('Nifty candle response status: '+res.status+' candles: '+(j.data&&j.data.candles?j.data.candles.length:'none')+' msg:'+(j.message||'ok'));
+    if(j.data && j.data.candles && j.data.candles.length>0) return j.data.candles;
+    document.getElementById('niftyLastUpdate').textContent = 'API error: '+(j.message||'No candles returned');
+  } catch(e) {
+    zdLog('Nifty candle fetch error: '+e.message);
+    document.getElementById('niftyLastUpdate').textContent = 'Fetch error: '+e.message;
+  }
+  return null;
+}
+
+async function fetchNiftyLTP() {
+  if(!zdLiveMode) return null;
+  try {
+    const res = await fetch(`${ZD_WORKER}/kite/quote/ltp?i=${encodeURIComponent('NSE:NIFTY 50')}`, {
+      headers:{'X-Kite-Version':'3','Authorization':`token ${zdApiKey}:${zdToken}`}
+    });
+    const j = await res.json();
+    if(j.data){
+      const key=Object.keys(j.data)[0];
+      return key?j.data[key].last_price:null;
+    }
+  } catch(e) { zdLog('Nifty LTP error: '+e.message); }
+  return null;
+}
+
+async function refreshNiftyDash() {
+  if(!zdLiveMode){toast('Connect Kite first','err');return;}
+  document.getElementById('niftyLastUpdate').textContent = 'Refreshing…';
+
+  const candles = await fetchNiftyCandles(5);
+  if(!candles || candles.length < 3) {
+    document.getElementById('niftyLastUpdate').textContent = 'No candle data — market may be closed or before 9:20 AM';
+    return;
+  }
+  _niftyCandles = candles;
+
+  const closes  = candles.map(c=>c[4]);
+  const highs   = candles.map(c=>c[2]);
+  const lows    = candles.map(c=>c[3]);
+  const ltp     = closes[closes.length-1];
+  const open    = candles[0][1];
+  const dayHigh = Math.max(...highs);
+  const dayLow  = Math.min(...lows);
+  const chgPct  = ((ltp-open)/open*100);
+  const chgStr  = (chgPct>=0?'+':'')+chgPct.toFixed(2)+'%';
+
+  // ── PDH/PDL: store yesterday's high/low from first candle cluster
+  // Use session open as proxy if no prior data
+  if(!_niftyPDH) _niftyPDH = open;
+  if(!_niftyPDL) _niftyPDL = open * 0.985;
+  const vsPDH = ((_niftyPDH - ltp)/_niftyPDH*100).toFixed(2);
+  const pdhStr = ltp>=_niftyPDH ? `▲ ${Math.abs(vsPDH)}% above PDH` : `${Math.abs(vsPDH)}% below PDH`;
+
+  // ── HMA(9) and HMA(10) series
+  const hma9s  = calcHMASeries(closes, 9);
+  const hma10s = calcHMASeries(closes, 10);
+  const hma9   = hma9s.length   ? hma9s[hma9s.length-1]   : null;
+  const hma9p  = hma9s.length>1 ? hma9s[hma9s.length-2]   : null;
+  const hma9p2 = hma9s.length>2 ? hma9s[hma9s.length-3]   : null;
+  const hma10  = hma10s.length  ? hma10s[hma10s.length-1]  : null;
+  const hma10p = hma10s.length>1? hma10s[hma10s.length-2]  : null;
+
+  // ── HMA slope — is it decelerating?
+  const slope1 = (hma9&&hma9p)   ? hma9-hma9p   : null;
+  const slope2 = (hma9p&&hma9p2) ? hma9p-hma9p2 : null;
+  const slopeDecelerating = slope1!==null && slope2!==null && slope1 < slope2 && slope1>0;
+  const hmaSlopeDir = slope1===null?'unknown':slope1>0.3?'bullish':slope1<-0.3?'bearish':'flat';
+
+  // ── HMA Cross detection
+  const hmaCross    = (hma9&&hma10)   ? (hma9>hma10 ?'bullish':'bearish') : 'unknown';
+  const hmaCrossNew = (hma9&&hma10&&hma9p&&hma10p) ?
+    (hma9>hma10 && hma9p<=hma10p ? 'fresh_bull' :
+     hma9<hma10 && hma9p>=hma10p ? 'fresh_bear' : 'hold') : 'hold';
+
+  // ── RSI
+  const rsi = calcNiftyRSI(closes, 14);
+  const rsiLevel = rsi===null?'unknown':rsi>72?'overbought':rsi>60?'bullish':rsi>45?'neutral':rsi>28?'bearish':'oversold';
+
+  // ── RSI Divergence (price new high but RSI lower = hidden weakness)
+  const recentCloses = closes.slice(-10);
+  const recentRSIs   = [];
+  for(let i=10; i<=closes.length; i++) recentRSIs.push(calcNiftyRSI(closes.slice(0,i),14));
+  const priceHigher  = recentCloses[recentCloses.length-1] > recentCloses[0];
+  const rsiLower     = recentRSIs.length>=2 && recentRSIs[recentRSIs.length-1]!==null && recentRSIs[0]!==null && recentRSIs[recentRSIs.length-1] < recentRSIs[0];
+  const bearDivergence = priceHigher && rsiLower;
+
+  // ── Tiredness Score (0-6)
+  let tired = 0;
+  if(rsi && rsi>70)             tired++;  // RSI overbought
+  if(hmaSlopeDir==='bearish')   tired++;  // HMA slope turning down
+  if(hmaCross==='bearish')      tired++;  // HMA bearish cross
+  if(chgPct>1.5)                tired++;  // Large up move — extended
+  if(slopeDecelerating)         tired++;  // Momentum fading
+  if(bearDivergence)            tired++;  // RSI divergence — hidden weakness
+
+  // ── Verdict
+  let vClass, vIcon, vTitle, vSub;
+  if(hmaCrossNew==='fresh_bull' && tired<=1){
+    vClass='safe'; vIcon='✅';
+    vTitle='FRESH HMA BULL CROSS — Strong entry signal';
+    vSub=`HMA(9) just crossed above HMA(10) | RSI ${rsi||'—'} | Tiredness ${tired}/6 — High probability setup`;
+  } else if(hmaCrossNew==='fresh_bear'){
+    vClass='danger'; vIcon='🔴';
+    vTitle='FRESH HMA BEAR CROSS — Avoid new longs';
+    vSub=`HMA(9) just crossed below HMA(10) | RSI ${rsi||'—'} | Exit existing positions, wait for reversal`;
+  } else if(tired>=4 || bearDivergence){
+    vClass='danger'; vIcon='🔴';
+    vTitle='NIFTY IS TIRED — Avoid same-day entry';
+    vSub=`Tiredness ${tired}/6${bearDivergence?' | ⚠ RSI Divergence detected':''} | HMA ${hmaSlopeDir}${slopeDecelerating?' | Momentum decelerating':''} — Wait next morning`;
+  } else if(tired>=2 || hmaSlopeDir==='flat'){
+    vClass='warn'; vIcon='⚠️';
+    vTitle='CAUTION — Mixed signals, selective entry only';
+    vSub=`Tiredness ${tired}/6 | HMA ${hmaSlopeDir} | RSI ${rsi||'—'} — Only highest conviction stocks (score 80+)`;
+  } else if(hmaCross==='bullish' && tired<=1){
+    vClass='safe'; vIcon='✅';
+    vTitle='SAFE TO ENTER — Nifty healthy';
+    vSub=`HMA(9) bullish | RSI ${rsi||'—'} | Tiredness ${tired}/6 — Same-day or next-morning entry valid`;
+  } else {
+    vClass='warn'; vIcon='⚠️';
+    vTitle='NEUTRAL — Monitor before entering';
+    vSub=`HMA ${hmaSlopeDir} | RSI ${rsi||'—'} | Tiredness ${tired}/6`;
+  }
+
+  // ── Update verdict
+  document.getElementById('niftyVerdict').style.display='flex';
+  document.getElementById('niftyVerdict').className='nifty-verdict '+vClass;
+  document.getElementById('niftyVerdictIcon').textContent=vIcon;
+  document.getElementById('niftyVerdictTitle').textContent=vTitle;
+  document.getElementById('niftyVerdictSub').textContent=vSub;
+
+  // ── Update stats grid
+  document.getElementById('nfCmp').textContent='₹'+ltp.toFixed(1);
+  document.getElementById('nfCmp').className='nv '+(chgPct>=0?'c-bull':'c-bear');
+  document.getElementById('nfChg').textContent=chgStr;
+  document.getElementById('nfChg').className='nv '+(chgPct>=0?'c-bull':'c-bear');
+  document.getElementById('nfVsPDH').textContent=pdhStr;
+  document.getElementById('nfVsPDH').className='nv '+(ltp>=_niftyPDH?'c-bull':'c-dim');
+  document.getElementById('nfRSI').textContent=rsi||'—';
+  document.getElementById('nfRSI').className='nv '+(rsi>70?'c-bear':rsi>55?'c-bull':'c-amb');
+  document.getElementById('nfHMA9').textContent=hmaSlopeDir.toUpperCase()+(slopeDecelerating?' ↘':'');
+  document.getElementById('nfHMA9').className='nv '+(hmaSlopeDir==='bullish'?'c-bull':hmaSlopeDir==='bearish'?'c-bear':'c-dim');
+  document.getElementById('nfHMACross').textContent=hmaCross.toUpperCase()+(hmaCrossNew==='fresh_bull'?' ✦':hmaCrossNew==='fresh_bear'?' ✦':'');
+  document.getElementById('nfHMACross').className='nv '+(hmaCross==='bullish'?'c-bull':'c-bear');
+  document.getElementById('nfRegime').textContent=overallRegime||'—';
+  document.getElementById('nfRegime').className='nv c-amb';
+  document.getElementById('nfCandles').textContent=candles.length+' (5min)';
+
+  // ── HMA status pills
+  const hmaRow = document.getElementById('niftyHMARow');
+  if(hmaRow) hmaRow.innerHTML=`
+    <span class="hma-pill ${hmaSlopeDir==='bullish'?'hma-bull':hmaSlopeDir==='bearish'?'hma-bear':'hma-flat'}">
+      HMA(9) Slope: ${hmaSlopeDir.toUpperCase()}${slopeDecelerating?' ↘ Decelerating':''}
+    </span>
+    <span class="hma-pill ${hmaCross==='bullish'?'hma-bull':'hma-bear'}">
+      9 vs 10: ${hmaCross.toUpperCase()}${hmaCrossNew==='fresh_bull'?' 🔔 FRESH CROSS':hmaCrossNew==='fresh_bear'?' 🔔 FRESH CROSS':''}
+    </span>
+    <span class="hma-pill ${rsi>70?'hma-bear':rsi>55?'hma-bull':'hma-flat'}">RSI: ${rsi||'—'} — ${rsiLevel.toUpperCase()}</span>
+    ${bearDivergence?'<span class="hma-pill hma-bear">⚠ RSI DIVERGENCE — Hidden weakness</span>':''}
+    <span class="hma-pill ${tired>=4?'hma-bear':tired<=1?'hma-bull':'hma-flat'}">Tiredness: ${tired}/6</span>
+    <span class="hma-pill hma-flat">Day High: ₹${dayHigh.toFixed(1)} | Low: ₹${dayLow.toFixed(1)}</span>`;
+
+  const hmaDetail = document.getElementById('niftyHMADetail');
+  if(hmaDetail) hmaDetail.innerHTML=`
+    HMA(9): <strong>${hma9?hma9.toFixed(2):'—'}</strong> &nbsp;|&nbsp;
+    HMA(10): <strong>${hma10?hma10.toFixed(2):'—'}</strong> &nbsp;|&nbsp;
+    Spread: <strong class="${hmaCross==='bullish'?'c-bull':'c-bear'}">${hma9&&hma10?(hma9-hma10).toFixed(2):'—'}</strong> &nbsp;|&nbsp;
+    Slope now vs prev: <strong>${slope1!==null?slope1.toFixed(2):'—'}</strong> vs <strong>${slope2!==null?slope2.toFixed(2):'—'}</strong>
+    ${slopeDecelerating?'<span class="c-bear"> ↘ Momentum decelerating</span>':''}
+    <br>
+    ${hmaCrossNew==='fresh_bull'?'<span class="c-bull">🔔 Fresh bullish cross this candle — strong entry signal</span>':
+      hmaCrossNew==='fresh_bear'?'<span class="c-bear">🔔 Fresh bearish cross this candle — exit longs</span>':
+      hmaCross==='bullish'?'<span class="c-bull">HMA(9) above HMA(10) — uptrend intact</span>':
+      '<span class="c-bear">HMA(9) below HMA(10) — avoid new longs</span>'}
+    ${bearDivergence?'<br><span class="c-bear">⚠ RSI Divergence: Price making new high but RSI declining — distribution pattern, be cautious</span>':''}`;
+
+  // ── Update entry tracker
+  updateEntryTracker(vClass, tired);
+
+  const t=new Date();
+  document.getElementById('niftyLastUpdate').textContent=`Updated ${t.getHours()}:${String(t.getMinutes()).padStart(2,'0')}:${String(t.getSeconds()).padStart(2,'0')}`;
+}
+
+function updateEntryTracker(niftyVerdict, tiredScore) {
+  const body = document.getElementById('entryTrackerBody');
+  if(!body) return;
+  // Use SAME source as Top 50 Buy table — selectTop25 applies regime threshold,
+  // signal type filter, sector cap and 250d lookback — exactly like Signal Scanner
+  const buys = selectTop25(allSignals, 'buy');
+  if(!buys.length){body.innerHTML='<tr><td colspan="10" class="empty">No buy signals — load data first</td></tr>';return;}
+
+  body.innerHTML = buys.map((s,i)=>{
+    const cmp=s.cmp, tp=s.tp, sl=s.sl;
+    // Per-stock momentum: where is CMP relative to TP/SL range
+    const range = tp - sl;
+    const pos = range>0 ? (cmp-sl)/range : 0.5;
+    const stockMom = pos>0.65?'bullish':pos<0.25?'bearish':'flat';
+
+    // Entry decision
+    let entryBadge, sameDay;
+    if(niftyVerdict==='safe' && stockMom==='bullish' && tiredScore<=1){
+      entryBadge='<span class="entry-badge eb-enter">✅ Enter Now</span>';
+      sameDay='Same Day';
+    } else if(niftyVerdict==='danger' || tiredScore>=4){
+      entryBadge='<span class="entry-badge eb-avoid">🔴 Next Morning</span>';
+      sameDay='Next Morning';
+    } else if(stockMom==='bearish'){
+      entryBadge='<span class="entry-badge eb-avoid">⚠ Near SL — Skip</span>';
+      sameDay='Skip';
+    } else if(niftyVerdict==='warn' && s.score>=80){
+      entryBadge='<span class="entry-badge eb-enter">✅ High Conv. OK</span>';
+      sameDay='Same Day';
+    } else {
+      entryBadge='<span class="entry-badge eb-wait">⏳ Wait HMA Cross</span>';
+      sameDay='TBD';
+    }
+
+    const orderBtn=zdLiveMode?`<button class="ob-buy" onclick="showOrderModal('${s.symbol}','BUY',${cmp},${tp},${sl},1)">▲ BUY</button>`:'—';
+    return`<tr class="${sameDay==='Skip'?'ro-bear':''}">
+      <td class="c-dim">${i+1}</td>
+      <td><strong>${s.symbol}</strong></td>
+      <td>${sigBadge(s.signal)}</td>
+      <td class="${s.score>=80?'c-bull':'c-amb'}">${s.score}</td>
+      <td>₹${cmp.toFixed(1)}</td>
+      <td class="c-bull">₹${tp.toFixed(1)}</td>
+      <td class="c-bear">₹${sl.toFixed(1)}</td>
+      <td>${entryBadge}</td>
+      <td style="font-family:var(--mono);font-size:9px;color:${sameDay==='Same Day'?'var(--bull)':sameDay==='Skip'?'var(--bear)':'var(--text2)'}">${sameDay}</td>
+      <td>${orderBtn}</td>
+    </tr>`;
+  }).join('');
+}
+
+function toggleNiftyAuto(){
+  const btn=document.getElementById('niftyAutoBtn');
+  if(_niftyAutoInterval){
+    clearInterval(_niftyAutoInterval);_niftyAutoInterval=null;
+    btn.innerHTML='<i class="fas fa-play"></i> Start 15s Auto';
+    toast('Nifty auto-refresh stopped','ok');
+  } else {
+    refreshNiftyDash();
+    _niftyAutoInterval=setInterval(refreshNiftyDash,15000);
+    btn.innerHTML='<i class="fas fa-stop"></i> Stop Auto';
+    toast('Nifty refreshing every 15s','ok');
+  }
+}
+
+function renderNiftyPage(){
+  updateEntryTracker('warn',0);
+}
+
+// 3:00 PM PORTFOLIO ALERT
+function check3PMAlert(){
+  if(!_pfAlertShown && allSignals.length>0){
+    const now=new Date();
+    if(now.getHours()===15 && now.getMinutes()>=0 && now.getMinutes()<15){
+      _pfAlertShown=true;
+      const box=document.createElement('div');
+      box.className='pf-alert-box';
+      box.id='pfAlertBox';
+      box.innerHTML=`<div>📊 3:00 PM — Time to review signals!</div>
+        <div style="font-size:9px;font-weight:400">Check Nifty health before building portfolio</div>
+        <div style="display:flex;gap:6px">
+          <button onclick="switchPage('nifty');document.getElementById('pfAlertBox').remove()">View Nifty Radar</button>
+          <button onclick="createDailyPortfolios();document.getElementById('pfAlertBox').remove()">Build Portfolio</button>
+          <button onclick="document.getElementById('pfAlertBox').remove()" style="background:rgba(0,0,0,.3);color:#fff">Dismiss</button>
+        </div>`;
+      document.body.appendChild(box);
+      toast('📊 3:00 PM — Portfolio build time!','ok');
+    }
+  }
+  // Reset flag after 3:15 PM
+  const now=new Date();
+  if(now.getHours()===15&&now.getMinutes()>=15) _pfAlertShown=false;
+}
 
 // ═══════════════════════════════════════════════════════════
 // INIT
