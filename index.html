@@ -605,13 +605,30 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
 <!-- PAGE 1: SCANNER -->
 <div class="page active" id="page-scanner">
   <!-- ══ LIVE BREAKOUTS STRIP ══ -->
-  <div id="liveBreakoutsStrip" style="display:none;padding:6px 12px;background:var(--bg2);border-bottom:2px solid var(--amber);font-family:var(--mono)">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+  <div id="liveBreakoutsStrip" style="display:none;background:var(--bg2);border-bottom:2px solid var(--amber);font-family:var(--mono)">
+    <!-- Header row -->
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 12px 4px;flex-wrap:wrap">
       <span style="font-size:10px;font-weight:800;color:var(--amber)">⚡ LIVE BREAKOUTS</span>
       <span id="liveBreakoutCount" style="font-size:8px;color:var(--text3)">0 today</span>
-      <button onclick="clearBreakouts()" style="margin-left:auto;font-family:var(--mono);font-size:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);border-radius:4px;padding:2px 8px;cursor:pointer">Clear</button>
+      <span id="liveBreakoutBuyCount" style="font-size:8px;color:var(--bull);font-weight:700"></span>
+      <span id="liveBreakoutSellCount" style="font-size:8px;color:var(--bear);font-weight:700"></span>
+      <span style="font-size:7px;color:var(--text3);margin-left:4px">▲Signal stocks + WAIT(PRE-SIG) both included</span>
+      <!-- View toggle -->
+      <div style="display:flex;gap:4px;margin-left:auto">
+        <button id="brkViewCards" onclick="setBrkView('cards')"
+          style="font-family:var(--mono);font-size:8px;background:var(--amber);color:#000;border:none;border-radius:4px;padding:2px 8px;cursor:pointer;font-weight:700">Cards</button>
+        <button id="brkViewBuy" onclick="setBrkView('buy')"
+          style="font-family:var(--mono);font-size:8px;background:var(--bg3);color:var(--bull);border:1px solid var(--border);border-radius:4px;padding:2px 8px;cursor:pointer">▲ BUY Table</button>
+        <button id="brkViewSell" onclick="setBrkView('sell')"
+          style="font-family:var(--mono);font-size:8px;background:var(--bg3);color:var(--bear);border:1px solid var(--border);border-radius:4px;padding:2px 8px;cursor:pointer">▼ SELL Table</button>
+        <button onclick="exportBreakouts()"
+          style="font-family:var(--mono);font-size:8px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-radius:4px;padding:2px 8px;cursor:pointer">⬇ CSV</button>
+        <button onclick="clearBreakouts()"
+          style="font-family:var(--mono);font-size:8px;background:var(--bg3);color:var(--text3);border:1px solid var(--border);border-radius:4px;padding:2px 8px;cursor:pointer">✕ Clear</button>
+      </div>
     </div>
-    <div id="liveBreakoutCards" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    <!-- Content area — cards or table depending on view -->
+    <div id="liveBreakoutContent" style="padding:0 12px 8px"></div>
   </div>
   <div class="top25-grid" id="top25Grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
 
@@ -7524,8 +7541,11 @@ function checkBreakouts() {
         const brk = { sym, dir: 'BUY', price: ltp, level: lvl.high,
                        pct: parseFloat(((ltp-lvl.high)/lvl.high*100).toFixed(2)),
                        time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),
+                       ts: Date.now(),
                        pb_score: lvl.pb_score, sector: lvl.sector,
-                       is_signal: lvl.is_signal };
+                       is_signal: lvl.is_signal,
+                       source: lvl.is_signal ? 'Signal' : 'WAIT (PB:'+lvl.pb_score+')',
+                       tv_url: 'https://www.tradingview.com/chart/?symbol=NSE:'+sym };
         liveBreakouts.unshift(brk);
         playBreakoutSound(true);
         toast('⚡ BUY Breakout: ' + sym + ' ₹' + ltp.toFixed(1) + ' > ₹' + lvl.high.toFixed(1), 'ok');
@@ -7543,8 +7563,11 @@ function checkBreakouts() {
         const brk = { sym, dir: 'SELL', price: ltp, level: lvl.low,
                        pct: parseFloat(((lvl.low-ltp)/lvl.low*100).toFixed(2)),
                        time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),
+                       ts: Date.now(),
                        pb_score: lvl.pb_score, sector: lvl.sector,
-                       is_signal: lvl.is_signal };
+                       is_signal: lvl.is_signal,
+                       source: lvl.is_signal ? 'Signal' : 'WAIT (PB:'+lvl.pb_score+')',
+                       tv_url: 'https://www.tradingview.com/chart/?symbol=NSE:'+sym };
         liveBreakouts.unshift(brk);
         playBreakoutSound(false);
         toast('⚡ SELL Breakdown: ' + sym + ' ₹' + ltp.toFixed(1) + ' < ₹' + lvl.low.toFixed(1), 'err');
@@ -7556,40 +7579,148 @@ function checkBreakouts() {
   if (newBreaks) renderBreakoutStrip();
 }
 
+var _brkView = 'cards'; /* 'cards' | 'buy' | 'sell' */
+
+function setBrkView(v) {
+  _brkView = v;
+  /* Update button styles */
+  ['cards','buy','sell'].forEach(id => {
+    const btn = document.getElementById('brkView'+id.charAt(0).toUpperCase()+id.slice(1));
+    if (!btn) return;
+    if (id === v) {
+      btn.style.background = id==='buy'?'var(--bull)':id==='sell'?'var(--bear)':'var(--amber)';
+      btn.style.color = '#000';
+      btn.style.border = 'none';
+    } else {
+      btn.style.background = 'var(--bg3)';
+      btn.style.color = id==='buy'?'var(--bull)':id==='sell'?'var(--bear)':'var(--text2)';
+      btn.style.border = '1px solid var(--border)';
+    }
+  });
+  renderBreakoutStrip();
+}
+
 function renderBreakoutStrip() {
-  const strip = document.getElementById('liveBreakoutsStrip');
-  const cards = document.getElementById('liveBreakoutCards');
-  const count = document.getElementById('liveBreakoutCount');
-  if (!strip || !cards) return;
+  const strip   = document.getElementById('liveBreakoutsStrip');
+  const content = document.getElementById('liveBreakoutContent');
+  const count   = document.getElementById('liveBreakoutCount');
+  const buyC    = document.getElementById('liveBreakoutBuyCount');
+  const sellC   = document.getElementById('liveBreakoutSellCount');
+  if (!strip || !content) return;
 
   if (!liveBreakouts.length) { strip.style.display = 'none'; return; }
 
+  const buys  = liveBreakouts.filter(b => b.dir === 'BUY');
+  const sells = liveBreakouts.filter(b => b.dir === 'SELL');
+
   strip.style.display = 'block';
   if (count) count.textContent = liveBreakouts.length + ' today';
+  if (buyC)  buyC.textContent  = buys.length  ? '▲ '+buys.length+' BUY'  : '';
+  if (sellC) sellC.textContent = sells.length ? '▼ '+sells.length+' SELL' : '';
 
-  cards.innerHTML = liveBreakouts.slice(0, 20).map(b => {
-    const buy     = b.dir === 'BUY';
-    const accent  = buy ? 'var(--bull)' : 'var(--bear)';
-    const icon    = buy ? '▲' : '▼';
-    const sigBadge = b.is_signal ? '' : '<span style="font-size:7px;color:var(--amber);margin-left:4px">PRE-SIG</span>';
-    return `<div style="background:var(--bg3);border:1px solid ${accent}55;border-left:3px solid ${accent};border-radius:7px;padding:7px 10px;font-family:var(--mono);min-width:160px;cursor:pointer"
-               onclick="vOpenAnyChart('${b.sym}')" title="Click to open chart">
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-        <span style="font-weight:900;color:var(--bright);font-size:11px">${b.sym}</span>
-        <span style="color:${accent};font-weight:700;font-size:9px">${icon} ${b.dir}</span>
-        ${sigBadge}
-        <span style="margin-left:auto;font-size:7px;color:var(--text3)">${b.time}</span>
-      </div>
-      <div style="font-size:10px;font-weight:700;color:${accent}">₹${b.price.toFixed(1)}</div>
-      <div style="font-size:7px;color:var(--text3)">+${b.pct}% above ₹${b.level.toFixed(1)} · ${b.sector}</div>
-      ${b.pb_score < 100 ? `<div style="font-size:7px;color:var(--amber)">PB Score: ${b.pb_score}</div>` : ''}
+  if (_brkView === 'cards') {
+    content.innerHTML = '<div style="display:flex;gap:8px;overflow-x:auto;padding:4px 0 6px">'
+      + liveBreakouts.map(b => {
+          const buy    = b.dir === 'BUY';
+          const accent = buy ? 'var(--bull)' : 'var(--bear)';
+          const sigBadge = b.is_signal
+            ? ''
+            : '<span style="font-size:7px;color:var(--amber);margin-left:4px">PRE-SIG</span>';
+          return `<div style="background:var(--bg3);border:1px solid ${accent}55;border-left:3px solid ${accent};border-radius:7px;padding:7px 10px;min-width:155px;flex-shrink:0;cursor:pointer"
+                     onclick="vOpenAnyChart('${b.sym}')" title="Click to open TRAM chart">
+            <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px">
+              <span style="font-weight:900;color:var(--bright);font-size:11px">${b.sym}</span>
+              <span style="color:${accent};font-weight:700;font-size:9px">${buy?'▲':'▼'} ${b.dir}</span>
+              ${sigBadge}
+              <span style="margin-left:auto;font-size:7px;color:var(--text3)">${b.time}</span>
+            </div>
+            <div style="font-size:10px;font-weight:700;color:${accent}">₹${b.price.toFixed(1)}</div>
+            <div style="font-size:7px;color:var(--text3)">${buy?'+':''}${b.pct}% ${buy?'above':'below'} ₹${b.level.toFixed(1)}</div>
+            <div style="font-size:7px;color:var(--text3)">${b.sector}</div>
+            <div style="display:flex;gap:4px;margin-top:3px">
+              <button onclick="event.stopPropagation();vOpenAnyChart('${b.sym}')" style="font-family:var(--mono);font-size:7px;background:var(--bg2);border:1px solid var(--border);color:var(--amber);border-radius:3px;padding:1px 5px;cursor:pointer">📊 TRAM</button>
+              <a href="${b.tv_url}" target="_blank" onclick="event.stopPropagation()" style="font-family:var(--mono);font-size:7px;background:var(--bg2);border:1px solid var(--border);color:var(--kite);border-radius:3px;padding:1px 5px;text-decoration:none">📈 TV</a>
+            </div>
+          </div>`;
+        }).join('')
+      + '</div>';
+    return;
+  }
+
+  /* Table view — shared for buy/sell */
+  const data  = _brkView === 'buy' ? buys : sells;
+  const accent = _brkView === 'buy' ? 'var(--bull)' : 'var(--bear)';
+  const icon   = _brkView === 'buy' ? '▲' : '▼';
+
+  if (!data.length) {
+    content.innerHTML = `<div style="font-family:var(--mono);font-size:9px;color:var(--text3);padding:10px">No ${_brkView.toUpperCase()} breakouts today</div>`;
+    return;
+  }
+
+  content.innerHTML = `
+    <div style="overflow-x:auto;max-height:280px;overflow-y:auto">
+      <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:9px">
+        <thead style="position:sticky;top:0;background:var(--bg2);z-index:1">
+          <tr style="border-bottom:2px solid ${accent}44">
+            <th style="text-align:left;padding:5px 8px;color:${accent}">#</th>
+            <th style="text-align:left;padding:5px 8px;color:var(--bright)">Symbol</th>
+            <th style="text-align:left;padding:5px 8px;color:var(--text2)">Sector</th>
+            <th style="text-align:center;padding:5px 8px;color:var(--bright)">LTP ₹</th>
+            <th style="text-align:center;padding:5px 8px;color:var(--text2)">Level ₹</th>
+            <th style="text-align:center;padding:5px 8px;color:${accent}">% Break</th>
+            <th style="text-align:center;padding:5px 8px;color:var(--text2)">Time</th>
+            <th style="text-align:center;padding:5px 8px;color:var(--amber)">Source</th>
+            <th style="text-align:center;padding:5px 8px;color:var(--text2)">Chart</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.map((b,i) => `
+          <tr style="border-bottom:1px solid var(--border)22;${i%2===0?'':'background:var(--bg3)22'}">
+            <td style="padding:4px 8px;color:var(--text3)">${i+1}</td>
+            <td style="padding:4px 8px;font-weight:700;color:var(--bright)">${b.sym}</td>
+            <td style="padding:4px 8px;color:var(--text3);font-size:8px">${(b.sector||'').slice(0,22)}</td>
+            <td style="padding:4px 8px;text-align:center;font-weight:700;color:${accent}">₹${b.price.toFixed(1)}</td>
+            <td style="padding:4px 8px;text-align:center;color:var(--text2)">₹${b.level.toFixed(1)}</td>
+            <td style="padding:4px 8px;text-align:center;font-weight:700;color:${accent}">${icon}${b.pct}%</td>
+            <td style="padding:4px 8px;text-align:center;color:var(--text3)">${b.time}</td>
+            <td style="padding:4px 8px;text-align:center">
+              <span style="font-size:7px;padding:1px 6px;border-radius:3px;background:${b.is_signal?'rgba(34,197,94,.15)':'rgba(217,119,6,.15)'};color:${b.is_signal?'var(--bull)':'var(--amber)'}">${b.source}</span>
+            </td>
+            <td style="padding:4px 8px;text-align:center">
+              <button onclick="vOpenAnyChart('${b.sym}')" style="font-family:var(--mono);font-size:7px;background:var(--amber);color:#000;border:none;border-radius:3px;padding:2px 6px;cursor:pointer;margin-right:3px" title="Open in TRAM chart">📊</button>
+              <a href="${b.tv_url}" target="_blank" style="font-family:var(--mono);font-size:7px;background:var(--kite);color:#fff;border-radius:3px;padding:2px 6px;text-decoration:none" title="Open in TradingView">TV</a>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <div style="font-family:var(--mono);font-size:7px;color:var(--text3);padding:5px 0 2px">
+      Source: <span style="color:var(--bull)">Signal</span> = active NANDI signal stock ·
+      <span style="color:var(--amber)">WAIT (PB:xx)</span> = from WAIT list, pre-breakout score shown ·
+      Click 📊 to chart in TRAM · Click TV to open TradingView
     </div>`;
-  }).join('');
 }
 
 function clearBreakouts() {
   liveBreakouts = [];
+  _brkView = 'cards';
   renderBreakoutStrip();
+}
+
+function exportBreakouts() {
+  if (!liveBreakouts.length) { toast('No breakouts to export','err'); return; }
+  const hdr = ['Time','Symbol','Direction','LTP','Level','%Break','Sector','Source','TradingView'];
+  const rows = liveBreakouts.map(b => [
+    b.time, b.sym, b.dir,
+    b.price.toFixed(2), b.level.toFixed(2), b.pct,
+    b.sector, b.source, b.tv_url
+  ]);
+  const csv = [hdr, ...rows].map(r => r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = 'breakouts_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  toast('Breakouts exported','ok');
 }
 
 
