@@ -525,6 +525,9 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
     <span class="pill p-purple" id="pill-sess">Session 0</span>
     <span class="pill p-dim" id="pill-date">No data</span>
     <span class="pill p-watch" id="pill-session-window" title="Trading session window">—</span>
+    <span class="pill p-dim" id="pill-regime-change" style="display:none;cursor:pointer"
+          onclick="switchPage('intel');setTimeout(()=>switchIntel('options'),100)"
+          title="Regime changed — click to see options strategy">⚡ Regime Change</span>
   </div>
   <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle dark/light theme"><i class="fas fa-moon"></i></button>
 </div>
@@ -784,6 +787,7 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
 <!-- PAGE 3: INTELLIGENCE LAB -->
 <div class="page" id="page-intel">
   <div class="intel-tabs">
+    <button class="i-tab" onclick="switchIntel('options')" style="background:rgba(99,102,241,.18);color:var(--kite);font-weight:800">📊 Options</button>
     <button class="i-tab" onclick="switchIntel('phase5')" style="background:rgba(124,58,237,.18);color:var(--purple);font-weight:800">🧬 Phase 5</button>
     <!-- sectormom tab merged into sectortracker — hidden -->
     <button class="i-tab" onclick="switchIntel('anticipation')" style="background:rgba(99,102,241,.18);color:#818cf8;font-weight:800">🔭 Anticipation</button>
@@ -808,6 +812,24 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
     <button class="i-tab" onclick="switchIntel('orderlog')" style="background:rgba(99,102,241,.12);color:var(--kite)">📋 Order Log</button>
     <button class="i-tab" onclick="switchIntel('gapopen')" style="background:rgba(234,88,12,.12);color:var(--exit);font-weight:800">⚡ Gap Open</button>
   </div>
+  <!-- ═══ OPTIONS SPREAD ADVISOR PANEL ═══ -->
+  <div class="i-panel card" id="intel-options" style="border-radius:0 0 var(--r-lg) var(--r-lg)">
+    <div class="ct" style="color:var(--kite)">
+      <i class="fas fa-chart-line"></i>
+      Nifty Options Spread Advisor — Regime-Based Monthly Expiry Strategies
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:4px 0 10px;font-family:var(--mono);font-size:8px;flex-wrap:wrap">
+      <span style="color:var(--text3)">Triggers on regime change · ATR-based strikes · Monthly expiry (last Tuesday) · Lot size 75</span>
+      <button class="btn btn-d" style="font-size:9px;padding:3px 10px;margin-left:auto"
+        onclick="checkRegimeChangeOptions();renderOptionsAdvisor(overallRegime,_lastKnownRegime,_optAdvisorData)">
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
+    </div>
+    <div id="optAdvisorWrap" style="font-family:var(--mono);font-size:9px;color:var(--text3);padding:10px">
+      Load CSV data first — advisor activates after regime is detected.
+    </div>
+  </div>
+
   <!-- ═══ PHASE 5 DASHBOARD PANEL ═══ -->
   <div class="i-panel card" id="intel-phase5" style="border-radius:0 0 var(--r-lg) var(--r-lg)">
     <div class="ct" style="color:var(--purple)"><i class="fas fa-dna"></i> Phase 5 — Full Universe Self-Learning Dashboard</div>
@@ -2071,7 +2093,7 @@ async function processAll(bySymbol){
   saveMeta(Object.assign({},meta,{sessions:sessionCount,lastDate:lastDateVal}));
   setProgress(100,'Done!');
   toast(`${allSignals.length} signals · ${newAdded} new · ${resolved} resolved · Session ${sessionCount}`,'ok');
-  updatePills();populateFilters();populateAnticipationSectors();renderPage1();renderPage2();renderPage3();updateDPFPnL();snapshotFullUniverse();resolveUniverseOutcomes();buildSectorMomentum();buildUnbiasedWRMap();recalibrateWeights();recalibratePBWeights();buildBreakoutLevels();buildMonthlyHeatmap();
+  updatePills();populateFilters();populateAnticipationSectors();renderPage1();renderPage2();renderPage3();updateDPFPnL();snapshotFullUniverse();resolveUniverseOutcomes();buildSectorMomentum();buildUnbiasedWRMap();recalibrateWeights();recalibratePBWeights();buildBreakoutLevels();buildMonthlyHeatmap();checkRegimeChangeOptions();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -4356,7 +4378,7 @@ function updatePills(){const buys=allSignals.filter(s=>s.signal.startsWith('B'))
 function switchPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.page-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+name);if(pg)pg.classList.add('active');document.querySelectorAll('.page-tab').forEach(t=>{if((t.getAttribute('onclick')||'').includes("'"+name+"'"))t.classList.add('active')});if(name==='intel')renderIntelActive();if(name==='portfolio')renderPage2();if(name==='nifty')renderNiftyPage();if(name==='broker'){switchBrokerTab('orders');brokerRefreshAll()}}
 function switchIntel(name){document.querySelectorAll('.i-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.i-tab').forEach(t=>t.classList.remove('active'));document.getElementById('intel-'+name).classList.add('active');event.target.classList.add('active');renderIntelTab(name)}
 function renderIntelActive(){const active=document.querySelector('.i-panel.active');if(active)renderIntelTab(active.id.replace('intel-',''))}
-function renderIntelTab(name){const map={phase5:renderPhase5Dashboard,sectormom:renderSectorMomentumTab,anticipation:renderAnticipation,hc:renderHighConviction,m6:function(){renderM6();renderUnbiasedPanel();},m1:renderM1,m4:renderM4,m2:renderM2,m3:renderM3,m5:renderM5,m7:renderM7,tpsl:renderTPSL,mb:renderMB,sectors:renderSectors,sectortracker:function(){if(!Object.keys(sectorMomentum).length)buildSectorMomentum();renderSectorTracker();updateRotationStrip();renderMonthlyHeatmap();renderSeasonalInsights();},ledger:renderLedger,retcorr:renderRetCorr,wrref:function(){},regimexperf:function(){renderRegimeCrossPerf()},slDash:renderSLDash,dailymovers:renderDailyMovers,orderlog:renderOrderLog,gapopen:renderGapOpen};if(map[name])map[name]()}
+function renderIntelTab(name){const map={options:function(){checkRegimeChangeOptions();if(!_optAdvisorData)renderOptionsAdvisor(overallRegime,null,null);else renderOptionsAdvisor(overallRegime,_lastKnownRegime,_optAdvisorData);},phase5:renderPhase5Dashboard,sectormom:renderSectorMomentumTab,anticipation:renderAnticipation,hc:renderHighConviction,m6:function(){renderM6();renderUnbiasedPanel();},m1:renderM1,m4:renderM4,m2:renderM2,m3:renderM3,m5:renderM5,m7:renderM7,tpsl:renderTPSL,mb:renderMB,sectors:renderSectors,sectortracker:function(){if(!Object.keys(sectorMomentum).length)buildSectorMomentum();renderSectorTracker();updateRotationStrip();renderMonthlyHeatmap();renderSeasonalInsights();},ledger:renderLedger,retcorr:renderRetCorr,wrref:function(){},regimexperf:function(){renderRegimeCrossPerf()},slDash:renderSLDash,dailymovers:renderDailyMovers,orderlog:renderOrderLog,gapopen:renderGapOpen};if(map[name])map[name]()}
 
 // FILE HANDLING
 
@@ -4376,47 +4398,68 @@ const HIST_META_KEY = 'nandi_v8_hist_meta';
 var historicalRows = {};
 
 function saveHistoricalData(data, meta) {
-  try {
-    /* Store raw parsed rows — compressed by keeping only essential fields */
-    const slim = {};
-    Object.keys(data).forEach(sym => {
-      slim[sym] = data[sym].rows.map(r => r.date+','+r.op+','+r.hi+','+r.lo+','+r.cl).join(';');
-    });
-    localStorage.setItem(HIST_KEY, JSON.stringify(slim));
-    localStorage.setItem(HIST_META_KEY, JSON.stringify(meta));
-    console.log('[Hist] Saved', Object.keys(slim).length, 'symbols');
-  } catch(e) {
-    /* localStorage full — store just meta */
-    try { localStorage.setItem(HIST_META_KEY, JSON.stringify({...meta, partial: true})); } catch(e2) {}
-    console.warn('[Hist] Storage full — historical data not persisted');
-  }
+  /* Use IndexedDB (handles 100MB+) — same idbSet used by trading ledger */
+  const slim = {};
+  Object.keys(data).forEach(sym => {
+    slim[sym] = data[sym].rows.map(r => r.date+','+r.op+','+r.hi+','+r.lo+','+r.cl).join(';');
+  });
+  idbSet(HIST_KEY, slim).then(ok => {
+    if (ok) {
+      console.log('[Hist] Saved', Object.keys(slim).length, 'symbols to IndexedDB');
+    } else {
+      console.warn('[Hist] IndexedDB save failed');
+    }
+  });
+  /* Meta is small — localStorage is fine for this */
+  try { localStorage.setItem(HIST_META_KEY, JSON.stringify(meta)); } catch(e) {}
 }
 
 function loadHistoricalData() {
-  try {
-    const raw = localStorage.getItem(HIST_KEY);
-    const meta = localStorage.getItem(HIST_META_KEY);
-    if (!raw) return;
-    const slim = JSON.parse(raw);
-    historicalRows = {};
-    Object.keys(slim).forEach(sym => {
-      historicalRows[sym] = slim[sym].split(';').map(line => {
-        const p = line.split(',');
-        return { date: p[0], op: +p[1], hi: +p[2], lo: +p[3], cl: +p[4] };
-      });
-    });
-    /* Merge into allStockData */
-    mergeHistoricalIntoStockData();
-    /* Update UI */
-    if (meta) {
-      const m = JSON.parse(meta);
-      updateHistUI(m);
+  /* Load from IndexedDB first, fallback to localStorage for legacy data */
+  const meta = localStorage.getItem(HIST_META_KEY);
+  idbGet(HIST_KEY).then(slim => {
+    if (!slim || typeof slim !== 'object' || !Object.keys(slim).length) {
+      /* Try legacy localStorage */
+      try {
+        const raw = localStorage.getItem(HIST_KEY);
+        if (raw) {
+          const lsSlim = JSON.parse(raw);
+          _applyHistSlim(lsSlim, meta);
+          /* Migrate to IndexedDB */
+          idbSet(HIST_KEY, lsSlim);
+          localStorage.removeItem(HIST_KEY);
+          return;
+        }
+      } catch(e) {}
+      console.log('[Hist] No historical data in storage');
+      return;
     }
-    console.log('[Hist] Loaded', Object.keys(historicalRows).length, 'symbols from storage');
-  } catch(e) {
-    historicalRows = {};
+    _applyHistSlim(slim, meta);
+  }).catch(e => {
     console.warn('[Hist] Load error:', e.message);
+  });
+}
+
+function _applyHistSlim(slim, metaStr) {
+  historicalRows = {};
+  Object.keys(slim).forEach(sym => {
+    historicalRows[sym] = slim[sym].split(';').map(line => {
+      const p = line.split(',');
+      return { date: p[0], op: +p[1], hi: +p[2], lo: +p[3], cl: +p[4] };
+    });
+  });
+  mergeHistoricalIntoStockData();
+  if (metaStr) {
+    try {
+      const m = typeof metaStr === 'string' ? JSON.parse(metaStr) : metaStr;
+      updateHistUI(m);
+    } catch(e) {}
   }
+  console.log('[Hist] Loaded', Object.keys(historicalRows).length, 'symbols from IndexedDB');
+  /* Rebuild heatmap now that historical data is available */
+  buildMonthlyHeatmap();
+  renderMonthlyHeatmap();
+  renderSeasonalInsights();
 }
 
 function mergeHistoricalIntoStockData() {
@@ -7928,6 +7971,411 @@ function renderSeasonalInsights() {
       <br><span style="color:var(--amber)">Remember: seasonal patterns are tendencies, not guarantees. Always confirm with live regime + momentum data.</span>
     </div>` : ''}
   `;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   NIFTY OPTIONS SPREAD ADVISOR
+   Triggers on regime change. Suggests monthly expiry spreads
+   with ATR-based strike levels. Monthly = last Tuesday of month.
+   Nifty strike interval = 50 pts.
+   ═══════════════════════════════════════════════════════════════════ */
+
+const OPT_REGIME_KEY = 'nandi_v8_last_regime';
+var _lastKnownRegime = localStorage.getItem(OPT_REGIME_KEY) || null;
+var _optAdvisorData  = null; /* cached last suggestion */
+
+/* Get next monthly expiry (last Tuesday of current or next month) */
+function getMonthlyExpiry() {
+  const now   = new Date();
+  const year  = now.getFullYear();
+  const month = now.getMonth(); /* 0-based */
+
+  function lastTuesdayOf(y, m) {
+    /* Find last day of month, walk back to Tuesday (day 2) */
+    const last = new Date(y, m + 1, 0); /* last day of month */
+    const dow  = last.getDay();          /* 0=Sun,1=Mon,2=Tue */
+    const diff = (dow >= 2) ? dow - 2 : dow + 5;
+    return new Date(y, m, last.getDate() - diff);
+  }
+
+  const thisMonthExpiry = lastTuesdayOf(year, month);
+  /* If today is past this month's expiry, use next month */
+  const expiry = now > thisMonthExpiry
+    ? lastTuesdayOf(year, month + 1)
+    : thisMonthExpiry;
+
+  const dte = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+  return {
+    date:    expiry.toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric'}),
+    dte,
+    expiry
+  };
+}
+
+/* Round to nearest Nifty strike (50pt intervals) */
+function roundToStrike(price, direction) {
+  if (direction === 'up')   return Math.ceil(price  / 50) * 50;
+  if (direction === 'down') return Math.floor(price / 50) * 50;
+  return Math.round(price / 50) * 50;
+}
+
+/* Get Nifty ATR from regimeData */
+function getNiftyATR() {
+  const nkey = 'NSEI' in regimeData ? 'NSEI' : 'CRSLDX' in regimeData ? 'CRSLDX' : null;
+  if (!nkey) return null;
+  const rows = regimeData[nkey].rows;
+  if (!rows || rows.length < 15) return null;
+  const n = rows.length - 1;
+  /* 14-day ATR */
+  let trSum = 0, count = 0;
+  for (let i = Math.max(1, n - 13); i <= n; i++) {
+    trSum += Math.max(
+      rows[i].hi - rows[i].lo,
+      Math.abs(rows[i].hi - rows[i-1].cl),
+      Math.abs(rows[i].lo - rows[i-1].cl)
+    );
+    count++;
+  }
+  return count > 0 ? parseFloat((trSum / count).toFixed(0)) : null;
+}
+
+/* Get Nifty current price */
+function getNiftyLTP() {
+  const nkey = 'NSEI' in regimeData ? 'NSEI' : 'CRSLDX' in regimeData ? 'CRSLDX' : null;
+  if (!nkey) return null;
+  /* Try live Kite price first */
+  const ltp = zdPrices['NSEI'] || zdPrices['NSE:NSEI'] || zdPrices['CRSLDX'];
+  if (ltp) return ltp;
+  /* Fall back to last close in regimeData */
+  const rows = regimeData[nkey].rows;
+  return rows && rows.length ? rows[rows.length-1].cl : null;
+}
+
+/* Core: generate spread suggestions for a regime transition */
+function generateSpreadSuggestions(fromRegime, toRegime) {
+  const niftyLTP = getNiftyLTP();
+  const atr      = getNiftyATR();
+  const expiry   = getMonthlyExpiry();
+
+  if (!niftyLTP || !atr) return null;
+
+  const atm   = roundToStrike(niftyLTP, 'nearest');
+  const atr1  = Math.round(atr);
+  const atr15 = Math.round(atr * 1.5);
+  const atr2  = Math.round(atr * 2);
+
+  /* Strike levels */
+  const otm1Up   = roundToStrike(niftyLTP + atr1,  'up');
+  const otm2Up   = roundToStrike(niftyLTP + atr2,  'up');
+  const otm1Dn   = roundToStrike(niftyLTP - atr1,  'down');
+  const otm2Dn   = roundToStrike(niftyLTP - atr2,  'down');
+  const wing1Up  = roundToStrike(niftyLTP + atr15, 'up');
+  const wing1Dn  = roundToStrike(niftyLTP - atr15, 'down');
+
+  const spreads = [];
+  const key = fromRegime + '->' + toRegime;
+
+  /* ── Transition-specific strategy selection ── */
+
+  if (key === 'bear->full' || key === 'bear->mixed' || key === 'caution->full') {
+    /* Bullish transition */
+    spreads.push({
+      strategy: 'Bull Call Spread',
+      bias:     'Bullish',
+      legs: [
+        { action:'BUY',  type:'CE', strike: atm,    exp: expiry.date, note:'ATM Call — long delta' },
+        { action:'SELL', type:'CE', strike: otm1Up,  exp: expiry.date, note:'1 ATR OTM — cap cost' }
+      ],
+      maxProfit:  `₹${((otm1Up - atm) * 75).toLocaleString('en-IN')} per lot`,
+      maxLoss:    'Premium paid × 75',
+      idealMove:  `Nifty above ${otm1Up} by expiry`,
+      why:        `Regime turning ${toRegime} — directional bullish with defined risk. ATR=${atr1}pt → spread width=${otm1Up-atm}pt.`,
+      dte:        expiry.dte
+    });
+    spreads.push({
+      strategy: 'Long Call (aggressive)',
+      bias:     'Strongly Bullish',
+      legs: [
+        { action:'BUY', type:'CE', strike: roundToStrike(niftyLTP - 50, 'down'), exp: expiry.date, note:'Slight ITM — higher delta' }
+      ],
+      maxProfit:  'Unlimited above strike',
+      maxLoss:    'Full premium paid × 75',
+      idealMove:  `Nifty above ${roundToStrike(niftyLTP - 50, 'down')} strongly`,
+      why:        'High conviction bullish play. Use only if regime is clean full-bull with all indices aligned.',
+      dte:        expiry.dte
+    });
+  }
+
+  else if (key === 'full->bear' || key === 'mixed->bear' || key === 'full->caution') {
+    /* Bearish transition */
+    spreads.push({
+      strategy: 'Bear Put Spread',
+      bias:     'Bearish',
+      legs: [
+        { action:'BUY',  type:'PE', strike: atm,    exp: expiry.date, note:'ATM Put — long delta' },
+        { action:'SELL', type:'PE', strike: otm1Dn, exp: expiry.date, note:'1 ATR OTM — reduce cost' }
+      ],
+      maxProfit:  `₹${((atm - otm1Dn) * 75).toLocaleString('en-IN')} per lot`,
+      maxLoss:    'Net premium paid × 75',
+      idealMove:  `Nifty below ${otm1Dn} by expiry`,
+      why:        `Regime turning ${toRegime} — directional bearish with defined risk. ATR=${atr1}pt → spread width=${atm-otm1Dn}pt.`,
+      dte:        expiry.dte
+    });
+    spreads.push({
+      strategy: 'Long Put (aggressive)',
+      bias:     'Strongly Bearish',
+      legs: [
+        { action:'BUY', type:'PE', strike: roundToStrike(niftyLTP + 50, 'up'), exp: expiry.date, note:'Slight ITM — higher delta' }
+      ],
+      maxProfit:  'Profit down to zero',
+      maxLoss:    'Full premium paid × 75',
+      idealMove:  `Nifty below ${roundToStrike(niftyLTP + 50, 'up')} strongly`,
+      why:        'High conviction bearish play. Use only if bear regime with FII selling and all indices red.',
+      dte:        expiry.dte
+    });
+  }
+
+  else if (key === 'full->mixed' || key === 'bear->mixed') {
+    /* Transition to uncertainty — sell premium */
+    spreads.push({
+      strategy: 'Iron Condor',
+      bias:     'Range-Bound / Neutral',
+      legs: [
+        { action:'SELL', type:'CE', strike: otm1Up,  exp: expiry.date, note:'1 ATR OTM Call — short' },
+        { action:'BUY',  type:'CE', strike: otm2Up,  exp: expiry.date, note:'2 ATR OTM Call — wing' },
+        { action:'SELL', type:'PE', strike: otm1Dn,  exp: expiry.date, note:'1 ATR OTM Put — short' },
+        { action:'BUY',  type:'PE', strike: otm2Dn,  exp: expiry.date, note:'2 ATR OTM Put — wing' }
+      ],
+      maxProfit:  'Net premium collected × 75',
+      maxLoss:    `₹${((otm2Up - otm1Up) * 75).toLocaleString('en-IN')} per lot (at breach)`,
+      idealMove:  `Nifty stays between ${otm1Dn} and ${otm1Up}`,
+      why:        `Mixed regime = indecision = premium seller's market. ATR=${atr1}pt → short strikes ${otm1Dn}-${otm1Up}, protected at ${otm2Dn}-${otm2Up}.`,
+      dte:        expiry.dte
+    });
+    spreads.push({
+      strategy: 'Short Strangle',
+      bias:     'Neutral (higher risk)',
+      legs: [
+        { action:'SELL', type:'CE', strike: wing1Up, exp: expiry.date, note:'1.5 ATR OTM — sell premium' },
+        { action:'SELL', type:'PE', strike: wing1Dn, exp: expiry.date, note:'1.5 ATR OTM — sell premium' }
+      ],
+      maxProfit:  'Full premium collected × 75',
+      maxLoss:    'Theoretically unlimited — must manage',
+      idealMove:  `Nifty stays between ${wing1Dn} and ${wing1Up}`,
+      why:        'Higher premium than Iron Condor but no wings. Use only with strict stop-loss discipline.',
+      dte:        expiry.dte
+    });
+  }
+
+  else if (key === 'mixed->full' || key === 'caution->mixed') {
+    /* Cautious bullish */
+    spreads.push({
+      strategy: 'Bull Call Spread (conservative)',
+      bias:     'Mildly Bullish',
+      legs: [
+        { action:'BUY',  type:'CE', strike: otm1Up,  exp: expiry.date, note:'1 ATR OTM — wait for confirmation' },
+        { action:'SELL', type:'CE', strike: otm2Up,  exp: expiry.date, note:'2 ATR OTM — cap cost further' }
+      ],
+      maxProfit:  `₹${((otm2Up - otm1Up) * 75).toLocaleString('en-IN')} per lot`,
+      maxLoss:    'Net debit × 75 (smaller than ATM spread)',
+      idealMove:  `Nifty above ${otm2Up} by expiry`,
+      why:        `Regime mixed but improving. OTM spread = cheaper entry, waits for actual bullish move above ${otm1Up}.`,
+      dte:        expiry.dte
+    });
+  }
+
+  else if (key === 'caution->bear' || key === 'mixed->caution') {
+    spreads.push({
+      strategy: 'Bear Put Spread (conservative)',
+      bias:     'Mildly Bearish',
+      legs: [
+        { action:'BUY',  type:'PE', strike: otm1Dn,  exp: expiry.date, note:'1 ATR OTM Put' },
+        { action:'SELL', type:'PE', strike: otm2Dn,  exp: expiry.date, note:'2 ATR OTM Put — reduce cost' }
+      ],
+      maxProfit:  `₹${((otm1Dn - otm2Dn) * 75).toLocaleString('en-IN')} per lot`,
+      maxLoss:    'Net debit × 75',
+      idealMove:  `Nifty below ${otm2Dn} by expiry`,
+      why:        `Regime weakening. OTM put spread gives cheaper entry — confirms break before committing.`,
+      dte:        expiry.dte
+    });
+  }
+
+  /* Default — no clear transition */
+  if (!spreads.length) {
+    spreads.push({
+      strategy: 'Wait — No clear trade',
+      bias:     'Neutral',
+      legs:     [],
+      maxProfit: '—', maxLoss: '—', idealMove: '—',
+      why: `${fromRegime} → ${toRegime} regime transition does not have a high-probability options setup. Wait for clearer direction.`,
+      dte: expiry.dte
+    });
+  }
+
+  return {
+    fromRegime, toRegime, niftyLTP, atm, atr: atr1,
+    expiry, spreads,
+    timestamp: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})
+  };
+}
+
+/* Check for regime change and show advisor */
+function checkRegimeChangeOptions() {
+  const cur = overallRegime;
+  const prev = _lastKnownRegime;
+
+  if (!cur) return;
+
+  /* First load — just record regime */
+  if (!prev) {
+    _lastKnownRegime = cur;
+    localStorage.setItem(OPT_REGIME_KEY, cur);
+    renderOptionsAdvisor(cur, null, null);
+    return;
+  }
+
+  if (prev !== cur) {
+    /* Regime changed! */
+    _lastKnownRegime = cur;
+    localStorage.setItem(OPT_REGIME_KEY, cur);
+    const data = generateSpreadSuggestions(prev, cur);
+    _optAdvisorData = data;
+    renderOptionsAdvisor(cur, prev, data);
+    /* Show toast + header pill alert */
+    toast('⚡ Regime changed: ' + prev.toUpperCase() + ' → ' + cur.toUpperCase() + ' — Check Options tab', 'ok');
+    playBreakoutSound(cur === 'full' || cur === 'mixed');
+    var rcp = document.getElementById('pill-regime-change');
+    if (rcp) {
+      rcp.style.display = 'inline-block';
+      rcp.textContent = '⚡ ' + prev.toUpperCase() + '→' + cur.toUpperCase() + ' Options';
+      rcp.className = 'pill ' + (cur==='full'?'p-bull':cur==='bear'?'p-bear':'p-amber');
+    }
+  } else {
+    /* Same regime — just ensure advisor shows current status */
+    if (!_optAdvisorData) {
+      renderOptionsAdvisor(cur, null, null);
+    }
+  }
+}
+
+function renderOptionsAdvisor(curRegime, prevRegime, data) {
+  const wrap = document.getElementById('optAdvisorWrap');
+  if (!wrap) return;
+
+  const expiry   = getMonthlyExpiry();
+  const niftyLTP = getNiftyLTP();
+  const atr      = getNiftyATR();
+
+  const regimeColors = {
+    full:    'var(--bull)',
+    bear:    'var(--bear)',
+    mixed:   'var(--amber)',
+    caution: 'var(--text2)'
+  };
+  const curCol  = regimeColors[curRegime]  || 'var(--text2)';
+  const prevCol = prevRegime ? (regimeColors[prevRegime] || 'var(--text3)') : null;
+
+  /* Header — always shown */
+  let html = `
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+      <div>
+        ${prevRegime
+          ? `<span style="font-size:9px;color:${prevCol};font-weight:700">${prevRegime.toUpperCase()}</span>
+             <span style="font-size:9px;color:var(--text3)"> → </span>`
+          : ''}
+        <span style="font-size:11px;color:${curCol};font-weight:900">${curRegime.toUpperCase()}</span>
+        ${prevRegime
+          ? '<span style="font-size:8px;color:var(--amber);margin-left:8px;background:rgba(217,119,6,.15);padding:2px 8px;border-radius:10px">⚡ REGIME CHANGED</span>'
+          : '<span style="font-size:8px;color:var(--text3);margin-left:8px">No change today</span>'}
+      </div>
+      <div style="margin-left:auto;text-align:right;font-family:var(--mono);font-size:8px;color:var(--text3)">
+        Nifty LTP: <span style="color:var(--bright);font-weight:700">${niftyLTP ? niftyLTP.toLocaleString('en-IN') : '—'}</span>
+        &nbsp;·&nbsp; ATR(14): <span style="color:var(--amber)">${atr || '—'} pts</span>
+        &nbsp;·&nbsp; Monthly expiry: <span style="color:var(--kite)">${expiry.date}</span>
+        &nbsp;·&nbsp; DTE: <span style="color:${expiry.dte <= 7 ? 'var(--bear)' : 'var(--text2)'}">${expiry.dte} days</span>
+      </div>
+    </div>`;
+
+  if (!data || !data.spreads || !data.spreads.length) {
+    /* No regime change — show neutral status */
+    html += `<div style="font-family:var(--mono);font-size:9px;color:var(--text3);padding:12px;background:var(--bg3);border-radius:6px">
+      No regime change detected since last upload.
+      Current regime: <span style="color:${curCol};font-weight:700">${curRegime.toUpperCase()}</span>
+      &nbsp;·&nbsp; Advisor activates when regime changes.
+      <br><span style="font-size:8px">Previous recorded: ${_lastKnownRegime||'—'}</span>
+      <br><br>
+      <button onclick="_optAdvisorData=generateSpreadSuggestions('${curRegime}','${curRegime}');renderOptionsAdvisor('${curRegime}','${curRegime}',_optAdvisorData)"
+        style="font-family:var(--mono);font-size:8px;background:var(--bg2);border:1px solid var(--border);color:var(--kite);border-radius:4px;padding:3px 10px;cursor:pointer">
+        Show current regime spreads anyway
+      </button>
+    </div>`;
+    wrap.innerHTML = html;
+    return;
+  }
+
+  /* Render each spread suggestion */
+  html += data.spreads.map((sp, si) => {
+    const biasCol = sp.bias.includes('Bull') ? 'var(--bull)'
+                  : sp.bias.includes('Bear') ? 'var(--bear)'
+                  : sp.bias.includes('Neutral') ? 'var(--text2)' : 'var(--amber)';
+
+    const legsHtml = sp.legs.length
+      ? `<table style="width:100%;border-collapse:collapse;margin:8px 0;font-size:8px">
+          <thead><tr style="color:var(--text3);border-bottom:1px solid var(--border)">
+            <th style="text-align:left;padding:3px 6px">Action</th>
+            <th style="padding:3px 6px">Type</th>
+            <th style="padding:3px 6px">Strike</th>
+            <th style="padding:3px 6px">Expiry</th>
+            <th style="text-align:left;padding:3px 6px">Note</th>
+            <th style="padding:3px 6px">Kite</th>
+          </tr></thead>
+          <tbody>
+          ${sp.legs.map(leg => {
+            const ac = leg.action === 'BUY' ? 'var(--bull)' : 'var(--bear)';
+            const kiteUrl = 'https://kite.zerodha.com/orders';
+            return `<tr style="border-bottom:1px solid var(--border)22">
+              <td style="padding:3px 6px;font-weight:700;color:${ac}">${leg.action}</td>
+              <td style="padding:3px 6px;text-align:center;font-weight:700;color:${leg.type==='CE'?'var(--bull)':'var(--bear)'}">${leg.type}</td>
+              <td style="padding:3px 6px;text-align:center;font-weight:700;color:var(--bright)">${leg.strike.toLocaleString('en-IN')}</td>
+              <td style="padding:3px 6px;text-align:center;color:var(--text2)">${leg.exp}</td>
+              <td style="padding:3px 6px;color:var(--text3)">${leg.note}</td>
+              <td style="padding:3px 6px;text-align:center">
+                <a href="${kiteUrl}" target="_blank"
+                   style="font-family:var(--mono);font-size:7px;background:rgba(99,102,241,.2);color:var(--kite);border-radius:3px;padding:2px 6px;text-decoration:none">
+                  Place →
+                </a>
+              </td>
+            </tr>`;
+          }).join('')}
+          </tbody>
+        </table>`
+      : '';
+
+    return `
+    <div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid ${biasCol};border-radius:8px;padding:10px 14px;margin-bottom:8px;font-family:var(--mono)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap">
+        <span style="font-size:11px;font-weight:800;color:var(--bright)">${si+1}. ${sp.strategy}</span>
+        <span style="font-size:8px;padding:2px 8px;border-radius:10px;background:${biasCol}22;color:${biasCol};font-weight:700">${sp.bias}</span>
+        <span style="font-size:8px;color:var(--text3);margin-left:auto">DTE: ${sp.dte} days</span>
+      </div>
+      <div style="font-size:8px;color:var(--text2);margin-bottom:8px;line-height:1.6">${sp.why}</div>
+      ${legsHtml}
+      <div style="display:flex;gap:16px;font-size:8px;flex-wrap:wrap">
+        <span><span style="color:var(--bull);font-weight:700">Max Profit:</span> <span style="color:var(--text2)">${sp.maxProfit}</span></span>
+        <span><span style="color:var(--bear);font-weight:700">Max Loss:</span> <span style="color:var(--text2)">${sp.maxLoss}</span></span>
+        <span><span style="color:var(--kite);font-weight:700">Ideal:</span> <span style="color:var(--text2)">${sp.idealMove}</span></span>
+      </div>
+    </div>`;
+  }).join('');
+
+  html += `<div style="font-family:var(--mono);font-size:7px;color:var(--text3);padding:6px;border-top:1px solid var(--border);margin-top:6px;line-height:1.6">
+    ⚠ These are strategy suggestions based on ATR and regime data only. Actual premiums depend on IV — check Kite option chain before placing.
+    Lot size = 75 · Nifty strikes at 50pt intervals · Monthly expiry = last Tuesday of month.
+    <strong>This is NOT financial advice.</strong>
+  </div>`;
+
+  wrap.innerHTML = html;
 }
 
 /* ── Chart Any Stock helpers (clean — no inline JS) ── */
