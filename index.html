@@ -787,6 +787,7 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
 <!-- PAGE 3: INTELLIGENCE LAB -->
 <div class="page" id="page-intel">
   <div class="intel-tabs">
+    <button class="i-tab" onclick="switchIntel('brkoutcomes')" style="background:rgba(239,68,68,.12);color:var(--bear);font-weight:800">⚡ Breakouts</button>
     <button class="i-tab" onclick="switchIntel('options')" style="background:rgba(99,102,241,.18);color:var(--kite);font-weight:800">📊 Options</button>
     <button class="i-tab" onclick="switchIntel('phase5')" style="background:rgba(124,58,237,.18);color:var(--purple);font-weight:800">🧬 Phase 5</button>
     <!-- sectormom tab merged into sectortracker — hidden -->
@@ -812,6 +813,20 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
     <button class="i-tab" onclick="switchIntel('orderlog')" style="background:rgba(99,102,241,.12);color:var(--kite)">📋 Order Log</button>
     <button class="i-tab" onclick="switchIntel('gapopen')" style="background:rgba(234,88,12,.12);color:var(--exit);font-weight:800">⚡ Gap Open</button>
   </div>
+  <!-- ═══ BREAKOUT OUTCOMES PANEL ═══ -->
+  <div class="i-panel card" id="intel-brkoutcomes" style="border-radius:0 0 var(--r-lg) var(--r-lg)">
+    <div class="ct" style="color:var(--bear)">
+      <i class="fas fa-bolt"></i>
+      Breakout Ledger — 3d / 5d / 10d Outcome Tracking · Buy &amp; Sell Separate
+    </div>
+    <div style="font-family:var(--mono);font-size:8px;color:var(--text3);padding:4px 0 10px">
+      All breakouts logged with date+time · levels: 20D/10D swing, 52W high, Pivot R1/S1 · outcomes resolve automatically from CSV data
+    </div>
+    <div id="brkOutcomeWrap" style="font-family:var(--mono);font-size:9px;color:var(--text3)">
+      Load CSV + connect Kite to start logging breakouts.
+    </div>
+  </div>
+
   <!-- ═══ OPTIONS SPREAD ADVISOR PANEL ═══ -->
   <div class="i-panel card" id="intel-options" style="border-radius:0 0 var(--r-lg) var(--r-lg)">
     <div class="ct" style="color:var(--kite)">
@@ -2093,7 +2108,7 @@ async function processAll(bySymbol){
   saveMeta(Object.assign({},meta,{sessions:sessionCount,lastDate:lastDateVal}));
   setProgress(100,'Done!');
   toast(`${allSignals.length} signals · ${newAdded} new · ${resolved} resolved · Session ${sessionCount}`,'ok');
-  updatePills();populateFilters();populateAnticipationSectors();renderPage1();renderPage2();renderPage3();updateDPFPnL();snapshotFullUniverse();resolveUniverseOutcomes();buildSectorMomentum();buildUnbiasedWRMap();recalibrateWeights();recalibratePBWeights();buildBreakoutLevels();buildMonthlyHeatmap();checkRegimeChangeOptions();
+  updatePills();populateFilters();populateAnticipationSectors();renderPage1();renderPage2();renderPage3();updateDPFPnL();snapshotFullUniverse();resolveUniverseOutcomes();buildSectorMomentum();buildUnbiasedWRMap();recalibrateWeights();recalibratePBWeights();buildBreakoutLevels();buildMonthlyHeatmap();checkRegimeChangeOptions();resolveBreakoutOutcomes();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -4378,7 +4393,7 @@ function updatePills(){const buys=allSignals.filter(s=>s.signal.startsWith('B'))
 function switchPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.page-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+name);if(pg)pg.classList.add('active');document.querySelectorAll('.page-tab').forEach(t=>{if((t.getAttribute('onclick')||'').includes("'"+name+"'"))t.classList.add('active')});if(name==='intel')renderIntelActive();if(name==='portfolio')renderPage2();if(name==='nifty')renderNiftyPage();if(name==='broker'){switchBrokerTab('orders');brokerRefreshAll()}}
 function switchIntel(name){document.querySelectorAll('.i-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.i-tab').forEach(t=>t.classList.remove('active'));document.getElementById('intel-'+name).classList.add('active');event.target.classList.add('active');renderIntelTab(name)}
 function renderIntelActive(){const active=document.querySelector('.i-panel.active');if(active)renderIntelTab(active.id.replace('intel-',''))}
-function renderIntelTab(name){const map={options:function(){checkRegimeChangeOptions();if(!_optAdvisorData)renderOptionsAdvisor(overallRegime,null,null);else renderOptionsAdvisor(overallRegime,_lastKnownRegime,_optAdvisorData);},phase5:renderPhase5Dashboard,sectormom:renderSectorMomentumTab,anticipation:renderAnticipation,hc:renderHighConviction,m6:function(){renderM6();renderUnbiasedPanel();},m1:renderM1,m4:renderM4,m2:renderM2,m3:renderM3,m5:renderM5,m7:renderM7,tpsl:renderTPSL,mb:renderMB,sectors:renderSectors,sectortracker:function(){if(!Object.keys(sectorMomentum).length)buildSectorMomentum();renderSectorTracker();updateRotationStrip();renderMonthlyHeatmap();renderSeasonalInsights();},ledger:renderLedger,retcorr:renderRetCorr,wrref:function(){},regimexperf:function(){renderRegimeCrossPerf()},slDash:renderSLDash,dailymovers:renderDailyMovers,orderlog:renderOrderLog,gapopen:renderGapOpen};if(map[name])map[name]()}
+function renderIntelTab(name){const map={brkoutcomes:renderBrkOutcomeTable,options:function(){checkRegimeChangeOptions();if(!_optAdvisorData)renderOptionsAdvisor(overallRegime,null,null);else renderOptionsAdvisor(overallRegime,_lastKnownRegime,_optAdvisorData);},phase5:renderPhase5Dashboard,sectormom:renderSectorMomentumTab,anticipation:renderAnticipation,hc:renderHighConviction,m6:function(){renderM6();renderUnbiasedPanel();},m1:renderM1,m4:renderM4,m2:renderM2,m3:renderM3,m5:renderM5,m7:renderM7,tpsl:renderTPSL,mb:renderMB,sectors:renderSectors,sectortracker:function(){if(!Object.keys(sectorMomentum).length)buildSectorMomentum();renderSectorTracker();updateRotationStrip();renderMonthlyHeatmap();renderSeasonalInsights();},ledger:renderLedger,retcorr:renderRetCorr,wrref:function(){},regimexperf:function(){renderRegimeCrossPerf()},slDash:renderSLDash,dailymovers:renderDailyMovers,orderlog:renderOrderLog,gapopen:renderGapOpen};if(map[name])map[name]()}
 
 // FILE HANDLING
 
@@ -7494,23 +7509,32 @@ function mcoRemove(sym, cellId) {
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   LIVE BREAKOUT DETECTOR
-   Monitors Anticipation-flagged stocks via Kite LTP every 30s.
-   Fires when LTP crosses yesterday's high (BUY) or low (SELL).
-   Plays a sound + toast + adds card to Live Breakouts strip.
+   LIVE BREAKOUT DETECTOR  v2  — Professional Grade
+   Levels: 20-day high/low (primary) + 10-day (secondary) + daily pivot
+   Confirmation: volume must be >= 1.4x 20-day avg volume
+   Debounce: 24 hours (one alert per stock per day)
+   Stores to IndexedDB — survives page reload
+   Outcome tracking: 3d, 5d, 10d returns resolved from CSV
    ═══════════════════════════════════════════════════════════════════ */
 
-var breakoutLevels = {};    /* {sym: {high, low, pb_score, fired_up, fired_dn}} */
-var liveBreakouts  = [];    /* [{sym, dir, price, time, pb_score}] */
-var _brkAlerted    = {};    /* debounce — {sym_dir: timestamp} */
-const BRK_DEBOUNCE = 60 * 60 * 1000; /* 60 min between same alert */
+var breakoutLevels  = {};  /* {sym:{hi20,lo20,hi10,lo10,pivotR1,pivotS1,avgVol,pb_score,...}} */
+var liveBreakouts   = [];  /* live session array */
+var _brkAlerted     = {};  /* {sym_dir: timestamp} — 24h debounce */
+const BRK_DEBOUNCE  = 24 * 60 * 60 * 1000; /* 24 hours */
+const BRK_LEDGER_KEY = 'nandi_v8_brk_ledger';
+const BRK_LEDGER_MAX = 1000;
 
-/* Build breakout levels from Anticipation candidates after CSV load */
+/* ── Compute 20-day average volume from Kite zdVolumes history ── */
+function getAvgVolume(sym) {
+  /* We store volume history in allStockData[sym].volHistory */
+  return (allStockData[sym]||{}).avgVolume || null;
+}
+
+/* ── Build professional breakout levels ── */
 function buildBreakoutLevels() {
   breakoutLevels = {};
   if (!Object.keys(allStockData).length) return;
 
-  /* Score every WAIT stock and track those with PB score >= 30 */
   const niftyKey  = 'NSEI' in regimeData ? 'NSEI' : 'CRSLDX' in regimeData ? 'CRSLDX' : null;
   const niftyRows = niftyKey ? regimeData[niftyKey].rows : null;
   const signalSyms = new Set(allSignals.map(s => s.symbol));
@@ -7519,32 +7543,227 @@ function buildBreakoutLevels() {
     const d = allStockData[sym];
     if ((d.index||'') === 'MAJOR INDEX') return;
     const rows = d.rows;
-    if (!rows || rows.length < 8) return;
+    if (!rows || rows.length < 22) return;
 
-    /* Also track confirmed signal stocks */
     const isSig = signalSyms.has(sym);
     let pb_score = 0;
-
     if (!isSig) {
       const pb = calcPreBreakoutScore(sym, rows, niftyRows);
       pb_score = pb.score;
-      if (pb_score < 25) return; /* skip low-scoring WAIT stocks */
+      if (pb_score < 25) return;
     }
 
-    const lastRow = rows[rows.length - 1];
-    const prevRow = rows[rows.length - 2] || lastRow;
+    const n = rows.length - 1;
+
+    /* ── 20-day swing high/low (primary — Minervini/O'Neil standard) ── */
+    /* Exclude today (index n) — use last 20 complete days */
+    let hi20 = 0, lo20 = Infinity;
+    for (let i = Math.max(0, n-20); i < n; i++) {
+      if (rows[i].hi > hi20) hi20 = rows[i].hi;
+      if (rows[i].lo < lo20) lo20 = rows[i].lo;
+    }
+
+    /* ── 10-day swing high/low (secondary — faster signal) ── */
+    let hi10 = 0, lo10 = Infinity;
+    for (let i = Math.max(0, n-10); i < n; i++) {
+      if (rows[i].hi > hi10) hi10 = rows[i].hi;
+      if (rows[i].lo < lo10) lo10 = rows[i].lo;
+    }
+
+    /* ── 52-week high (power breakout level) ── */
+    let hi52 = 0;
+    for (let i = Math.max(0, n-252); i < n; i++) {
+      if (rows[i].hi > hi52) hi52 = rows[i].hi;
+    }
+
+    /* ── Daily Pivot (classic: P = (H+L+C)/3 of yesterday) ── */
+    const prev   = rows[n-1];
+    const pivot  = (prev.hi + prev.lo + prev.cl) / 3;
+    const pivR1  = parseFloat((2*pivot - prev.lo).toFixed(2));  /* R1 */
+    const pivS1  = parseFloat((2*pivot - prev.hi).toFixed(2));  /* S1 */
+
+    /* ── Average volume (20-day) from stored history ── */
+    const avgVol = getAvgVolume(sym);
 
     breakoutLevels[sym] = {
-      high:     prevRow.hi,   /* yesterday's high = breakout level */
-      low:      prevRow.lo,   /* yesterday's low  = breakdown level */
+      /* Primary levels */
+      hi20, lo20,
+      /* Secondary levels */
+      hi10, lo10,
+      /* Power level */
+      hi52,
+      /* Pivot */
+      pivR1, pivS1, pivot: parseFloat(pivot.toFixed(2)),
+      /* Meta */
       pb_score: isSig ? 100 : pb_score,
       is_signal: isSig,
-      sector:   d.sector || '—',
-      fired_up: false,
-      fired_dn: false
+      sector:    d.sector || '—',
+      avgVol,
+      /* Fire flags — reset each day */
+      fired: {}  /* {level_key: true} */
     };
   });
-  console.log('[Breakout] Tracking', Object.keys(breakoutLevels).length, 'stocks for breakout');
+
+  /* Load 24h debounce from today's date key */
+  const today = new Date().toISOString().slice(0,10);
+  try {
+    const saved = localStorage.getItem('brkDebounce_'+today);
+    if (saved) _brkAlerted = JSON.parse(saved);
+    else _brkAlerted = {};
+  } catch(e) { _brkAlerted = {}; }
+
+  /* Load today's breakouts from IndexedDB */
+  loadTodayBreakouts();
+
+  console.log('[Breakout v2] Tracking', Object.keys(breakoutLevels).length,
+    'stocks · 20d/10d swing + pivot levels');
+}
+
+/* ── Check LTP against all professional levels ── */
+function checkBreakouts() {
+  if (!zdLiveMode || !Object.keys(breakoutLevels).length) return;
+  let newBreaks = 0;
+  const now   = Date.now();
+  const today = new Date().toISOString().slice(0,10);
+  const datetime = new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short'})
+                 + ' ' + new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+
+  Object.keys(breakoutLevels).forEach(sym => {
+    const lvl = breakoutLevels[sym];
+    const ltp = zdPrices[sym] || zdPrices['NSE:'+sym];
+    if (!ltp || ltp <= 0) return;
+
+    /* Volume confirmation — is today's volume significant? */
+    const liveVol = zdVolumes[sym] || zdVolumes['NSE:'+sym] || 0;
+    const volRatio = lvl.avgVol ? liveVol / lvl.avgVol : null;
+    const volConfirmed  = volRatio === null || volRatio >= 1.4;
+    const volLabel = volRatio ? (volRatio >= 1.4
+      ? 'Vol '+volRatio.toFixed(1)+'x ✓'
+      : 'Vol '+volRatio.toFixed(1)+'x (low)') : 'Vol N/A';
+
+    /* Define levels to check with priority */
+    const levels = [
+      { key:'hi52',  price: lvl.hi52,  dir:'BUY',  label:'52W High',  priority: 1, confirmed: volConfirmed },
+      { key:'hi20',  price: lvl.hi20,  dir:'BUY',  label:'20D High',  priority: 2, confirmed: volConfirmed },
+      { key:'pivR1', price: lvl.pivR1, dir:'BUY',  label:'Pivot R1',  priority: 3, confirmed: true },
+      { key:'hi10',  price: lvl.hi10,  dir:'BUY',  label:'10D High',  priority: 4, confirmed: volConfirmed },
+      { key:'lo20',  price: lvl.lo20,  dir:'SELL', label:'20D Low',   priority: 2, confirmed: volConfirmed },
+      { key:'pivS1', price: lvl.pivS1, dir:'SELL', label:'Pivot S1',  priority: 3, confirmed: true },
+      { key:'lo10',  price: lvl.lo10,  dir:'SELL', label:'10D Low',   priority: 4, confirmed: volConfirmed },
+    ];
+
+    levels.forEach(l => {
+      if (!l.price || l.price <= 0) return;
+
+      /* Already fired this level today? */
+      const alertKey = sym + '_' + l.key;
+      if (_brkAlerted[alertKey]) return;
+
+      const triggered = l.dir === 'BUY' ? ltp > l.price : ltp < l.price;
+      if (!triggered) return;
+
+      /* Fire the breakout */
+      _brkAlerted[alertKey] = now;
+
+      const pct = l.dir === 'BUY'
+        ? parseFloat(((ltp - l.price)/l.price*100).toFixed(2))
+        : parseFloat(((l.price - ltp)/l.price*100).toFixed(2));
+
+      const brk = {
+        id:          sym + '_' + l.key + '_' + today,
+        sym,
+        dir:         l.dir,
+        price:       ltp,
+        level:       parseFloat(l.price.toFixed(2)),
+        level_type:  l.label,
+        level_priority: l.priority,
+        pct,
+        datetime,
+        date:        today,
+        ts:          now,
+        vol_label:   volLabel,
+        vol_confirmed: l.confirmed,
+        pb_score:    lvl.pb_score,
+        sector:      lvl.sector,
+        is_signal:   lvl.is_signal,
+        source:      lvl.is_signal ? 'Signal' : 'WAIT (PB:'+lvl.pb_score+')',
+        tv_url:      'https://www.tradingview.com/chart/?symbol=NSE:'+sym,
+        /* Outcome fields — resolved later from CSV */
+        outcome_3d: null, chg_3d: null,
+        outcome_5d: null, chg_5d: null,
+        outcome_10d: null, chg_10d: null,
+        failed:     false,  /* true if price returns below level within 3d */
+        status:     'open'
+      };
+
+      /* Only add to live array if not duplicate */
+      if (!liveBreakouts.find(b => b.id === brk.id)) {
+        liveBreakouts.unshift(brk);
+        saveBrkToLedger(brk);
+        newBreaks++;
+
+        /* Alert only for high-priority levels or confirmed volume */
+        if (l.priority <= 2 || l.confirmed) {
+          playBreakoutSound(l.dir === 'BUY');
+          const icon = l.dir === 'BUY' ? '⚡ BUY' : '⚡ SELL';
+          const conf = l.confirmed ? '' : ' (low vol)';
+          toast(icon + ' ' + sym + ' ' + l.label + conf + ' ₹' + ltp.toFixed(1),
+                l.dir === 'BUY' ? 'ok' : 'err');
+        }
+      }
+    });
+  });
+
+  /* Save debounce state for today */
+  if (newBreaks) {
+    try { localStorage.setItem('brkDebounce_'+today, JSON.stringify(_brkAlerted)); } catch(e) {}
+    renderBreakoutStrip();
+  }
+}
+
+/* ── Resolve outcomes for historical breakouts from CSV data ── */
+function resolveBreakoutOutcomes() {
+  idbGet(BRK_LEDGER_KEY).then(ledger => {
+    if (!ledger || !ledger.length) return;
+    let updated = 0;
+    ledger.forEach(brk => {
+      if (brk.outcome_10d !== null) return; /* fully resolved */
+      const rows = (allStockData[brk.sym]||{}).rows;
+      if (!rows || !rows.length) return;
+
+      const entryIdx = rows.findIndex(r => r.date >= brk.date);
+      if (entryIdx < 0) return;
+
+      [3, 5, 10].forEach(d => {
+        const key_chg = 'chg_'+d+'d', key_out = 'outcome_'+d+'d';
+        if (brk[key_out] !== null) return;
+        const futureIdx = entryIdx + d;
+        if (futureIdx >= rows.length) return;
+        const chg = parseFloat(((rows[futureIdx].cl - brk.price) / brk.price * 100).toFixed(2));
+        brk[key_chg] = chg;
+        /* For BUY: positive is good; for SELL: negative is good */
+        const win = brk.dir === 'BUY' ? chg > 0 : chg < 0;
+        const big = Math.abs(chg) >= 3;
+        brk[key_out] = big && win ? 'strong' : win ? 'mild' : big ? 'failed' : 'flat';
+        updated++;
+      });
+
+      /* Check if price failed (returned below breakout level within 3d) */
+      if (!brk.failed) {
+        const check3 = entryIdx + 3;
+        if (check3 < rows.length) {
+          const failed3 = brk.dir === 'BUY'
+            ? rows[check3].cl < brk.level
+            : rows[check3].cl > brk.level;
+          if (failed3) { brk.failed = true; brk.status = 'failed'; updated++; }
+        }
+      }
+    });
+    if (updated) {
+      idbSet(BRK_LEDGER_KEY, ledger);
+      console.log('[Breakout] Resolved', updated, 'outcome fields');
+    }
+  }).catch(() => {});
 }
 
 /* Beep using Web Audio API — no files needed */
@@ -8376,6 +8595,223 @@ function renderOptionsAdvisor(curRegime, prevRegime, data) {
   </div>`;
 
   wrap.innerHTML = html;
+}
+
+
+/* ── Save single breakout to IndexedDB ledger ── */
+function saveBrkToLedger(brk) {
+  idbGet(BRK_LEDGER_KEY).then(ledger => {
+    const arr = ledger && Array.isArray(ledger) ? ledger : [];
+    /* Deduplicate by id */
+    if (!arr.find(b => b.id === brk.id)) {
+      arr.unshift(brk);
+      /* Keep only last BRK_LEDGER_MAX entries */
+      const trimmed = arr.slice(0, BRK_LEDGER_MAX);
+      idbSet(BRK_LEDGER_KEY, trimmed);
+    }
+  }).catch(() => {
+    /* idb fail — silent */
+  });
+}
+
+/* ── Load today's breakouts from ledger into liveBreakouts ── */
+function loadTodayBreakouts() {
+  const today = new Date().toISOString().slice(0,10);
+  idbGet(BRK_LEDGER_KEY).then(ledger => {
+    if (!ledger || !Array.isArray(ledger)) return;
+    const todayBrk = ledger.filter(b => b.date === today);
+    /* Merge into liveBreakouts without duplicates */
+    todayBrk.forEach(b => {
+      if (!liveBreakouts.find(x => x.id === b.id)) {
+        liveBreakouts.push(b);
+      }
+    });
+    liveBreakouts.sort((a,b) => b.ts - a.ts);
+    if (liveBreakouts.length) renderBreakoutStrip();
+    console.log('[Breakout] Loaded', todayBrk.length, 'breakouts from today');
+  }).catch(() => {});
+}
+
+/* ── Render Breakout Outcome Table (Intel Lab tab) ── */
+function renderBrkOutcomeTable() {
+  const wrap = document.getElementById('brkOutcomeWrap');
+  if (!wrap) return;
+
+  idbGet(BRK_LEDGER_KEY).then(ledger => {
+    if (!ledger || !ledger.length) {
+      wrap.innerHTML = '<div style="font-family:var(--mono);font-size:9px;color:var(--text3);padding:20px">No breakout history yet. Breakouts are logged automatically when Kite is connected.</div>';
+      return;
+    }
+
+    /* Resolve outcomes first */
+    resolveBreakoutOutcomes();
+
+    const dirFilter = document.getElementById('brkDirFilter')?.value || 'all';
+    const lvlFilter = document.getElementById('brkLvlFilter')?.value || 'all';
+
+    let data = ledger;
+    if (dirFilter !== 'all') data = data.filter(b => b.dir === dirFilter);
+    if (lvlFilter !== 'all') data = data.filter(b => (b.level_type||'').includes(lvlFilter));
+
+    const buys  = data.filter(b => b.dir === 'BUY');
+    const sells = data.filter(b => b.dir === 'SELL');
+
+    /* Stats */
+    function stats(arr) {
+      const resolved = arr.filter(b => b.outcome_5d !== null);
+      if (!resolved.length) return null;
+      const wins = resolved.filter(b => b.outcome_5d === 'strong' || b.outcome_5d === 'mild').length;
+      const avgChg = parseFloat((resolved.reduce((s,b)=>s+(b.chg_5d||0),0)/resolved.length).toFixed(1));
+      const failed = resolved.filter(b => b.failed).length;
+      return { total: arr.length, resolved: resolved.length,
+               wr: Math.round(wins/resolved.length*100), avgChg, failed };
+    }
+
+    const buyStats  = stats(buys);
+    const sellStats = stats(sells);
+
+    function statBox(label, s, col) {
+      if (!s) return `<div style="background:var(--bg3);border-radius:6px;padding:8px 12px;font-family:var(--mono);text-align:center;flex:1">
+        <div style="font-size:9px;color:${col};font-weight:700">${label}</div>
+        <div style="font-size:8px;color:var(--text3)">No resolved data yet</div></div>`;
+      return `<div style="background:var(--bg3);border-radius:6px;padding:8px 12px;font-family:var(--mono);text-align:center;flex:1;border-left:3px solid ${col}">
+        <div style="font-size:9px;color:${col};font-weight:700">${label}</div>
+        <div style="font-size:16px;font-weight:900;color:${s.wr>=55?'var(--bull)':s.wr>=45?'var(--amber)':'var(--bear)'}">${s.wr}%</div>
+        <div style="font-size:8px;color:var(--text3)">Win rate (5d)</div>
+        <div style="font-size:9px;color:${s.avgChg>0?'var(--bull)':'var(--bear)'};margin-top:3px">${s.avgChg>0?'+':''}${s.avgChg}% avg</div>
+        <div style="font-size:7px;color:var(--text3)">${s.resolved}/${s.total} resolved · ${s.failed} failed</div>
+      </div>`;
+    }
+
+    function outcomeCol(val, chg, dir) {
+      if (val === null || val === undefined) return '<span style="color:var(--text3)">—</span>';
+      const win = dir==='BUY' ? (chg||0)>0 : (chg||0)<0;
+      const col = val==='strong'?'var(--bull)':val==='mild'?'var(--kite)':val==='failed'?'var(--bear)':'var(--text3)';
+      const icon = val==='strong'?'★':val==='mild'?'▲':val==='failed'?'✗':'—';
+      return `<span style="color:${col};font-weight:700">${icon} ${chg!==null?(chg>0?'+':'')+chg+'%':'—'}</span>`;
+    }
+
+    function tableHTML(arr, accent) {
+      if (!arr.length) return '<div style="font-family:var(--mono);font-size:9px;color:var(--text3);padding:10px">No breakouts in this category</div>';
+      return `<div style="overflow-x:auto;max-height:320px;overflow-y:auto">
+        <table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:8px">
+          <thead style="position:sticky;top:0;background:var(--bg2);z-index:1">
+            <tr style="border-bottom:2px solid ${accent}44;color:var(--text3)">
+              <th style="text-align:left;padding:4px 8px">Symbol</th>
+              <th style="padding:4px 6px">Level</th>
+              <th style="padding:4px 6px">Price</th>
+              <th style="padding:4px 6px">Date &amp; Time</th>
+              <th style="padding:4px 6px">Volume</th>
+              <th style="padding:4px 6px;color:var(--kite)">3d</th>
+              <th style="padding:4px 6px;color:var(--kite)">5d</th>
+              <th style="padding:4px 6px;color:var(--kite)">10d</th>
+              <th style="padding:4px 6px;color:var(--bear)">Failed?</th>
+              <th style="padding:4px 6px">Source</th>
+              <th style="padding:4px 6px">Chart</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${arr.map((b,i) => {
+              const statusBg = b.failed ? 'rgba(239,68,68,.08)' : '';
+              return `<tr style="border-bottom:1px solid var(--border)22;background:${statusBg}">
+                <td style="padding:4px 8px;font-weight:700;color:var(--bright)">${b.sym}</td>
+                <td style="padding:4px 6px;text-align:center">
+                  <span style="font-size:7px;padding:1px 5px;border-radius:3px;background:${accent}22;color:${accent};font-weight:700">${b.level_type||'—'}</span>
+                  <div style="font-size:7px;color:var(--text3)">₹${b.level}</div>
+                </td>
+                <td style="padding:4px 6px;text-align:center;font-weight:700;color:${accent}">₹${b.price.toFixed(1)}</td>
+                <td style="padding:4px 6px;text-align:center;color:var(--text2);font-size:7px">${b.datetime||b.date}</td>
+                <td style="padding:4px 6px;text-align:center;font-size:7px;color:${b.vol_confirmed?'var(--bull)':'var(--text3)'}">${b.vol_label||'—'}</td>
+                <td style="padding:4px 6px;text-align:center">${outcomeCol(b.outcome_3d,b.chg_3d,b.dir)}</td>
+                <td style="padding:4px 6px;text-align:center">${outcomeCol(b.outcome_5d,b.chg_5d,b.dir)}</td>
+                <td style="padding:4px 6px;text-align:center">${outcomeCol(b.outcome_10d,b.chg_10d,b.dir)}</td>
+                <td style="padding:4px 6px;text-align:center;font-size:8px;color:${b.failed?'var(--bear)':'var(--text3)'}">${b.failed?'✗ Failed':'—'}</td>
+                <td style="padding:4px 6px;text-align:center">
+                  <span style="font-size:7px;padding:1px 5px;border-radius:3px;background:${b.is_signal?'rgba(34,197,94,.15)':'rgba(217,119,6,.15)'};color:${b.is_signal?'var(--bull)':'var(--amber)'}">${b.source||'—'}</span>
+                </td>
+                <td style="padding:4px 6px;text-align:center">
+                  <button onclick="vOpenAnyChart('${b.sym}')" style="font-family:var(--mono);font-size:7px;background:var(--amber);color:#000;border:none;border-radius:3px;padding:2px 5px;cursor:pointer">📊</button>
+                  <a href="${b.tv_url||'#'}" target="_blank" style="font-family:var(--mono);font-size:7px;background:var(--kite);color:#fff;border-radius:3px;padding:2px 5px;text-decoration:none">TV</a>
+                </td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+    }
+
+    wrap.innerHTML = `
+      <!-- Stats row -->
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+        ${statBox('▲ BUY Breakouts', buyStats, 'var(--bull)')}
+        ${statBox('▼ SELL Breakdowns', sellStats, 'var(--bear)')}
+        <div style="background:var(--bg3);border-radius:6px;padding:8px 12px;font-family:var(--mono);text-align:center;flex:1">
+          <div style="font-size:9px;color:var(--amber);font-weight:700">Total Logged</div>
+          <div style="font-size:16px;font-weight:900;color:var(--bright)">${ledger.length}</div>
+          <div style="font-size:8px;color:var(--text3)">across all sessions</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;font-family:var(--mono);font-size:9px;flex-wrap:wrap">
+        <span style="color:var(--text2)">Filter:</span>
+        <select id="brkDirFilter" class="fi" onchange="renderBrkOutcomeTable()" style="font-size:9px;padding:2px 6px">
+          <option value="all">All directions</option>
+          <option value="BUY">BUY only</option>
+          <option value="SELL">SELL only</option>
+        </select>
+        <select id="brkLvlFilter" class="fi" onchange="renderBrkOutcomeTable()" style="font-size:9px;padding:2px 6px">
+          <option value="all">All levels</option>
+          <option value="20D">20D High/Low</option>
+          <option value="10D">10D High/Low</option>
+          <option value="52W">52W High</option>
+          <option value="Pivot">Pivot R1/S1</option>
+        </select>
+        <button class="btn btn-d" style="font-size:9px;padding:3px 10px" onclick="resolveBreakoutOutcomes();renderBrkOutcomeTable()">
+          <i class="fas fa-sync-alt"></i> Resolve Outcomes
+        </button>
+        <button class="btn btn-d" style="font-size:9px;padding:3px 10px" onclick="exportBrkLedger()">⬇ CSV</button>
+        <span style="color:var(--text3);font-size:8px;margin-left:auto">${data.length} records shown · ${ledger.length} total</span>
+      </div>
+
+      <!-- Legend -->
+      <div style="font-family:var(--mono);font-size:7px;color:var(--text3);padding:4px 0 8px;display:flex;gap:12px;flex-wrap:wrap">
+        <span><span style="color:var(--bull)">★ strong</span> = 3%+ move in right direction</span>
+        <span><span style="color:var(--kite)">▲ mild</span> = moved correctly but &lt;3%</span>
+        <span><span style="color:var(--bear)">✗ failed</span> = price returned below breakout level within 3d</span>
+        <span><span style="color:var(--bull)">Vol 1.8x ✓</span> = volume confirmed (≥1.4x avg)</span>
+      </div>
+
+      <!-- BUY table -->
+      <div style="font-family:var(--mono);font-size:9px;font-weight:700;color:var(--bull);margin-bottom:6px">▲ BUY Breakouts (${buys.length})</div>
+      ${tableHTML(buys, 'var(--bull)')}
+
+      <!-- SELL table -->
+      <div style="font-family:var(--mono);font-size:9px;font-weight:700;color:var(--bear);margin-top:14px;margin-bottom:6px">▼ SELL Breakdowns (${sells.length})</div>
+      ${tableHTML(sells, 'var(--bear)')}
+    `;
+  }).catch(() => {
+    wrap.innerHTML = '<div style="font-family:var(--mono);font-size:9px;color:var(--text3);padding:20px">Error loading breakout ledger</div>';
+  });
+}
+
+function exportBrkLedger() {
+  idbGet(BRK_LEDGER_KEY).then(ledger => {
+    if (!ledger||!ledger.length){toast('No breakout data to export','err');return;}
+    const hdr=['Date','Time','Symbol','Direction','Level Type','Level ₹','Price ₹','%Break','Volume','3d%','5d%','10d%','Failed','Source','TradingView'];
+    const rows = ledger.map(b=>[
+      b.date, (b.datetime||'').split(' ').pop(),
+      b.sym, b.dir, b.level_type||'—', b.level, b.price.toFixed(2), b.pct,
+      b.vol_label||'—', b.chg_3d||'', b.chg_5d||'', b.chg_10d||'',
+      b.failed?'YES':'', b.source||'', b.tv_url||''
+    ]);
+    const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+    a.download='breakout_ledger_'+new Date().toISOString().slice(0,10)+'.csv';
+    a.click();
+    toast('Breakout ledger exported','ok');
+  });
 }
 
 /* ── Chart Any Stock helpers (clean — no inline JS) ── */
