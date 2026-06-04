@@ -607,11 +607,15 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
 
 <!-- PAGE 1: SCANNER -->
 <div class="page active" id="page-scanner">
+  <!-- ══ NEAR BREAKOUT WATCHLIST BAR ══ -->
+  <div id="nearBreakoutBar" style="display:none;align-items:center;gap:0;padding:5px 12px;background:rgba(99,179,237,.06);border-bottom:1px solid rgba(99,179,237,.2);font-family:var(--mono)"></div>
+
   <!-- ══ LIVE BREAKOUTS STRIP ══ -->
   <div id="liveBreakoutsStrip" style="display:none;background:var(--bg2);border-bottom:2px solid var(--amber);font-family:var(--mono)">
     <!-- Header row -->
     <div style="display:flex;align-items:center;gap:8px;padding:6px 12px 4px;flex-wrap:wrap">
-      <span style="font-size:10px;font-weight:800;color:var(--amber)">⚡ LIVE BREAKOUTS</span>
+      <span style="font-size:10px;font-weight:800;color:var(--amber)">⚡ BREAKOUTS</span>
+      <span id="brkSourceLabel" style="font-size:7px;color:var(--text3);background:var(--bg3);border-radius:3px;padding:1px 6px">CSV close · Live when Kite connected</span>
       <span id="liveBreakoutCount" style="font-size:8px;color:var(--text3)">0 today</span>
       <span id="liveBreakoutBuyCount" style="font-size:8px;color:var(--bull);font-weight:700"></span>
       <span id="liveBreakoutSellCount" style="font-size:8px;color:var(--bear);font-weight:700"></span>
@@ -2108,7 +2112,7 @@ async function processAll(bySymbol){
   saveMeta(Object.assign({},meta,{sessions:sessionCount,lastDate:lastDateVal}));
   setProgress(100,'Done!');
   toast(`${allSignals.length} signals · ${newAdded} new · ${resolved} resolved · Session ${sessionCount}`,'ok');
-  updatePills();populateFilters();populateAnticipationSectors();renderPage1();renderPage2();renderPage3();updateDPFPnL();snapshotFullUniverse();resolveUniverseOutcomes();buildSectorMomentum();buildUnbiasedWRMap();recalibrateWeights();recalibratePBWeights();buildBreakoutLevels();buildMonthlyHeatmap();checkRegimeChangeOptions();resolveBreakoutOutcomes();
+  updatePills();populateFilters();populateAnticipationSectors();renderPage1();renderPage2();renderPage3();updateDPFPnL();snapshotFullUniverse();resolveUniverseOutcomes();buildSectorMomentum();buildUnbiasedWRMap();recalibrateWeights();recalibratePBWeights();buildBreakoutLevels();scanCSVBreakouts();buildMonthlyHeatmap();checkRegimeChangeOptions();resolveBreakoutOutcomes();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2361,7 +2365,7 @@ async function zdFetchHistorical(){
   if(Object.keys(newData).length>50){zdLog(`Fetched ${Object.keys(newData).length} symbols.`);toast(`Fetched ${Object.keys(newData).length} stocks`,'kite');await processAll({...allStockData,...newData})}
   else{zdLog('Historical fetch failed — use CSV approach.');zdSetStatus('Fetch failed — use CSV','err')}
 }
-function zdFetchNow(){checkBreakouts();if(!allSignals.length)return;const brkSyms=Object.keys(breakoutLevels).filter(s=>!allSignals.find(x=>x.symbol===s)).slice(0,50);const syms=[...new Set([...allSignals.map(s=>'NSE:'+s.symbol),...brkSyms.map(s=>'NSE:'+s)])];zdSetDot('fetching');zdFetchLTP(syms).then(ok=>{if(ok){zdSetDot('ok');updateDPFPnL();zdUpdateSignalTable();toast('Live prices updated','kite')}else{zdSetDot('err');toast('LTP fetch failed','err')}})}
+function zdFetchNow(){checkBreakouts();if(!allSignals.length)return;const brkSyms=Object.keys(breakoutLevels).filter(s=>!allSignals.find(x=>x.symbol===s)).slice(0,50);const syms=[...new Set([...allSignals.map(s=>'NSE:'+s.symbol),...brkSyms.map(s=>'NSE:'+s)])];zdSetDot('fetching');zdFetchLTP(syms).then(ok=>{if(ok){zdSetDot('ok');updateDPFPnL();zdUpdateSignalTable();toast('Live prices updated','kite');var sl=document.getElementById('brkSourceLabel');if(sl)sl.textContent='🟢 Live Kite prices';}else{zdSetDot('err');toast('LTP fetch failed','err')}})}
 function zdToggleAuto(){const btn=document.getElementById('zdAutoBtn');if(zdInterval){clearInterval(zdInterval);zdInterval=null;btn.innerHTML='<i class="fas fa-sync"></i> Auto OFF';toast('Auto refresh OFF','info')}else{const now=new Date(),close=new Date();close.setHours(15,30,0,0);if(now>close){toast('Market closed — auto disabled','info');return}zdInterval=setInterval(()=>{const n=new Date(),c=new Date();c.setHours(15,30,0,0);if(n>c){clearInterval(zdInterval);zdInterval=null;btn.innerHTML='<i class="fas fa-sync"></i> Auto OFF';return}zdFetchNow();check3PMAlert();checkAutoExport()},30000);btn.innerHTML='<i class="fas fa-sync fa-spin"></i> Auto ON';toast('Auto refresh ON (30s)','kite');zdFetchNow()}}
 function zdUpdateSignalTable(){
   let updated=0;
@@ -8812,6 +8816,165 @@ function exportBrkLedger() {
     a.click();
     toast('Breakout ledger exported','ok');
   });
+}
+
+
+/* ── CSV-based breakout scan (runs on CSV upload, no Kite needed) ──
+   Uses today's close vs breakout levels to detect breakouts from
+   the uploaded data immediately. Marked as "CSV" source.
+   When Kite connects, live checks supplement/confirm these.        */
+function scanCSVBreakouts() {
+  if (!Object.keys(breakoutLevels).length) return;
+
+  const today    = new Date().toISOString().slice(0,10);
+  const datetime = new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short'})
+                 + ' (CSV close)';
+  let added = 0;
+
+  Object.keys(breakoutLevels).forEach(sym => {
+    const lvl  = breakoutLevels[sym];
+    const rows = (allStockData[sym]||{}).rows;
+    if (!rows || !rows.length) return;
+
+    /* Use the last close in the CSV as proxy LTP */
+    const ltp = rows[rows.length-1].cl;
+    if (!ltp || ltp <= 0) return;
+
+    /* Define levels — same priority as live check */
+    const levels = [
+      {key:'hi52',  price:lvl.hi52,  dir:'BUY',  label:'52W High',  priority:1},
+      {key:'hi20',  price:lvl.hi20,  dir:'BUY',  label:'20D High',  priority:2},
+      {key:'pivR1', price:lvl.pivR1, dir:'BUY',  label:'Pivot R1',  priority:3},
+      {key:'hi10',  price:lvl.hi10,  dir:'BUY',  label:'10D High',  priority:4},
+      {key:'lo20',  price:lvl.lo20,  dir:'SELL', label:'20D Low',   priority:2},
+      {key:'pivS1', price:lvl.pivS1, dir:'SELL', label:'Pivot S1',  priority:3},
+      {key:'lo10',  price:lvl.lo10,  dir:'SELL', label:'10D Low',   priority:4},
+    ];
+
+    levels.forEach(l => {
+      if (!l.price || l.price <= 0) return;
+
+      /* Skip if already alerted today (24h debounce) */
+      const alertKey = sym + '_' + l.key;
+      if (_brkAlerted[alertKey]) return;
+
+      const triggered = l.dir === 'BUY' ? ltp > l.price : ltp < l.price;
+      if (!triggered) return;
+
+      /* Mark as alerted so live Kite doesn't double-fire */
+      _brkAlerted[alertKey] = Date.now();
+
+      const pct = l.dir === 'BUY'
+        ? parseFloat(((ltp - l.price)/l.price*100).toFixed(2))
+        : parseFloat(((l.price - ltp)/l.price*100).toFixed(2));
+
+      /* Only add if significant (>0.3% above level to avoid rounding noise) */
+      if (pct < 0.3) return;
+
+      const brk = {
+        id:           sym+'_'+l.key+'_'+today,
+        sym,
+        dir:          l.dir,
+        price:        parseFloat(ltp.toFixed(2)),
+        level:        parseFloat(l.price.toFixed(2)),
+        level_type:   l.label,
+        level_priority: l.priority,
+        pct,
+        datetime,
+        date:         today,
+        ts:           Date.now(),
+        vol_label:    'CSV close',
+        vol_confirmed: false,
+        pb_score:     lvl.pb_score,
+        sector:       lvl.sector,
+        is_signal:    lvl.is_signal,
+        source:       lvl.is_signal ? 'Signal' : 'WAIT (PB:'+lvl.pb_score+')',
+        tv_url:       'https://www.tradingview.com/chart/?symbol=NSE:'+sym,
+        outcome_3d: null, chg_3d: null,
+        outcome_5d: null, chg_5d: null,
+        outcome_10d:null, chg_10d:null,
+        failed: false, status: 'open'
+      };
+
+      if (!liveBreakouts.find(b => b.id === brk.id)) {
+        liveBreakouts.push(brk);
+        saveBrkToLedger(brk);
+        added++;
+      }
+    });
+  });
+
+  /* Save debounce */
+  try { localStorage.setItem('brkDebounce_'+today, JSON.stringify(_brkAlerted)); } catch(e) {}
+
+  liveBreakouts.sort((a,b) => {
+    /* Sort by priority first, then by pct descending */
+    if (a.level_priority !== b.level_priority) return a.level_priority - b.level_priority;
+    return b.pct - a.pct;
+  });
+
+  if (added) {
+    renderBreakoutStrip();
+    console.log('[Breakout CSV] Found', added, 'breakouts from CSV close prices');
+  }
+
+  /* Also build near-breakout watchlist */
+  buildNearBreakoutList();
+}
+
+/* ── Near-breakout watchlist (stocks within 2% of 20d high) ── */
+var nearBreakoutList = [];
+
+function buildNearBreakoutList() {
+  nearBreakoutList = [];
+  const today = new Date().toISOString().slice(0,10);
+
+  Object.keys(breakoutLevels).forEach(sym => {
+    const lvl  = breakoutLevels[sym];
+    const rows = (allStockData[sym]||{}).rows;
+    if (!rows || !rows.length) return;
+    const ltp   = rows[rows.length-1].cl;
+    const hi20  = lvl.hi20;
+    if (!ltp || !hi20) return;
+
+    const pctFrom20d = (ltp - hi20) / hi20 * 100;
+    /* Near = within -2% of 20d high but NOT already above it */
+    if (pctFrom20d < -2 || pctFrom20d >= 0) return;
+
+    nearBreakoutList.push({
+      sym, ltp, hi20,
+      pctFrom20d: parseFloat(pctFrom20d.toFixed(2)),
+      sector:    lvl.sector,
+      is_signal: lvl.is_signal,
+      pb_score:  lvl.pb_score
+    });
+  });
+
+  nearBreakoutList.sort((a,b) => b.pctFrom20d - a.pctFrom20d); /* closest first */
+  renderNearBreakoutBar();
+}
+
+function renderNearBreakoutBar() {
+  const bar = document.getElementById('nearBreakoutBar');
+  if (!bar) return;
+  if (!nearBreakoutList.length) { bar.style.display='none'; return; }
+
+  bar.style.display = 'flex';
+  const items = nearBreakoutList.slice(0,15);
+  bar.innerHTML = `
+    <span style="font-size:9px;font-weight:700;color:var(--kite);white-space:nowrap;padding-right:8px">
+      👀 Near 20D High:
+    </span>
+    <div style="display:flex;gap:6px;overflow-x:auto;flex:1">
+      ${items.map(s => `
+        <div onclick="vOpenAnyChart('${s.sym}')"
+             style="flex-shrink:0;cursor:pointer;background:var(--bg3);border:1px solid rgba(99,179,237,.3);border-radius:5px;padding:3px 8px;font-family:var(--mono)">
+          <span style="font-size:9px;font-weight:700;color:var(--bright)">${s.sym}</span>
+          <span style="font-size:8px;color:var(--kite);margin-left:4px">${s.pctFrom20d}%</span>
+          <span style="font-size:7px;color:var(--text3);margin-left:3px">₹${s.ltp.toFixed(0)}/₹${s.hi20.toFixed(0)}</span>
+        </div>`).join('')}
+    </div>
+    <span style="font-size:7px;color:var(--text3);white-space:nowrap;padding-left:8px">${nearBreakoutList.length} stocks</span>`;
 }
 
 /* ── Chart Any Stock helpers (clean — no inline JS) ── */
