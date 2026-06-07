@@ -603,6 +603,7 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
   <button class="page-tab" onclick="switchPage('nifty')"><i class="fas fa-chart-line"></i> Nifty Entry Radar</button>
   <button class="page-tab" onclick="switchPage('intel')"><i class="fas fa-brain"></i> Intelligence Lab</button>
   <button class="page-tab" onclick="switchPage('broker')"><i class="fas fa-briefcase"></i> Broker</button>
+  <button class="page-tab" onclick="switchPage('backtest')" style="color:var(--teal)"><i class="fas fa-flask"></i> Backtest</button>
 </div>
 
 <!-- PAGE 1: SCANNER -->
@@ -1229,6 +1230,8 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
       <button class="btn btn-d" onclick="exportDailyMoversCSV()"><i class="fas fa-download"></i> Export CSV</button>
     </div>
     <div class="tw"><table id="dmTable"><thead><tr><th>#</th><th>Symbol</th><th>Sector</th><th>Prev Close</th><th>CMP / Latest</th><th>Today %</th><th>Avg %/day</th><th>Consistency</th><th>Days +2%</th><th>Signal</th><th>SMI</th><th>In Portfolio?</th></tr></thead><tbody id="dmBody"><tr><td colspan="12" class="empty">Load CSV data to see daily movers</td></tr></tbody></table></div>
+  </div><!-- end intel-dailymovers -->
+
   <div class="i-panel card" id="intel-alphauniverse" style="border-radius:0 0 var(--r-lg) var(--r-lg)">
     <div class="ct" style="background:rgba(5,150,105,.12);border-bottom:1px solid rgba(5,150,105,.25)">
       <i class="fas fa-star"></i> 🎯 Alpha Universe — Self-Updating High Win-Rate Stock List
@@ -1557,7 +1560,149 @@ tr.earn td:first-child{border-left:3px solid var(--pink)}
   </div>
 </div>
 
-</div><!-- end shell -->
+<!-- PAGE: BACKTEST -->
+<div class="page" id="page-backtest">
+  <div class="card">
+    <div class="ct"><i class="fas fa-flask"></i> Backtest — 5-Min Intraday TP/SL Hit Rate Analyser</div>
+
+    <!-- ── Instructions ── -->
+    <div style="background:rgba(13,148,136,.08);border:1px solid rgba(13,148,136,.2);border-radius:6px;padding:10px 12px;margin-bottom:12px;font-family:var(--mono);font-size:8px;color:var(--text2);line-height:1.7">
+      <strong style="color:var(--teal)">How to use:</strong>
+      1. Download 5-min OHLC data from Kite/any source for the stocks you want to test &nbsp;·&nbsp;
+      2. Upload the CSV below (supports multiple stocks in one file) &nbsp;·&nbsp;
+      3. Set your TP% and SL% &nbsp;·&nbsp;
+      4. Click <strong>Run Backtest</strong> — results show per stock and overall &nbsp;·&nbsp;
+      <strong style="color:var(--amber)">CSV format:</strong> Date, Symbol, Open, High, Low, Close, Volume (same as your 250-day CSV)
+    </div>
+
+    <!-- ── Controls row ── -->
+    <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px">
+
+      <!-- Upload -->
+      <div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--text2);margin-bottom:4px">5-Min CSV</div>
+        <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:var(--bg3);border:1.5px dashed rgba(13,148,136,.5);border-radius:6px;padding:6px 12px;font-family:var(--mono);font-size:8px;color:var(--teal)"
+          onmouseover="this.style.background='rgba(13,148,136,.08)'" onmouseout="this.style.background='var(--bg3)'">
+          📂 Upload CSV
+          <span id="btFileLabel" style="color:var(--text3)">no file</span>
+          <input type="file" accept=".csv" id="btFileInput" style="display:none" onchange="btHandleFile(this)">
+        </label>
+      </div>
+
+      <!-- TP -->
+      <div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--text2);margin-bottom:4px">Target TP%</div>
+        <input type="number" id="btTP" value="1.3" step="0.1" min="0.1" max="10"
+          style="width:70px;font-family:var(--mono);font-size:10px;padding:5px 8px;border:1px solid var(--border);border-radius:5px;background:var(--bg3);color:var(--text);text-align:center">
+      </div>
+
+      <!-- SL -->
+      <div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--text2);margin-bottom:4px">Stop Loss%</div>
+        <input type="number" id="btSL" value="1.0" step="0.1" min="0.1" max="10"
+          style="width:70px;font-family:var(--mono);font-size:10px;padding:5px 8px;border:1px solid var(--border);border-radius:5px;background:var(--bg3);color:var(--text);text-align:center">
+      </div>
+
+      <!-- Entry type -->
+      <div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--text2);margin-bottom:4px">Entry Signal</div>
+        <select id="btEntryType" style="font-family:var(--mono);font-size:8px;padding:5px 8px;border:1px solid var(--border);border-radius:5px;background:var(--bg3);color:var(--text)">
+          <option value="breakout">Pivot R1 / 10D High Breakout</option>
+          <option value="open">On Open (9:15 candle)</option>
+          <option value="allcandles">All candles (stress test)</option>
+        </select>
+      </div>
+
+      <!-- Holding period -->
+      <div>
+        <div style="font-family:var(--mono);font-size:8px;color:var(--text2);margin-bottom:4px">Max Hold</div>
+        <select id="btMaxHold" style="font-family:var(--mono);font-size:8px;padding:5px 8px;border:1px solid var(--border);border-radius:5px;background:var(--bg3);color:var(--text)">
+          <option value="1">Same day</option>
+          <option value="2" selected>2 days</option>
+          <option value="3">3 days</option>
+          <option value="5">5 days</option>
+          <option value="10">10 days</option>
+        </select>
+      </div>
+
+      <!-- Run button -->
+      <button onclick="btRunBacktest()" id="btRunBtn"
+        style="background:var(--teal);color:#fff;border:none;border-radius:6px;padding:7px 18px;font-family:var(--mono);font-size:9px;font-weight:700;cursor:pointer">
+        ▶ Run Backtest
+      </button>
+
+      <!-- Export button -->
+      <button onclick="btExportResults()" id="btExportBtn" style="display:none;background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;font-family:var(--mono);font-size:9px;cursor:pointer">
+        ⬇ Export CSV
+      </button>
+    </div>
+
+    <!-- ── Progress bar ── -->
+    <div id="btProgress" style="display:none;margin-bottom:10px">
+      <div style="font-family:var(--mono);font-size:8px;color:var(--text2);margin-bottom:4px" id="btProgressLabel">Processing…</div>
+      <div style="background:var(--bg3);border-radius:4px;height:6px;overflow:hidden">
+        <div id="btProgressBar" style="height:100%;background:var(--teal);width:0%;transition:width .2s;border-radius:4px"></div>
+      </div>
+    </div>
+
+    <!-- ── Summary stats ── -->
+    <div id="btSummary" style="display:none;margin-bottom:12px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;padding:10px 0" id="btSummaryCards"></div>
+    </div>
+
+    <!-- ── Per-stock results table ── -->
+    <div id="btResultsWrap" style="display:none">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:700;color:var(--text2);margin-bottom:6px">
+        Per-Stock Results
+        <span id="btFilterRow" style="margin-left:10px">
+          <select id="btSortBy" onchange="btSortResults()" style="font-family:var(--mono);font-size:8px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text)">
+            <option value="wr">Sort: Win Rate</option>
+            <option value="trades">Sort: Trades</option>
+            <option value="sym">Sort: Symbol</option>
+            <option value="exp">Sort: Expectancy</option>
+          </select>
+          <select id="btFilterSym" onchange="btFilterResults()" style="font-family:var(--mono);font-size:8px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;background:var(--bg3);color:var(--text);margin-left:6px">
+            <option value="">All Symbols</option>
+          </select>
+        </span>
+      </div>
+      <div class="tw" style="max-height:400px;overflow-y:auto">
+        <table id="btTable">
+          <thead>
+            <tr>
+              <th>#</th><th>Symbol</th><th>Trades</th>
+              <th>TP Hits</th><th>SL Hits</th><th>Expired</th>
+              <th>Win Rate</th><th>Avg Days TP</th><th>Avg Days SL</th>
+              <th>Expectancy</th><th>Best Trade</th><th>Worst Trade</th>
+            </tr>
+          </thead>
+          <tbody id="btTableBody">
+            <tr><td colspan="12" class="empty">Upload a 5-min CSV and click Run Backtest</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Candle-level detail ── -->
+    <div id="btDetailWrap" style="display:none;margin-top:12px">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:700;color:var(--text2);margin-bottom:6px">
+        Trade Log — <span id="btDetailSym"></span>
+      </div>
+      <div class="tw" style="max-height:250px;overflow-y:auto">
+        <table id="btDetailTable">
+          <thead>
+            <tr>
+              <th>#</th><th>Entry Date</th><th>Entry Time</th><th>Entry ₹</th>
+              <th>TP ₹</th><th>SL ₹</th><th>Outcome</th><th>Exit ₹</th>
+              <th>Days held</th><th>P&amp;L%</th>
+            </tr>
+          </thead>
+          <tbody id="btDetailBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 // ═══════════════════════════════════════════════════════════
 // CONSTANTS
@@ -4467,7 +4612,7 @@ setInterval(updateSessionWindow,30000);
 function updatePills(){const buys=allSignals.filter(s=>s.signal.startsWith('B')).length,sells=allSignals.filter(s=>s.signal.startsWith('S')).length,total=Object.keys(allStockData).length,waits=total-buys-sells;document.getElementById('pill-sym').textContent=`${total} SYM`;const pb=document.getElementById('pill-buy'),ps=document.getElementById('pill-sell'),pw=document.getElementById('pill-wait');if(pb){pb.textContent=`${buys} BUY`;pb.style.display=buys?'inline-block':'none'}if(ps){ps.textContent=`${sells} SELL`;ps.style.display=sells?'inline-block':'none'}if(pw){pw.textContent=`${waits} WAIT`;pw.style.display=(waits>0&&total>0)?'inline-block':'none'}document.getElementById('pill-sess').textContent=`Session ${sessionCount||0}`;const meta=loadMeta();document.getElementById('pill-date').textContent=meta.lastDate||'No data';document.getElementById('badgeBuy').textContent=buys+sells}
 
 // PAGE / INTEL SWITCHING
-function switchPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.page-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+name);if(pg)pg.classList.add('active');document.querySelectorAll('.page-tab').forEach(t=>{if((t.getAttribute('onclick')||'').includes("'"+name+"'"))t.classList.add('active')});if(name==='intel')renderIntelActive();if(name==='portfolio')renderPage2();if(name==='nifty')renderNiftyPage();if(name==='broker'){switchBrokerTab('orders');brokerRefreshAll()}}
+function switchPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.page-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+name);if(pg)pg.classList.add('active');document.querySelectorAll('.page-tab').forEach(t=>{if((t.getAttribute('onclick')||'').includes("'"+name+"'"))t.classList.add('active')});if(name==='intel')renderIntelActive();if(name==='portfolio')renderPage2();if(name==='nifty')renderNiftyPage();if(name==='broker'){switchBrokerTab('orders');brokerRefreshAll()};if(name==='backtest')btInit();}
 function switchIntel(name){document.querySelectorAll('.i-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.i-tab').forEach(t=>t.classList.remove('active'));document.getElementById('intel-'+name).classList.add('active');event.target.classList.add('active');renderIntelTab(name)}
 function renderIntelActive(){const active=document.querySelector('.i-panel.active');if(active)renderIntelTab(active.id.replace('intel-',''))}
 function renderIntelTab(name){const map={brkoutcomes:renderBrkOutcomeTable,options:function(){checkRegimeChangeOptions();if(!_optAdvisorData)renderOptionsAdvisor(overallRegime,null,null);else renderOptionsAdvisor(overallRegime,_lastKnownRegime,_optAdvisorData);},phase5:renderPhase5Dashboard,sectormom:renderSectorMomentumTab,anticipation:renderAnticipation,hc:renderHighConviction,m6:function(){renderM6();renderUnbiasedPanel();},m1:renderM1,m4:renderM4,m2:renderM2,m3:renderM3,m5:renderM5,m7:renderM7,tpsl:renderTPSL,mb:renderMB,sectors:renderSectors,sectortracker:function(){if(!Object.keys(sectorMomentum).length)buildSectorMomentum();renderSectorTracker();updateRotationStrip();renderMonthlyHeatmap();renderSeasonalInsights();},ledger:renderLedger,retcorr:renderRetCorr,wrref:function(){},regimexperf:function(){renderRegimeCrossPerf()},slDash:renderSLDash,dailymovers:renderDailyMovers,orderlog:renderOrderLog,gapopen:renderGapOpen,alphauniverse:renderAlphaUniverse};if(map[name])map[name]()}
@@ -9820,6 +9965,426 @@ function mcoZoomClose() {
   if(_zoomSmi){try{_zoomSmi.remove();}catch(e){} _zoomSmi=null;}
   if(_zoomRo){try{_zoomRo.disconnect();}catch(e){} _zoomRo=null;}
   document.getElementById('mcoZoom').classList.remove('mco-zoom-active');
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   📊 BACKTEST ENGINE — 5-min intraday TP/SL hit rate analyser
+   Accepts CSV with Date,Symbol,Open,High,Low,Close,Volume columns.
+   Simulates breakout entries, tracks TP/SL hits on subsequent candles.
+   Completely self-contained — does NOT touch any other part of script.
+   ══════════════════════════════════════════════════════════════════ */
+
+var _btData    = {};   /* {sym: [{date,time,open,high,low,close,vol},...]} */
+var _btResults = [];   /* [{sym, trades, tpHits, slHits, expired, wr, ...}] */
+var _btTrades  = {};   /* {sym: [{entry, tp, sl, outcome, exitPx, days, pnl}]} */
+
+function btInit() {
+  /* Nothing to do on init — just show the page */
+}
+
+/* ── File handler ── */
+function btHandleFile(input) {
+  if (!input.files.length) return;
+  const label = document.getElementById('btFileLabel');
+  if (label) label.textContent = 'reading…';
+
+  const reader = new FileReader();
+  reader.onerror = () => { toast('Backtest: file read error', 'err'); };
+  reader.onload = function(e) {
+    try {
+      const text  = e.target.result.trim();
+      const lines = text.split(/\r?\n/).filter(l => l.trim());
+      if (lines.length < 2) { toast('Backtest: empty file', 'err'); return; }
+
+      const hdr = lines[0].split(',').map(h => h.trim().toLowerCase());
+      const iDate = hdr.indexOf('date');
+      const iTime = Math.max(hdr.indexOf('time'), hdr.indexOf('datetime'));
+      const iSym  = hdr.indexOf('symbol');
+      const iO    = hdr.indexOf('open');
+      const iH    = hdr.indexOf('high');
+      const iL    = hdr.indexOf('low');
+      const iC    = hdr.indexOf('close');
+      const iV    = hdr.indexOf('volume');
+
+      if ([iDate, iSym, iH, iL, iC].some(x => x < 0)) {
+        toast('Backtest CSV needs: Date, Symbol, Open, High, Low, Close', 'err');
+        return;
+      }
+
+      _btData = {};
+      let rowCount = 0;
+
+      for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].split(',');
+        if (cols.length < 5) continue;
+        const sym   = (cols[iSym] || '').trim().toUpperCase();
+        const date  = (cols[iDate] || '').trim();
+        const time  = iTime >= 0 ? (cols[iTime] || '').trim() : '';
+        const open  = parseFloat(cols[iO]  || cols[iC]);
+        const high  = parseFloat(cols[iH]);
+        const low   = parseFloat(cols[iL]);
+        const close = parseFloat(cols[iC]);
+        const vol   = iV >= 0 ? parseFloat(cols[iV]) || 0 : 0;
+        if (!sym || !date || isNaN(close) || close <= 0) continue;
+        if (!_btData[sym]) _btData[sym] = [];
+        _btData[sym].push({ date, time, open, high, low, close, vol });
+        rowCount++;
+      }
+
+      const syms = Object.keys(_btData).length;
+      if (label) label.textContent = syms + ' symbols, ' + rowCount + ' rows';
+      /* Populate symbol filter dropdown */
+      const sel = document.getElementById('btFilterSym');
+      if (sel) {
+        sel.innerHTML = '<option value="">All Symbols</option>'
+          + Object.keys(_btData).sort().map(s => '<option value="' + s + '">' + s + '</option>').join('');
+      }
+      toast('Backtest: loaded ' + syms + ' symbols (' + rowCount + ' candles)', 'ok');
+      input.value = '';
+    } catch(err) {
+      toast('Backtest file error: ' + err.message, 'err');
+    }
+  };
+  reader.readAsText(input.files[0]);
+}
+
+/* ── Core backtest engine ── */
+function btRunBacktest() {
+  if (!Object.keys(_btData).length) {
+    toast('Upload a 5-min CSV first', 'err'); return;
+  }
+
+  const tp_pct   = parseFloat(document.getElementById('btTP').value)   / 100;
+  const sl_pct   = parseFloat(document.getElementById('btSL').value)   / 100;
+  const entryType= document.getElementById('btEntryType').value;
+  const maxHold  = parseInt(document.getElementById('btMaxHold').value);
+  const syms     = Object.keys(_btData);
+
+  /* Show progress */
+  const prog  = document.getElementById('btProgress');
+  const pBar  = document.getElementById('btProgressBar');
+  const pLbl  = document.getElementById('btProgressLabel');
+  if (prog) prog.style.display = 'block';
+
+  _btResults = [];
+  _btTrades  = {};
+
+  let processed = 0;
+
+  /* Process each symbol */
+  function processSymbol(sym) {
+    const candles = _btData[sym];
+    if (!candles || candles.length < 2) return;
+
+    /* Group candles by date */
+    const byDate = {};
+    candles.forEach(c => {
+      if (!byDate[c.date]) byDate[c.date] = [];
+      byDate[c.date].push(c);
+    });
+    const dates = Object.keys(byDate).sort();
+
+    const trades = [];
+    let tpHits = 0, slHits = 0, expired = 0;
+    let tpDays = [], slDays = [], pnls = [];
+    let bestPnl = -999, worstPnl = 999;
+
+    /* For breakout entry: need rolling high/low from prev days */
+    let rollingHighs = [];   /* last 10 days closing highs */
+
+    dates.forEach((date, di) => {
+      const dayCandls = byDate[date];
+      if (!dayCandls.length) return;
+
+      /* Determine entry candles based on entry type */
+      let entryCandles = [];
+      if (entryType === 'open') {
+        entryCandles = [dayCandls[0]];  /* first candle only */
+      } else if (entryType === 'breakout') {
+        /* Entry when candle close crosses prev 10-day high or Pivot R1 */
+        const prevDays = dates.slice(Math.max(0, di-10), di);
+        let prevHigh = 0;
+        prevDays.forEach(pd => {
+          const pCandles = byDate[pd] || [];
+          pCandles.forEach(c => { prevHigh = Math.max(prevHigh, c.high); });
+        });
+        /* Pivot R1 from yesterday */
+        let pivR1 = 0;
+        if (di > 0) {
+          const yd = byDate[dates[di-1]] || [];
+          if (yd.length) {
+            const yH = Math.max(...yd.map(c => c.high));
+            const yL = Math.min(...yd.map(c => c.low));
+            const yC = yd[yd.length-1].close;
+            const piv = (yH + yL + yC) / 3;
+            pivR1 = 2*piv - yL;
+          }
+        }
+        const level = Math.max(prevHigh, pivR1);
+        /* Find candles that cross the level */
+        entryCandles = dayCandls.filter(c => level > 0 && c.close > level * 1.003);
+        /* Debounce: only first breakout per day */
+        entryCandles = entryCandles.slice(0, 1);
+      } else {
+        /* All candles stress test — every candle is an entry */
+        entryCandles = dayCandls;
+      }
+
+      entryCandles.forEach(entryCandle => {
+        const entryPx = entryCandle.close;
+        const tpPx    = entryPx * (1 + tp_pct);
+        const slPx    = entryPx * (1 - sl_pct);
+
+        /* Look forward through subsequent candles (same day + next days) */
+        let outcome   = 'expired';
+        let exitPx    = null;
+        let daysHeld  = 0;
+        let exitDate  = date;
+        let exitTime  = '';
+
+        const entryDateIdx = dates.indexOf(date);
+        const lookAheadDates = dates.slice(entryDateIdx, entryDateIdx + maxHold + 1);
+
+        outerLoop:
+        for (let li = 0; li < lookAheadDates.length; li++) {
+          const ld = lookAheadDates[li];
+          const ldCandles = byDate[ld] || [];
+          const startIdx = (ld === date)
+            ? ldCandles.indexOf(entryCandle) + 1
+            : 0;
+
+          for (let ci = startIdx; ci < ldCandles.length; ci++) {
+            const c = ldCandles[ci];
+            /* Check TP first (optimistic — intraday if high touches TP) */
+            if (c.high >= tpPx) {
+              outcome  = 'TP';
+              exitPx   = tpPx;
+              daysHeld = li;
+              exitDate = ld;
+              exitTime = c.time || '';
+              break outerLoop;
+            }
+            /* Check SL */
+            if (c.low <= slPx) {
+              outcome  = 'SL';
+              exitPx   = slPx;
+              daysHeld = li;
+              exitDate = ld;
+              exitTime = c.time || '';
+              break outerLoop;
+            }
+          }
+        }
+
+        /* Expired — use last available close */
+        if (outcome === 'expired') {
+          const lastDate = lookAheadDates[lookAheadDates.length-1];
+          const lastCandles = byDate[lastDate] || [];
+          exitPx   = lastCandles.length ? lastCandles[lastCandles.length-1].close : entryPx;
+          daysHeld = lookAheadDates.length - 1;
+          exitDate = lastDate;
+        }
+
+        const pnlPct = ((exitPx / entryPx) - 1) * 100;
+
+        if (outcome === 'TP')       { tpHits++; tpDays.push(daysHeld); }
+        else if (outcome === 'SL')  { slHits++; slDays.push(daysHeld); }
+        else                        { expired++; }
+
+        pnls.push(pnlPct);
+        if (pnlPct > bestPnl)  bestPnl  = pnlPct;
+        if (pnlPct < worstPnl) worstPnl = pnlPct;
+
+        trades.push({
+          entryDate: date,
+          entryTime: entryCandle.time || '',
+          entryPx:   parseFloat(entryPx.toFixed(2)),
+          tpPx:      parseFloat(tpPx.toFixed(2)),
+          slPx:      parseFloat(slPx.toFixed(2)),
+          outcome,
+          exitPx:    parseFloat((exitPx||entryPx).toFixed(2)),
+          exitDate,
+          exitTime,
+          daysHeld,
+          pnlPct:    parseFloat(pnlPct.toFixed(3)),
+        });
+      });
+    });
+
+    _btTrades[sym] = trades;
+    const totalTrades = tpHits + slHits + expired;
+    if (!totalTrades) return;
+
+    const wr        = totalTrades ? tpHits / totalTrades : 0;
+    const avgTpDays = tpDays.length ? (tpDays.reduce((a,b)=>a+b,0)/tpDays.length).toFixed(1) : '—';
+    const avgSlDays = slDays.length ? (slDays.reduce((a,b)=>a+b,0)/slDays.length).toFixed(1) : '—';
+    const exp       = wr*tp_pct*100 - (1-wr)*sl_pct*100;
+    const avgPnl    = pnls.length ? pnls.reduce((a,b)=>a+b,0)/pnls.length : 0;
+
+    _btResults.push({
+      sym,
+      trades:    totalTrades,
+      tpHits,
+      slHits,
+      expired,
+      wr:        parseFloat((wr*100).toFixed(1)),
+      avgTpDays,
+      avgSlDays,
+      exp:       parseFloat(exp.toFixed(3)),
+      avgPnl:    parseFloat(avgPnl.toFixed(3)),
+      bestPnl:   parseFloat(bestPnl.toFixed(2)),
+      worstPnl:  parseFloat(worstPnl.toFixed(2)),
+    });
+  }
+
+  /* Process all symbols with progress updates */
+  let i = 0;
+  function processNext() {
+    if (i >= syms.length) {
+      btRenderResults(tp_pct, sl_pct);
+      if (prog) prog.style.display = 'none';
+      return;
+    }
+    processSymbol(syms[i]);
+    i++;
+    const pct = Math.round(i/syms.length*100);
+    if (pBar) pBar.style.width = pct + '%';
+    if (pLbl) pLbl.textContent = 'Processing ' + syms[i-1] + ' (' + i + '/' + syms.length + ')…';
+    setTimeout(processNext, 0);  /* yield to UI thread */
+  }
+  processNext();
+}
+
+/* ── Render results ── */
+function btRenderResults(tp_pct, sl_pct) {
+  if (!_btResults.length) {
+    toast('No trades generated — check entry type or data', 'err'); return;
+  }
+
+  /* Overall stats */
+  const totalTrades = _btResults.reduce((a,r) => a+r.trades, 0);
+  const totalTP     = _btResults.reduce((a,r) => a+r.tpHits, 0);
+  const totalSL     = _btResults.reduce((a,r) => a+r.slHits, 0);
+  const totalExp    = _btResults.reduce((a,r) => a+r.expired, 0);
+  const overallWR   = totalTP/totalTrades*100;
+  const overallExp  = overallWR/100*tp_pct*100 - (1-overallWR/100)*sl_pct*100;
+
+  const summaryEl = document.getElementById('btSummaryCards');
+  if (summaryEl) {
+    const cards = [
+      { label: 'Total Trades',   value: totalTrades.toLocaleString(),      color: 'var(--text)' },
+      { label: 'TP Hits',        value: totalTP.toLocaleString(),           color: 'var(--bull)' },
+      { label: 'SL Hits',        value: totalSL.toLocaleString(),           color: 'var(--bear)' },
+      { label: 'Expired',        value: totalExp.toLocaleString(),          color: 'var(--text3)' },
+      { label: 'Win Rate',       value: overallWR.toFixed(1) + '%',         color: overallWR>=55?'var(--bull)':overallWR>=40?'var(--amber)':'var(--bear)' },
+      { label: 'Expectancy',     value: (overallExp>0?'+':'')+overallExp.toFixed(3)+'%', color: overallExp>0?'var(--bull)':'var(--bear)' },
+      { label: 'Symbols tested', value: _btResults.length,                  color: 'var(--kite)' },
+      { label: 'BE Win Rate',    value: (sl_pct*100/(tp_pct*100+sl_pct*100)).toFixed(1)+'%', color: 'var(--text3)' },
+    ];
+    summaryEl.innerHTML = cards.map(c =>
+      '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 14px;min-width:100px">'
+      + '<div style="font-family:var(--mono);font-size:7px;color:var(--text3);margin-bottom:2px">' + c.label + '</div>'
+      + '<div style="font-family:var(--mono);font-size:13px;font-weight:700;color:' + c.color + '">' + c.value + '</div>'
+      + '</div>'
+    ).join('');
+  }
+  document.getElementById('btSummary').style.display = 'block';
+
+  /* Sort and render table */
+  btSortResults();
+  document.getElementById('btResultsWrap').style.display = 'block';
+  document.getElementById('btExportBtn').style.display = 'inline-block';
+  toast('Backtest complete — ' + totalTrades + ' trades across ' + _btResults.length + ' symbols', 'ok');
+}
+
+/* ── Sort/Filter ── */
+function btSortResults() {
+  const sortBy  = (document.getElementById('btSortBy') ||{value:'wr'}).value;
+  const filterSym = (document.getElementById('btFilterSym')||{value:''}).value;
+  let data = _btResults.slice();
+  if (filterSym) data = data.filter(r => r.sym === filterSym);
+  data.sort((a,b) => {
+    if (sortBy === 'wr')     return b.wr - a.wr;
+    if (sortBy === 'trades') return b.trades - a.trades;
+    if (sortBy === 'exp')    return b.exp - a.exp;
+    if (sortBy === 'sym')    return a.sym.localeCompare(b.sym);
+    return b.wr - a.wr;
+  });
+  btRenderTable(data);
+}
+function btFilterResults() { btSortResults(); }
+
+function btRenderTable(data) {
+  const tb = document.getElementById('btTableBody');
+  if (!tb) return;
+  if (!data.length) {
+    tb.innerHTML = '<tr><td colspan="12" class="empty">No results</td></tr>'; return;
+  }
+  tb.innerHTML = data.map(function(r, i) {
+    var wrColor = r.wr >= 70 ? 'var(--bull)' : r.wr >= 50 ? 'var(--amber)' : 'var(--bear)';
+    var expColor = r.exp > 0 ? 'var(--bull)' : 'var(--bear)';
+    var tpBar = Math.round(r.tpHits/r.trades*100);
+    var slBar = Math.round(r.slHits/r.trades*100);
+    return '<tr style="cursor:pointer" onclick="btShowDetail(\'' + r.sym + '\')" title="Click to see trade log">'
+      + '<td style="color:var(--text3)">' + (i+1) + '</td>'
+      + '<td><strong style="color:var(--bright)">' + r.sym + '</strong></td>'
+      + '<td style="text-align:center">' + r.trades + '</td>'
+      + '<td style="text-align:center;color:var(--bull);font-weight:700">' + r.tpHits
+        + ' <span style="font-size:7px;color:var(--text3)">(' + tpBar + '%)</span></td>'
+      + '<td style="text-align:center;color:var(--bear);font-weight:700">' + r.slHits
+        + ' <span style="font-size:7px;color:var(--text3)">(' + slBar + '%)</span></td>'
+      + '<td style="text-align:center;color:var(--text3)">' + r.expired + '</td>'
+      + '<td style="text-align:center;font-weight:700;color:' + wrColor + '">' + r.wr + '%</td>'
+      + '<td style="text-align:center;color:var(--bull)">' + r.avgTpDays + 'd</td>'
+      + '<td style="text-align:center;color:var(--bear)">' + r.avgSlDays + 'd</td>'
+      + '<td style="text-align:center;font-weight:700;color:' + expColor + '">' + (r.exp>0?'+':'') + r.exp + '%</td>'
+      + '<td style="text-align:center;color:var(--bull)">+' + r.bestPnl + '%</td>'
+      + '<td style="text-align:center;color:var(--bear)">' + r.worstPnl + '%</td>'
+      + '</tr>';
+  }).join('');
+}
+
+/* ── Trade log detail per stock ── */
+function btShowDetail(sym) {
+  const trades = _btTrades[sym];
+  if (!trades || !trades.length) return;
+  const wrap = document.getElementById('btDetailWrap');
+  const symEl = document.getElementById('btDetailSym');
+  const tb    = document.getElementById('btDetailBody');
+  if (!wrap || !tb) return;
+  if (symEl) symEl.textContent = sym + ' (' + trades.length + ' trades)';
+  tb.innerHTML = trades.map(function(t, i) {
+    var oc = t.outcome === 'TP' ? 'var(--bull)' : t.outcome === 'SL' ? 'var(--bear)' : 'var(--text3)';
+    var icon = t.outcome === 'TP' ? '✅' : t.outcome === 'SL' ? '❌' : '⏳';
+    return '<tr>'
+      + '<td style="color:var(--text3)">' + (i+1) + '</td>'
+      + '<td style="font-family:var(--mono);font-size:8px">' + t.entryDate + '</td>'
+      + '<td style="font-family:var(--mono);font-size:8px;color:var(--text3)">' + (t.entryTime||'—') + '</td>'
+      + '<td style="font-family:var(--mono)">₹' + t.entryPx + '</td>'
+      + '<td style="color:var(--bull);font-family:var(--mono)">₹' + t.tpPx + '</td>'
+      + '<td style="color:var(--bear);font-family:var(--mono)">₹' + t.slPx + '</td>'
+      + '<td style="font-weight:700;color:' + oc + '">' + icon + ' ' + t.outcome + '</td>'
+      + '<td style="font-family:var(--mono)">₹' + t.exitPx + '</td>'
+      + '<td style="text-align:center;color:var(--text3)">' + t.daysHeld + 'd</td>'
+      + '<td style="font-weight:700;color:' + (t.pnlPct>=0?'var(--bull)':'var(--bear)') + '">'
+        + (t.pnlPct>=0?'+':'') + t.pnlPct + '%</td>'
+      + '</tr>';
+  }).join('');
+  wrap.style.display = 'block';
+  wrap.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+/* ── Export ── */
+function btExportResults() {
+  if (!_btResults.length) { toast('Run backtest first','err'); return; }
+  const hdr  = ['Symbol','Trades','TP_Hits','SL_Hits','Expired','WinRate%','AvgDays_TP','AvgDays_SL','Expectancy%','BestTrade%','WorstTrade%'];
+  const rows = _btResults.map(r => [r.sym,r.trades,r.tpHits,r.slHits,r.expired,r.wr,r.avgTpDays,r.avgSlDays,r.exp,r.bestPnl,r.worstPnl].join(','));
+  const csv  = [hdr.join(','), ...rows].join('\n');
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = 'backtest_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  toast('Backtest results exported','ok');
 }
 </script>
 <!-- ══ ZOOM CHART OVERLAY ══ -->
