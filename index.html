@@ -7982,65 +7982,6 @@ function playBreakoutSound(isBuy) {
   } catch(e) {}
 }
 
-/* Check LTP against breakout levels — called every 30s by existing Kite tick */
-function checkBreakouts() {
-  if (!zdLiveMode || !Object.keys(breakoutLevels).length) return;
-  let newBreaks = 0;
-
-  Object.keys(breakoutLevels).forEach(sym => {
-    const lvl = breakoutLevels[sym];
-    const ltp = zdPrices[sym] || zdPrices['NSE:'+sym];
-    if (!ltp) return;
-    const now = Date.now();
-
-    /* BUY breakout — LTP crosses above yesterday's high */
-    if (!lvl.fired_up && ltp > lvl.high) {
-      const key = sym + '_up';
-      const lastAlert = _brkAlerted[key] || 0;
-      if (now - lastAlert > BRK_DEBOUNCE) {
-        lvl.fired_up = true;
-        _brkAlerted[key] = now;
-        const brk = { sym, dir: 'BUY', price: ltp, level: lvl.high,
-                       pct: parseFloat(((ltp-lvl.high)/lvl.high*100).toFixed(2)),
-                       time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),
-                       ts: Date.now(),
-                       pb_score: lvl.pb_score, sector: lvl.sector,
-                       is_signal: lvl.is_signal,
-                       source: lvl.is_signal ? 'Signal' : 'WAIT (PB:'+lvl.pb_score+')',
-                       tv_url: 'https://www.tradingview.com/chart/?symbol=NSE:'+sym };
-        liveBreakouts.unshift(brk);
-        playBreakoutSound(true);
-        toast('⚡ BUY Breakout: ' + sym + ' ₹' + ltp.toFixed(1) + ' > ₹' + lvl.high.toFixed(1), 'ok');
-        newBreaks++;
-      }
-    }
-
-    /* SELL breakdown — LTP crosses below yesterday's low */
-    if (!lvl.fired_dn && ltp < lvl.low) {
-      const key = sym + '_dn';
-      const lastAlert = _brkAlerted[key] || 0;
-      if (now - lastAlert > BRK_DEBOUNCE) {
-        lvl.fired_dn = true;
-        _brkAlerted[key] = now;
-        const brk = { sym, dir: 'SELL', price: ltp, level: lvl.low,
-                       pct: parseFloat(((lvl.low-ltp)/lvl.low*100).toFixed(2)),
-                       time: new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),
-                       ts: Date.now(),
-                       pb_score: lvl.pb_score, sector: lvl.sector,
-                       is_signal: lvl.is_signal,
-                       source: lvl.is_signal ? 'Signal' : 'WAIT (PB:'+lvl.pb_score+')',
-                       tv_url: 'https://www.tradingview.com/chart/?symbol=NSE:'+sym };
-        liveBreakouts.unshift(brk);
-        playBreakoutSound(false);
-        toast('⚡ SELL Breakdown: ' + sym + ' ₹' + ltp.toFixed(1) + ' < ₹' + lvl.low.toFixed(1), 'err');
-        newBreaks++;
-      }
-    }
-  });
-
-  if (newBreaks) renderBreakoutStrip();
-}
-
 var _brkView = 'cards'; /* 'cards' | 'buy' | 'sell' */
 
 function setBrkView(v) {
@@ -8171,7 +8112,7 @@ function renderBreakoutStrip() {
             <th style="text-align:center;padding:5px 8px;color:var(--text2)">Level ₹</th>
             <th style="text-align:center;padding:5px 8px;color:var(--text2)">Level Type</th>
             <th style="text-align:center;padding:5px 8px;color:${accent}">% Break</th>
-            <th style="text-align:center;padding:5px 8px;color:var(--text2)">CSV Date</th>
+            <th style="text-align:center;padding:5px 8px;color:var(--text2)">Breakout Time</th>
             <th style="text-align:center;padding:5px 8px;color:var(--amber)">Source</th>
             ${_auFilterActive ? '<th style="text-align:center;padding:5px 8px;color:var(--bull)">Tier</th>' : ''}
             <th style="text-align:center;padding:5px 8px;color:var(--text2)">Chart</th>
@@ -8198,9 +8139,8 @@ function renderBreakoutStrip() {
       var srcBg   = b.is_signal ? 'rgba(34,197,94,.15)' : b.source==='Index' ? 'rgba(99,102,241,.15)' : b.source==='ETF' ? 'rgba(13,148,136,.15)' : 'rgba(217,119,6,.15)';
       var srcClr  = b.is_signal ? 'var(--bull)' : b.source==='Index' ? 'var(--kite)' : b.source==='ETF' ? 'var(--teal)' : 'var(--amber)';
       var rowBg   = i % 2 !== 0 ? 'background:var(--bg3)22;' : '';
-      /* Clean date display */
-      var dateStr = b.date || '—';
-      try { var d=new Date(b.date); dateStr=d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'}); } catch(e){}
+      /* Show full breakout datetime (set by checkBreakouts at the moment of crossing) */
+      var dateStr = b.datetime || b.date || '—';
       var lvlBg   = b.level_type==='52W High' ? 'rgba(168,85,247,.15)' : b.level_type==='20D High'||b.level_type==='20D Low' ? 'rgba(99,102,241,.15)' : b.level_type==='Pivot R1'||b.level_type==='Pivot S1' ? 'rgba(13,148,136,.15)' : 'rgba(107,114,128,.15)';
       var lvlClr  = b.level_type==='52W High' ? '#a855f7' : b.level_type==='20D High'||b.level_type==='20D Low' ? 'var(--kite)' : b.level_type==='Pivot R1'||b.level_type==='Pivot S1' ? 'var(--teal)' : 'var(--text3)';
       return '<tr style="border-bottom:1px solid var(--border)22;' + rowDim + rowBg + '">'
@@ -9119,73 +9059,16 @@ function scanCSVBreakouts() {
       const triggered = l.dir === 'BUY' ? ltp > l.price : ltp < l.price;
       if (!triggered) return;
 
-      /* Mark as alerted so live Kite doesn't double-fire */
-      _brkAlerted[alertKey] = Date.now();
-
-      const pct = l.dir === 'BUY'
-        ? parseFloat(((ltp - l.price)/l.price*100).toFixed(2))
-        : parseFloat(((l.price - ltp)/l.price*100).toFixed(2));
-
-      /* Only add if significant (>0.3% above level to avoid rounding noise) */
-      if (pct < 0.3) return;
-
-      /* Use the actual last row date from CSV — not upload time */
-      const lastRow    = rows[rows.length-1];
-      const csvDate    = lastRow.date || today;
-      const csvDateFmt = (() => {
-        try {
-          const d = new Date(csvDate);
-          return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'2-digit'}) + ' (CSV ' + uploadTime + ')';
-        } catch(e) { return csvDate + ' (CSV)'; }
-      })();
-
-      const brk = {
-        id:           sym+'_'+l.key+'_'+today,
-        sym,
-        dir:          l.dir,
-        price:        parseFloat(ltp.toFixed(2)),
-        level:        parseFloat(l.price.toFixed(2)),
-        level_type:   l.label,
-        level_priority: l.priority,
-        pct,
-        datetime:     csvDateFmt,
-        date:         csvDate,
-        ts:           Date.now(),
-        vol_label:    'CSV close',
-        vol_confirmed: false,
-        pb_score:     lvl.pb_score,
-        sector:       lvl.sector,
-        is_signal:    lvl.is_signal,
-        source:       lvl.is_signal ? 'Signal' : lvl.is_index ? 'Index' : lvl.is_etf ? 'ETF' : 'WAIT (PB:'+lvl.pb_score+')',
-        au_tier:      auTier,
-        tv_url:       'https://www.tradingview.com/chart/?symbol=NSE:'+sym,
-        outcome_3d: null, chg_3d: null,
-        outcome_5d: null, chg_5d: null,
-        outcome_10d:null, chg_10d:null,
-        failed: false, status: 'open'
-      };
-
-      if (!liveBreakouts.find(b => b.id === brk.id)) {
-        liveBreakouts.push(brk);
-        saveBrkToLedger(brk);
-        added++;
-      }
+      /* Prime the debounce flag so live Kite fires fresh on this level.
+         We do NOT push to liveBreakouts or saveBrkToLedger here.
+         Breakout alerts fire exclusively from checkBreakouts() using
+         real-time Kite prices with accurate wall-clock timestamps.    */
+      _brkAlerted[alertKey] = 0; /* 0 = seen in CSV but not yet live-alerted */
     });
   });
 
   /* Save debounce */
   try { localStorage.setItem('brkDebounce_'+today, JSON.stringify(_brkAlerted)); } catch(e) {}
-
-  liveBreakouts.sort((a,b) => {
-    /* Sort by priority first, then by pct descending */
-    if (a.level_priority !== b.level_priority) return a.level_priority - b.level_priority;
-    return b.pct - a.pct;
-  });
-
-  if (added) {
-    renderBreakoutStrip();
-    console.log('[Breakout CSV] Found', added, 'breakouts from CSV close prices');
-  }
 
   /* Also build near-breakout watchlist */
   buildNearBreakoutList();
